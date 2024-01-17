@@ -21,34 +21,34 @@ namespace Taskify.DAL.Repositories
 
         public async Task<CompanyMemberRole> AddAsync(CompanyMemberRole item)
         {
-            await _dbContext.CompanyMembersRoles.AddAsync(item);
+            await _dbContext.CompanyMemberRoles.AddAsync(item);
             await _dbContext.SaveChangesAsync();
             return item;
         }
 
         public async Task DeleteAsync(string id)
         {
-            var companyMemberRole = await _dbContext.CompanyMembersRoles.FindAsync(id);
+            var companyMemberRole = await _dbContext.CompanyMemberRoles.FindAsync(id);
             if (companyMemberRole != null)
             {
-                _dbContext.CompanyMembersRoles.Remove(companyMemberRole);
+                _dbContext.CompanyMemberRoles.Remove(companyMemberRole);
                 await _dbContext.SaveChangesAsync();
             }
         }
 
         public async Task<IEnumerable<CompanyMemberRole>> GetAllAsync()
         {
-            return await _dbContext.CompanyMembersRoles.ToListAsync();
+            return await _dbContext.CompanyMemberRoles.ToListAsync();
         }
 
         public async Task<CompanyMemberRole?> GetById(string id)
         {
-            return await _dbContext.CompanyMembersRoles.FindAsync(id);
+            return await _dbContext.CompanyMemberRoles.FindAsync(id);
         }
 
         public async Task<IEnumerable<CompanyMemberRole>> GetFilteredItemsAsync(Expression<Func<CompanyMemberRole, bool>> filter)
         {
-            return await _dbContext.CompanyMembersRoles.Where(filter).ToListAsync();
+            return await _dbContext.CompanyMemberRoles.Where(filter).ToListAsync();
         }
 
         public async Task UpdateAsync(CompanyMemberRole item)

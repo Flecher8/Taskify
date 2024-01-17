@@ -11,5 +11,6 @@ namespace Taskify.Core.DbModels
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public Company Company { get; set; }
         public string Name { get; set; }
+        public List<CompanyMember>? CompanyMembers { get; set; }
     }
 }

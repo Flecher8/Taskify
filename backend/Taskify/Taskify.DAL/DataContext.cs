@@ -26,7 +26,7 @@ namespace Taskify.DAL
         public DbSet<ProjectInvitation> ProjectInvitations { get; set;}
         public DbSet<Company> Companies { get; set; }
         public DbSet<CompanyInvitation> CompanyInvitations { get; set; }
-        public DbSet<CompanyMemberRole> CompanyMembersRoles { get; set;}
+        public DbSet<CompanyMemberRole> CompanyMemberRoles { get; set;}
         public DbSet<CompanyMember> CompanyMembers {  get; set; }
         public DbSet<CompanyExpense> CompanyExpenses { get; set; }
 

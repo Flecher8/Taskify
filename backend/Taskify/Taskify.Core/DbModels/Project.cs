@@ -12,6 +12,7 @@ namespace Taskify.Core.DbModels
         public User User { get; set; }
         public string Name { get; set; }
         public DateTime CreatedAt { get; set; }
-        
+        public List<Section> Sections { get; set; }
+        public List<ProjectInvitation>? ProjectInvitations { get; set;}
     }
 }
