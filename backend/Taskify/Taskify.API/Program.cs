@@ -19,7 +19,7 @@ namespace Taskify.API
             // DB
             builder.Services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Taskify.DAL"));
             });
 
             // Enable CORS
