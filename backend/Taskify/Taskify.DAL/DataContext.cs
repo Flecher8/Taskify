@@ -19,7 +19,7 @@ namespace Taskify.DAL
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectIncome> ProjectIncomes { get; set;}
         public DbSet<Section> Sections { get; set; }
-        public DbSet<CustomTask> Tasks { get; set; }
+        public DbSet<CustomTask> CustomTasks { get; set; }
         public DbSet<ProjectRole> ProjectRoles { get; set; }
         public DbSet<ProjectMember> ProjectMembers { get; set; }
         public DbSet<Notification> Notifications { get; set; }

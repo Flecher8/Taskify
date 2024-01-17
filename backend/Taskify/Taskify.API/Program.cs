@@ -1,6 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using Taskify.Core.DbModels;
 using Taskify.DAL;
+using Taskify.DAL.Interfaces;
+using Taskify.DAL.Repositories;
 
 namespace Taskify.API
 {
@@ -9,6 +13,9 @@ namespace Taskify.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Repositories
+            builder.Services.AddScoped<IDataRepository<User>, UserRepository>();
 
             // Add services to the container.
 

@@ -11,6 +11,6 @@ namespace Taskify.Core.DbModels
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public User User { get; set; }
         public Subscription Subscription { get; set; }
-        public DateTime EndDateTime { get; set;} = DateTime.Now;
+        public DateTime EndDateTimeUtc { get; set;} = DateTime.Now;
     }
 }
