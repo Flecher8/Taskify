@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Taskify.Core.DbModels;
@@ -18,6 +19,11 @@ namespace Taskify.API
             builder.Services.AddScoped<IDataRepository<User>, UserRepository>();
 
             // Add services to the container.
+
+            // Add Identity services
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
