@@ -10,7 +10,7 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class SectionRepository : IDataRepository<Section>
+    public class SectionRepository : ISectionRepository
     {
         private readonly DataContext _dbContext;
 
@@ -36,7 +36,7 @@ namespace Taskify.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<Section>> GetAllAsync()
+        public async Task<List<Section>> GetAllAsync()
         {
             return await _dbContext.Sections.ToListAsync();
         }
@@ -46,7 +46,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.Sections.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Section>> GetFilteredItemsAsync(Expression<Func<Section, bool>> filter)
+        public async Task<List<Section>> GetFilteredItemsAsync(Expression<Func<Section, bool>> filter)
         {
             return await _dbContext.Sections.Where(filter).ToListAsync();
         }

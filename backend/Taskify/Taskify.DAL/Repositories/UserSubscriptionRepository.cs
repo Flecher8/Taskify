@@ -6,10 +6,11 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class UserSubscriptionRepository
+    public class UserSubscriptionRepository : IUserSubscriptionRepository
     {
         private readonly DataContext _dbContext;
 
@@ -35,7 +36,7 @@ namespace Taskify.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<UserSubscription>> GetAllAsync()
+        public async Task<List<UserSubscription>> GetAllAsync()
         {
             return await _dbContext.UserSubscriptions.ToListAsync();
         }
@@ -45,7 +46,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.UserSubscriptions.FindAsync(id);
         }
 
-        public async Task<IEnumerable<UserSubscription>> GetFilteredItemsAsync(Expression<Func<UserSubscription, bool>> filter)
+        public async Task<List<UserSubscription>> GetFilteredItemsAsync(Expression<Func<UserSubscription, bool>> filter)
         {
             return await _dbContext.UserSubscriptions.Where(filter).ToListAsync();
         }

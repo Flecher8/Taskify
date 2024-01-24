@@ -6,10 +6,11 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class CompanyExpenseRepository
+    public class CompanyExpenseRepository : ICompanyExpenseRepository
     {
         private readonly DataContext _dbContext;
 
@@ -35,7 +36,7 @@ namespace Taskify.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<CompanyExpense>> GetAllAsync()
+        public async Task<List<CompanyExpense>> GetAllAsync()
         {
             return await _dbContext.CompanyExpenses.ToListAsync();
         }
@@ -45,7 +46,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.CompanyExpenses.FindAsync(id);
         }
 
-        public async Task<IEnumerable<CompanyExpense>> GetFilteredItemsAsync(Expression<Func<CompanyExpense, bool>> filter)
+        public async Task<List<CompanyExpense>> GetFilteredItemsAsync(Expression<Func<CompanyExpense, bool>> filter)
         {
             return await _dbContext.CompanyExpenses.Where(filter).ToListAsync();
         }

@@ -10,7 +10,7 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class NotificationRepository : IDataRepository<Notification>
+    public class NotificationRepository : INotificationRepository
     {
         private readonly DataContext _dbContext;
 
@@ -36,7 +36,7 @@ namespace Taskify.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<Notification>> GetAllAsync()
+        public async Task<List<Notification>> GetAllAsync()
         {
             return await _dbContext.Notifications.ToListAsync();
         }
@@ -46,7 +46,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.Notifications.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Notification>> GetFilteredItemsAsync(Expression<Func<Notification, bool>> filter)
+        public async Task<List<Notification>> GetFilteredItemsAsync(Expression<Func<Notification, bool>> filter)
         {
             return await _dbContext.Notifications.Where(filter).ToListAsync();
         }

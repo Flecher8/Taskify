@@ -10,7 +10,7 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class CompanyMemberRoleRepository : IDataRepository<CompanyMemberRole>
+    public class CompanyMemberRoleRepository : ICompanyMemberRoleRepository
     {
         private readonly DataContext _dbContext;
 
@@ -36,7 +36,7 @@ namespace Taskify.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<CompanyMemberRole>> GetAllAsync()
+        public async Task<List<CompanyMemberRole>> GetAllAsync()
         {
             return await _dbContext.CompanyMemberRoles.ToListAsync();
         }
@@ -46,7 +46,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.CompanyMemberRoles.FindAsync(id);
         }
 
-        public async Task<IEnumerable<CompanyMemberRole>> GetFilteredItemsAsync(Expression<Func<CompanyMemberRole, bool>> filter)
+        public async Task<List<CompanyMemberRole>> GetFilteredItemsAsync(Expression<Func<CompanyMemberRole, bool>> filter)
         {
             return await _dbContext.CompanyMemberRoles.Where(filter).ToListAsync();
         }

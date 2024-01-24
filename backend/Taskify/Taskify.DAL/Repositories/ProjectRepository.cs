@@ -10,7 +10,7 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class ProjectRepository : IDataRepository<Project>
+    public class ProjectRepository : IProjectRepository
     {
         private readonly DataContext _dbContext;
 
@@ -36,7 +36,7 @@ namespace Taskify.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<Project>> GetAllAsync()
+        public async Task<List<Project>> GetAllAsync()
         {
             return await _dbContext.Projects.ToListAsync();
         }
@@ -46,7 +46,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.Projects.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Project>> GetFilteredItemsAsync(Expression<Func<Project, bool>> filter)
+        public async Task<List<Project>> GetFilteredItemsAsync(Expression<Func<Project, bool>> filter)
         {
             return await _dbContext.Projects.Where(filter).ToListAsync();
         }

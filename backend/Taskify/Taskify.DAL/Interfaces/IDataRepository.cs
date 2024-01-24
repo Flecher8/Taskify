@@ -9,9 +9,9 @@ namespace Taskify.DAL.Interfaces
 {
     public interface IDataRepository<T>
     {
-        Task<IEnumerable<T>> GetAllAsync();
+        Task<List<T>> GetAllAsync();
 
-        Task<IEnumerable<T>> GetFilteredItemsAsync(Expression<Func<T, bool>> filter);
+        Task<List<T>> GetFilteredItemsAsync(Expression<Func<T, bool>> filter);
 
         Task<T?> GetById(string id);
 
