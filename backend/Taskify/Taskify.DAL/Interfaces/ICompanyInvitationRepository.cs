@@ -7,7 +7,7 @@ using Taskify.Core.DbModels;
 
 namespace Taskify.DAL.Interfaces
 {
-    internal interface ICompanyInvitationRepository : IDataRepository<CompanyInvitation>
+    public interface ICompanyInvitationRepository : IDataRepository<CompanyInvitation>
     {
     }
 }

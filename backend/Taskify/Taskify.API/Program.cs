@@ -18,7 +18,23 @@ namespace Taskify.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Repositories
-            builder.Services.AddScoped<IDataRepository<User>, UserRepository>();
+
+            builder.Services.AddScoped<ICompanyExpenseRepository, CompanyExpenseRepository>();
+            builder.Services.AddScoped<ICompanyInvitationRepository, CompanyInvitationRepository>();
+            builder.Services.AddScoped<ICompanyMemberRepository, CompanyMemberRepository>();
+            builder.Services.AddScoped<ICompanyMemberRoleRepository, CompanyMemberRoleRepository>();
+            builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+            builder.Services.AddScoped<ICustomTaskRepository, CustomTaskRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IProjectIncomeRepository, ProjectIncomeRepository>();
+            builder.Services.AddScoped<IProjectInvitationRepository, ProjectInvitationRepository>();
+            builder.Services.AddScoped<IProjectMemberRepository, ProjectMemberRepository>();
+            builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+            builder.Services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
+            builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+            builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
 
             // Add services to the container.
 
