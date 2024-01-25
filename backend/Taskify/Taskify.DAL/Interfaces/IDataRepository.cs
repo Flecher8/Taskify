@@ -13,7 +13,7 @@ namespace Taskify.DAL.Interfaces
 
         Task<List<T>> GetFilteredItemsAsync(Expression<Func<T, bool>> filter);
 
-        Task<T?> GetById(string id);
+        Task<T?> GetByIdAsync(string id);
 
         Task<T> AddAsync(T item);
 

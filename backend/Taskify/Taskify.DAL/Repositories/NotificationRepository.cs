@@ -41,7 +41,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.Notifications.ToListAsync();
         }
 
-        public async Task<Notification?> GetById(string id)
+        public async Task<Notification?> GetByIdAsync(string id)
         {
             return await _dbContext.Notifications.FindAsync(id);
         }

@@ -41,7 +41,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.CompanyInvitations.ToListAsync();
         }
 
-        public async Task<CompanyInvitation?> GetById(string id)
+        public async Task<CompanyInvitation?> GetByIdAsync(string id)
         {
             return await _dbContext.CompanyInvitations.FindAsync(id);
         }

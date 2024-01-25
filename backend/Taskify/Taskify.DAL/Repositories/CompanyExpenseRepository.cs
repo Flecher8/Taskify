@@ -41,7 +41,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.CompanyExpenses.ToListAsync();
         }
 
-        public async Task<CompanyExpense?> GetById(string id)
+        public async Task<CompanyExpense?> GetByIdAsync(string id)
         {
             return await _dbContext.CompanyExpenses.FindAsync(id);
         }

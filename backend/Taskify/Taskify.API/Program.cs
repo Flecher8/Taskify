@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Net;
+using Taskify.BLL.Interfaces;
+using Taskify.BLL.Services;
+using Taskify.BLL.Validation;
 using Taskify.Core.DbModels;
 using Taskify.DAL;
 using Taskify.DAL.Interfaces;
@@ -18,7 +21,6 @@ namespace Taskify.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Repositories
-
             builder.Services.AddScoped<ICompanyExpenseRepository, CompanyExpenseRepository>();
             builder.Services.AddScoped<ICompanyInvitationRepository, CompanyInvitationRepository>();
             builder.Services.AddScoped<ICompanyMemberRepository, CompanyMemberRepository>();
@@ -36,7 +38,11 @@ namespace Taskify.API
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
 
+            // Validators
+            builder.Services.AddScoped<IValidator<Subscription>, SubscriptionValidator>();
+
             // Add services to the container.
+            builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
             // Add Identity services
             //builder.Services.AddIdentity<User, IdentityRole>()

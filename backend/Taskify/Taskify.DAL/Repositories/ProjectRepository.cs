@@ -41,7 +41,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.Projects.ToListAsync();
         }
 
-        public async Task<Project?> GetById(string id)
+        public async Task<Project?> GetByIdAsync(string id)
         {
             return await _dbContext.Projects.FindAsync(id);
         }

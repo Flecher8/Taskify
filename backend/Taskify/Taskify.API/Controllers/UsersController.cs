@@ -28,7 +28,7 @@ namespace Taskify.API.Controllers
         [HttpGet("id/")]
         public async Task<IActionResult> GetUserById(string id)
         {
-            var user = await _userRepository.GetById(id);
+            var user = await _userRepository.GetByIdAsync(id);
             return Ok(user);
         }
 

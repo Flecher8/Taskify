@@ -41,7 +41,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.CompanyMemberRoles.ToListAsync();
         }
 
-        public async Task<CompanyMemberRole?> GetById(string id)
+        public async Task<CompanyMemberRole?> GetByIdAsync(string id)
         {
             return await _dbContext.CompanyMemberRoles.FindAsync(id);
         }

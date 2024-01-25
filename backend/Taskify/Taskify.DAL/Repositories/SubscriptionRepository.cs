@@ -41,7 +41,7 @@ namespace Taskify.DAL.Repositories
             return await _dbContext.Subscriptions.ToListAsync();
         }
 
-        public async Task<Subscription?> GetById(string id)
+        public async Task<Subscription?> GetByIdAsync(string id)
         {
             return await _dbContext.Subscriptions.FindAsync(id);
         }
