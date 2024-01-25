@@ -67,6 +67,8 @@ namespace Taskify.API
 
                 option.OperationFilter<SecurityRequirementsOperationFilter>();
             });
+            // AutoMapper
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
             // DB
             builder.Services.AddDbContext<DataContext>(options =>
             {

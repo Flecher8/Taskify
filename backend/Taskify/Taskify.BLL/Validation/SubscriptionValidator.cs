@@ -40,7 +40,7 @@ namespace Taskify.BLL.Validation
             }
 
             // PricePerMonth validation
-            if (subscription.PricePerMonth <= 0)
+            if (subscription.PricePerMonth < 0)
             {
                 errorMessages.Add("Price per month must be greater than 0.");
             }
