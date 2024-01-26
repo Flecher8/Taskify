@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
@@ -13,10 +14,12 @@ namespace Taskify.DAL.Repositories
     public class CompanyInvitationRepository : ICompanyInvitationRepository
     {
         private readonly DataContext _dbContext;
+        private readonly CompanyInvitationFilterBuilder _filterBuilder;
 
         public CompanyInvitationRepository(DataContext dbContext)
         {
             _dbContext = dbContext;
+            _filterBuilder = new CompanyInvitationFilterBuilder();
         }
 
         public async Task<CompanyInvitation> AddAsync(CompanyInvitation item)
@@ -49,6 +52,27 @@ namespace Taskify.DAL.Repositories
         public async Task<List<CompanyInvitation>> GetFilteredItemsAsync(Expression<Func<CompanyInvitation, bool>> filter)
         {
             return await _dbContext.CompanyInvitations.Where(filter).ToListAsync();
+        }
+
+        public async Task<List<CompanyInvitation>> GetFilteredItemsAsync(Action<CompanyInvitationFilterBuilder> buildFilter)
+        {
+            buildFilter(_filterBuilder);
+
+            var query = _dbContext.CompanyInvitations.AsQueryable();
+
+            if (_filterBuilder.IncludeNotification)
+            {
+                query = query.Include(ci => ci.Notification);
+            }
+
+            if (_filterBuilder.IncludeCompany)
+            {
+                query = query.Include(ci => ci.Company);
+            }
+
+            return await query
+                .Where(_filterBuilder.Filter)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(CompanyInvitation item)

@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
@@ -13,10 +14,12 @@ namespace Taskify.DAL.Repositories
     public class CompanyExpenseRepository : ICompanyExpenseRepository
     {
         private readonly DataContext _dbContext;
+        private readonly CompanyExpenseFilterBuilder _filterBuilder;
 
         public CompanyExpenseRepository(DataContext dbContext)
         {
             _dbContext = dbContext;
+            _filterBuilder = new CompanyExpenseFilterBuilder();
         }
 
         public async Task<CompanyExpense> AddAsync(CompanyExpense item)
@@ -49,6 +52,22 @@ namespace Taskify.DAL.Repositories
         public async Task<List<CompanyExpense>> GetFilteredItemsAsync(Expression<Func<CompanyExpense, bool>> filter)
         {
             return await _dbContext.CompanyExpenses.Where(filter).ToListAsync();
+        }
+
+        public async Task<List<CompanyExpense>> GetFilteredItemsAsync(Action<CompanyExpenseFilterBuilder> buildFilter)
+        {
+            buildFilter(_filterBuilder);
+
+            var query = _dbContext.CompanyExpenses.AsQueryable();
+
+            if (_filterBuilder.IncludeCompany)
+            {
+                query = query.Include(ce => ce.Company);
+            }
+
+            return await query
+                .Where(_filterBuilder.Filter)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(CompanyExpense item)

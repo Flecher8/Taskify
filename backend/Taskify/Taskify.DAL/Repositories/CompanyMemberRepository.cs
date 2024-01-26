@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
@@ -13,10 +14,12 @@ namespace Taskify.DAL.Repositories
     public class CompanyMemberRepository : ICompanyMemberRepository
     {
         private readonly DataContext _dbContext;
+        private readonly CompanyMemberFilterBuilder _filterBuilder;
 
         public CompanyMemberRepository(DataContext dbContext)
         {
             _dbContext = dbContext;
+            _filterBuilder = new CompanyMemberFilterBuilder();
         }
 
         public async Task<CompanyMember> AddAsync(CompanyMember item)
@@ -49,6 +52,32 @@ namespace Taskify.DAL.Repositories
         public async Task<List<CompanyMember>> GetFilteredItemsAsync(Expression<Func<CompanyMember, bool>> filter)
         {
             return await _dbContext.CompanyMembers.Where(filter).ToListAsync();
+        }
+
+        public async Task<List<CompanyMember>> GetFilteredItemsAsync(Action<CompanyMemberFilterBuilder> buildFilter)
+        {
+            buildFilter(_filterBuilder);
+
+            var query = _dbContext.CompanyMembers.AsQueryable();
+
+            if (_filterBuilder.IncludeUser)
+            {
+                query = query.Include(cm => cm.User);
+            }
+
+            if (_filterBuilder.IncludeCompany)
+            {
+                query = query.Include(cm => cm.Company);
+            }
+
+            if (_filterBuilder.IncludeRole)
+            {
+                query = query.Include(cm => cm.Role);
+            }
+
+            return await query
+                .Where(_filterBuilder.Filter)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(CompanyMember item)
