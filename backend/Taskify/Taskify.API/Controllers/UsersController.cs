@@ -1,48 +1,64 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Taskify.BLL.Interfaces;
+using Taskify.BLL.Services;
 using Taskify.Core.DbModels;
+using Taskify.Core.Dtos;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
+        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IUserRepository userRepository) 
+        public UsersController(IUserService userService, IMapper mapper, ILogger<UsersController> logger) 
         {
-            _userRepository = userRepository;
+            _userService = userService;
+            _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var result = await _userRepository.GetAllAsync();
-            return Ok(result);
+            try
+            {
+                var result = await _userService.GetAllUsersAsync();
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<List<UserDto>>(result.Data))
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetAllUsers method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
-        [HttpGet("id/")]
-        public async Task<IActionResult> GetUserById(string id)
-        {
-            var user = await _userRepository.GetByIdAsync(id);
-            return Ok(user);
-        }
+        //[HttpGet("id/")]
+        //public async Task<IActionResult> GetUserById(string id)
+        //{
+            
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> PostUser(User user)
-        {
-            var result = await _userRepository.AddAsync(user);
-            return Ok(result);
-        }
-        [HttpPut]
-        public async Task<IActionResult> PutUser(User user)
-        {
-            await _userRepository.UpdateAsync(user);
-            return Ok();
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> PostUser(User user)
+        //{
+            
+        //}
+
+        //[HttpPut]
+        //public async Task<IActionResult> PutUser(User user)
+        //{
+            
+        //}
     }
 }

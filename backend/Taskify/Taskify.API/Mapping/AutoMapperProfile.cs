@@ -11,6 +11,9 @@ namespace Taskify.API.Mapping
             CreateMap<Subscription, SubscriptionDto>();
             CreateMap<SubscriptionDto, Subscription>();
             CreateMap<CreateSubscriptionDto, Subscription>();
+
+            CreateMap<UserDto, User>();
+            CreateMap<User, UserDto>();
         }
     }
 }

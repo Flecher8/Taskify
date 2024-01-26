@@ -47,7 +47,7 @@ namespace Taskify.BLL.Services
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<Subscription>("Can not create new subscription");
+                return ResultFactory.Failure<Subscription>("Can not create new subscription.");
             }
         }
 
@@ -61,7 +61,7 @@ namespace Taskify.BLL.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<bool>("Can not delete subscription");
+                return ResultFactory.Failure<bool>("Can not delete subscription.");
                 
             }
         }
@@ -76,7 +76,7 @@ namespace Taskify.BLL.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<List<Subscription>>("Can not get all subscriptions");
+                return ResultFactory.Failure<List<Subscription>>("Can not get all subscriptions.");
             }
         }
 
@@ -88,7 +88,7 @@ namespace Taskify.BLL.Services
 
                 if (result == null)
                 {
-                    return ResultFactory.Failure<Subscription>("Subscription with such id does not exist");
+                    return ResultFactory.Failure<Subscription>("Subscription with such id does not exist.");
                 }
 
                 return ResultFactory.Success(result);
@@ -96,7 +96,7 @@ namespace Taskify.BLL.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<Subscription>("Can not get subscription by id");
+                return ResultFactory.Failure<Subscription>("Can not get subscription by id.");
             }
         }
 
@@ -117,7 +117,7 @@ namespace Taskify.BLL.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<bool>("Can not update subscription");
+                return ResultFactory.Failure<bool>("Can not update subscription.");
             }
         }
     }

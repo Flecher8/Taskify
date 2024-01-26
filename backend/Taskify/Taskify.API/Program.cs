@@ -40,9 +40,11 @@ namespace Taskify.API
 
             // Validators
             builder.Services.AddScoped<IValidator<Subscription>, SubscriptionValidator>();
+            builder.Services.AddScoped<IValidator<User>, UserValidator>();
 
             // Add services to the container.
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             // Add Identity services
             //builder.Services.AddIdentity<User, IdentityRole>()

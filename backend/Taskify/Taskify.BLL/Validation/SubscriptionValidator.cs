@@ -21,7 +21,7 @@ namespace Taskify.BLL.Validation
 
             var errorMessages = baseResult.ErrorMessages;
 
-            // Specific validation logic for Subscription entity goes here
+            // Specific validation logic for Subscription entity
 
             // Check if Id is a valid Guid
             if (!Guid.TryParse(subscription.Id, out _))
