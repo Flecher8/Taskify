@@ -44,6 +44,7 @@ namespace Taskify.API
 
             // Add services to the container.
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+            builder.Services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             builder.Services.AddScoped<IUserService, UserService>();
 
             // Add Identity services

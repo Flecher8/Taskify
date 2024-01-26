@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
@@ -13,10 +14,12 @@ namespace Taskify.DAL.Repositories
     public class UserSubscriptionRepository : IUserSubscriptionRepository
     {
         private readonly DataContext _dbContext;
+        private readonly UserSubscriptionFilterBuilder _filterBuilder;
 
         public UserSubscriptionRepository(DataContext dbContext)
         {
             _dbContext = dbContext;
+            _filterBuilder = new UserSubscriptionFilterBuilder();
         }
 
         public async Task<UserSubscription> AddAsync(UserSubscription item)
@@ -49,6 +52,27 @@ namespace Taskify.DAL.Repositories
         public async Task<List<UserSubscription>> GetFilteredItemsAsync(Expression<Func<UserSubscription, bool>> filter)
         {
             return await _dbContext.UserSubscriptions.Where(filter).ToListAsync();
+        }
+
+        public async Task<List<UserSubscription>> GetFilteredItemsAsync(Action<UserSubscriptionFilterBuilder> buildFilter)
+        {
+            buildFilter(_filterBuilder);
+
+            var query = _dbContext.UserSubscriptions.AsQueryable();
+
+            if (_filterBuilder.IncludeUser)
+            {
+                query = query.Include(us => us.User);
+            }
+
+            if (_filterBuilder.IncludeSubscription)
+            {
+                query = query.Include(us => us.Subscription);
+            }
+
+            return await query
+                .Where(_filterBuilder.Filter)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(UserSubscription item)
