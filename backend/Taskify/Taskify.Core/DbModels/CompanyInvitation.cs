@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Taskify.Core.DbModels
 {
-    public class UserSubscription
+    public class CompanyInvitation
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public User User { get; set; }
-        public Subscription Subscription { get; set; }
-        public DateTime StartDateTimeUtc { get; set; }
-        public DateTime EndDateTimeUtc { get; set; }
+        public Notification Notification { get; set; }
+        public Company Company { get; set; }
+        public bool? IsAccepted { get; set; }
     }
 }

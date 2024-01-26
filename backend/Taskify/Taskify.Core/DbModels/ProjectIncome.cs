@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Taskify.Core.Enums;
 
 namespace Taskify.Core.DbModels
 {
-    public class UserSubscription
+    public class ProjectIncome
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public User User { get; set; }
-        public Subscription Subscription { get; set; }
-        public DateTime StartDateTimeUtc { get; set; }
-        public DateTime EndDateTimeUtc { get; set; }
+        public Project Project { get; set; }
+        public double Amount { get; set; }
+        public ProjectIncomeFrequency Frequency { get; set; }
+        
     }
 }

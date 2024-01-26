@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taskify.DAL;
 
@@ -11,9 +12,11 @@ using Taskify.DAL;
 namespace Taskify.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240126122626_AddedDependenciesInProjectTable")]
+    partial class AddedDependenciesInProjectTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -607,9 +610,6 @@ namespace Taskify.DAL.Migrations
                     b.Property<DateTime>("EndDateTimeUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("StartDateTimeUtc")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("SubscriptionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -858,7 +858,7 @@ namespace Taskify.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("Taskify.Core.DbModels.User", "User")
-                        .WithMany("UserSubscriptions")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -912,8 +912,6 @@ namespace Taskify.DAL.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Projects");
-
-                    b.Navigation("UserSubscriptions");
                 });
 #pragma warning restore 612, 618
         }

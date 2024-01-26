@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Taskify.Core\Taskify.Core.csproj" />
     <ProjectReference Include="..\Taskify.DAL\Taskify.DAL.csproj" />
   </ItemGroup>
 

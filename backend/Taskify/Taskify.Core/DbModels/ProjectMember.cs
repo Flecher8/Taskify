@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Taskify.Core.DbModels
 {
-    public class UserSubscription
+    public class ProjectMember
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
+        public Project Project { get; set; }
         public User User { get; set; }
-        public Subscription Subscription { get; set; }
-        public DateTime StartDateTimeUtc { get; set; }
-        public DateTime EndDateTimeUtc { get; set; }
+        public ProjectRole ProjectRole { get; set; }
     }
 }
