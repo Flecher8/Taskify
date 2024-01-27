@@ -10,7 +10,7 @@ using Taskify.DAL.Repositories;
 
 namespace Taskify.DAL.Interfaces
 {
-    public interface IUserSubscriptionRepository
+    public interface IUserSubscriptionRepository : IFilterableRepository<UserSubscription, UserSubscriptionFilterBuilder>
     {
     }
 }

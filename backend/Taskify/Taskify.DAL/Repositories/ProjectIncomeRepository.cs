@@ -6,55 +6,28 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class ProjectIncomeRepository : IProjectIncomeRepository
+    public class ProjectIncomeRepository : BaseFilterableRepository<ProjectIncome, ProjectIncomeFilterBuilder>, IProjectIncomeRepository
     {
-        private readonly DataContext _dbContext;
+        public ProjectIncomeRepository(DataContext dbContext) : base(dbContext) { }
 
-        public ProjectIncomeRepository(DataContext dbContext)
+        public override async Task<List<ProjectIncome>> GetFilteredItemsAsync(Action<ProjectIncomeFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<ProjectIncome> AddAsync(ProjectIncome item)
+        protected override IQueryable<ProjectIncome> IncludeEntities(IQueryable<ProjectIncome> query)
         {
-            await _dbContext.ProjectIncomes.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var projectIncome = await _dbContext.ProjectIncomes.FindAsync(id);
-            if (projectIncome != null)
+            if (_filterBuilder.IncludeProject)
             {
-                _dbContext.ProjectIncomes.Remove(projectIncome);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(pi => pi.Project);
             }
-        }
 
-        public async Task<List<ProjectIncome>> GetAllAsync()
-        {
-            return await _dbContext.ProjectIncomes.ToListAsync();
-        }
-
-        public async Task<ProjectIncome?> GetByIdAsync(string id)
-        {
-            return await _dbContext.ProjectIncomes.FindAsync(id);
-        }
-
-        public async Task<List<ProjectIncome>> GetFilteredItemsAsync(Expression<Func<ProjectIncome, bool>> filter)
-        {
-            return await _dbContext.ProjectIncomes.Where(filter).ToListAsync();
-        }
-
-        public async Task UpdateAsync(ProjectIncome item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

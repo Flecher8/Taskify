@@ -6,55 +6,33 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class CompanyMemberRoleRepository : ICompanyMemberRoleRepository
+    public class CompanyMemberRoleRepository : BaseFilterableRepository<CompanyMemberRole, CompanyMemberRoleFilterBuilder>, ICompanyMemberRoleRepository
     {
-        private readonly DataContext _dbContext;
+        public CompanyMemberRoleRepository(DataContext dbContext) : base(dbContext) { }
 
-        public CompanyMemberRoleRepository(DataContext dbContext)
+        public override async Task<List<CompanyMemberRole>> GetFilteredItemsAsync(Action<CompanyMemberRoleFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<CompanyMemberRole> AddAsync(CompanyMemberRole item)
+        protected override IQueryable<CompanyMemberRole> IncludeEntities(IQueryable<CompanyMemberRole> query)
         {
-            await _dbContext.CompanyMemberRoles.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var companyMemberRole = await _dbContext.CompanyMemberRoles.FindAsync(id);
-            if (companyMemberRole != null)
+            if (_filterBuilder.IncludeCompany)
             {
-                _dbContext.CompanyMemberRoles.Remove(companyMemberRole);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(cmr => cmr.Company);
             }
-        }
 
-        public async Task<List<CompanyMemberRole>> GetAllAsync()
-        {
-            return await _dbContext.CompanyMemberRoles.ToListAsync();
-        }
+            if (_filterBuilder.IncludeMembers)
+            {
+                query = query.Include(cmr => cmr.CompanyMembers);
+            }
 
-        public async Task<CompanyMemberRole?> GetByIdAsync(string id)
-        {
-            return await _dbContext.CompanyMemberRoles.FindAsync(id);
-        }
-
-        public async Task<List<CompanyMemberRole>> GetFilteredItemsAsync(Expression<Func<CompanyMemberRole, bool>> filter)
-        {
-            return await _dbContext.CompanyMemberRoles.Where(filter).ToListAsync();
-        }
-
-        public async Task UpdateAsync(CompanyMemberRole item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

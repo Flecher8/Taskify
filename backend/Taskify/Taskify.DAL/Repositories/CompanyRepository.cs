@@ -11,55 +11,17 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class CompanyRepository : ICompanyRepository
+    public class CompanyRepository : BaseFilterableRepository<Company, CompanyFilterBuilder>, ICompanyRepository
     {
-        private readonly DataContext _dbContext;
-        private readonly CompanyFilterBuilder _filterBuilder;
+        public CompanyRepository(DataContext dbContext) : base(dbContext) { }
 
-        public CompanyRepository(DataContext dbContext)
+        public override async Task<List<Company>> GetFilteredItemsAsync(Action<CompanyFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
-            _filterBuilder = new CompanyFilterBuilder();
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<Company> AddAsync(Company item)
+        protected override IQueryable<Company> IncludeEntities(IQueryable<Company> query)
         {
-            await _dbContext.Companies.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var company = await _dbContext.Companies.FindAsync(id);
-            if (company != null)
-            {
-                _dbContext.Companies.Remove(company);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task<List<Company>> GetAllAsync()
-        {
-            return await _dbContext.Companies.ToListAsync();
-        }
-
-        public async Task<Company?> GetByIdAsync(string id)
-        {
-            return await _dbContext.Companies.FindAsync(id);
-        }
-
-        public async Task<List<Company>> GetFilteredItemsAsync(Expression<Func<Company, bool>> filter)
-        {
-            return await _dbContext.Companies.Where(filter).ToListAsync();
-        }
-
-        public async Task<List<Company>> GetFilteredItemsAsync(Action<CompanyFilterBuilder> buildFilter)
-        {
-            buildFilter(_filterBuilder);
-
-            var query = _dbContext.Companies.AsQueryable();
-
             if (_filterBuilder.IncludeUser)
             {
                 query = query.Include(c => c.User);
@@ -85,15 +47,7 @@ namespace Taskify.DAL.Repositories
                 query = query.Include(c => c.CompanyInvitations);
             }
 
-            return await query
-                .Where(_filterBuilder.Filter)
-                .ToListAsync();
-        }
-
-        public async Task UpdateAsync(Company item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

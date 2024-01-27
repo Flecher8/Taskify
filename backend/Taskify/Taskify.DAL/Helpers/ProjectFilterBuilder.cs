@@ -8,15 +8,13 @@ using Taskify.Core.DbModels;
 
 namespace Taskify.DAL.Helpers
 {
-    public class ProjectFilterBuilder
+    public class ProjectFilterBuilder : BaseFilterBuilder<Project>
     {
         public bool IncludeUser { get; private set; }
         public bool IncludeSections { get; private set; }
         public bool IncludeInvitations { get; private set; }
         public bool IncludeMembers { get; private set; }
         public bool IncludeRoles { get; private set; }
-
-        public Expression<Func<Project, bool>> Filter { get; private set; } = _ => true;
 
         public ProjectFilterBuilder IncludeUserEntity()
         {
@@ -45,12 +43,6 @@ namespace Taskify.DAL.Helpers
         public ProjectFilterBuilder IncludeRolesEntity()
         {
             IncludeRoles = true;
-            return this;
-        }
-
-        public ProjectFilterBuilder WithFilter(Expression<Func<Project, bool>> filter)
-        {
-            Filter = filter;
             return this;
         }
     }

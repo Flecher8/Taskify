@@ -11,69 +11,24 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class CompanyExpenseRepository : ICompanyExpenseRepository
+    public class CompanyExpenseRepository : BaseFilterableRepository<CompanyExpense, CompanyExpenseFilterBuilder>, ICompanyExpenseRepository
     {
-        private readonly DataContext _dbContext;
-        private readonly CompanyExpenseFilterBuilder _filterBuilder;
 
-        public CompanyExpenseRepository(DataContext dbContext)
+        public CompanyExpenseRepository(DataContext dbContext) : base(dbContext) { }
+
+        public override async Task<List<CompanyExpense>> GetFilteredItemsAsync(Action<CompanyExpenseFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
-            _filterBuilder = new CompanyExpenseFilterBuilder();
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<CompanyExpense> AddAsync(CompanyExpense item)
+        protected override IQueryable<CompanyExpense> IncludeEntities(IQueryable<CompanyExpense> query)
         {
-            await _dbContext.CompanyExpenses.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var companyExpense = await _dbContext.CompanyExpenses.FindAsync(id);
-            if (companyExpense != null)
-            {
-                _dbContext.CompanyExpenses.Remove(companyExpense);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task<List<CompanyExpense>> GetAllAsync()
-        {
-            return await _dbContext.CompanyExpenses.ToListAsync();
-        }
-
-        public async Task<CompanyExpense?> GetByIdAsync(string id)
-        {
-            return await _dbContext.CompanyExpenses.FindAsync(id);
-        }
-
-        public async Task<List<CompanyExpense>> GetFilteredItemsAsync(Expression<Func<CompanyExpense, bool>> filter)
-        {
-            return await _dbContext.CompanyExpenses.Where(filter).ToListAsync();
-        }
-
-        public async Task<List<CompanyExpense>> GetFilteredItemsAsync(Action<CompanyExpenseFilterBuilder> buildFilter)
-        {
-            buildFilter(_filterBuilder);
-
-            var query = _dbContext.CompanyExpenses.AsQueryable();
-
             if (_filterBuilder.IncludeCompany)
             {
                 query = query.Include(ce => ce.Company);
             }
 
-            return await query
-                .Where(_filterBuilder.Filter)
-                .ToListAsync();
-        }
-
-        public async Task UpdateAsync(CompanyExpense item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

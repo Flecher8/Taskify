@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Taskify.DAL.Interfaces
 {
-    public interface IFilterableRepository<T, TFilterData> : IDataRepository<T>
+    public interface IFilterableRepository<T, TFilterBuilder> : IDataRepository<T>
     {
-        Task<List<T>> GetFilteredItemsAsync(Action<TFilterData> buildFilter);
+        Task<List<T>> GetFilteredItemsAsync(Action<TFilterBuilder> buildFilter);
     }
 }

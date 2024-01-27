@@ -8,13 +8,11 @@ using Taskify.Core.DbModels;
 
 namespace Taskify.DAL.Helpers
 {
-    public class CompanyMemberFilterBuilder
+    public class CompanyMemberFilterBuilder : BaseFilterBuilder<CompanyMember>
     {
         public bool IncludeUser { get; private set; }
         public bool IncludeCompany { get; private set; }
         public bool IncludeRole { get; private set; }
-
-        public Expression<Func<CompanyMember, bool>> Filter { get; private set; } = _ => true;
 
         public CompanyMemberFilterBuilder IncludeUserEntity()
         {
@@ -31,12 +29,6 @@ namespace Taskify.DAL.Helpers
         public CompanyMemberFilterBuilder IncludeRoleEntity()
         {
             IncludeRole = true;
-            return this;
-        }
-
-        public CompanyMemberFilterBuilder WithFilter(Expression<Func<CompanyMember, bool>> filter)
-        {
-            Filter = filter;
             return this;
         }
     }

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 
 namespace Taskify.DAL.Interfaces
 {
-    public interface IProjectRoleRepository : IDataRepository<ProjectRole>
+    public interface IProjectRoleRepository : IFilterableRepository<ProjectRole, ProjectRoleFilterBuilder>
     {
     }
 }

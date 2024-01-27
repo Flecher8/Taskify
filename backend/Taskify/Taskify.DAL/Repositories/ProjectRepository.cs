@@ -11,55 +11,17 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class ProjectRepository : BaseFilterableRepository<Project, ProjectFilterBuilder>, IProjectRepository
     {
-        private readonly DataContext _dbContext;
-        private readonly ProjectFilterBuilder _filterBuilder;
+        public ProjectRepository(DataContext dbContext) : base(dbContext) { }
 
-        public ProjectRepository(DataContext dbContext)
+        public override async Task<List<Project>> GetFilteredItemsAsync(Action<ProjectFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
-            _filterBuilder = new ProjectFilterBuilder();
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<Project> AddAsync(Project item)
+        protected override IQueryable<Project> IncludeEntities(IQueryable<Project> query)
         {
-            await _dbContext.Projects.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var project = await _dbContext.Projects.FindAsync(id);
-            if (project != null)
-            {
-                _dbContext.Projects.Remove(project);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task<List<Project>> GetAllAsync()
-        {
-            return await _dbContext.Projects.ToListAsync();
-        }
-
-        public async Task<Project?> GetByIdAsync(string id)
-        {
-            return await _dbContext.Projects.FindAsync(id);
-        }
-
-        public async Task<List<Project>> GetFilteredItemsAsync(Expression<Func<Project, bool>> filter)
-        {
-            return await _dbContext.Projects.Where(filter).ToListAsync();
-        }
-
-        public async Task<List<Project>> GetFilteredItemsAsync(Action<ProjectFilterBuilder> buildFilter)
-        {
-            buildFilter(_filterBuilder);
-
-            var query = _dbContext.Projects.AsQueryable();
-
             if (_filterBuilder.IncludeUser)
             {
                 query = query.Include(p => p.User);
@@ -85,15 +47,7 @@ namespace Taskify.DAL.Repositories
                 query = query.Include(p => p.ProjectRoles);
             }
 
-            return await query
-                .Where(_filterBuilder.Filter)
-                .ToListAsync();
-        }
-
-        public async Task UpdateAsync(Project item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

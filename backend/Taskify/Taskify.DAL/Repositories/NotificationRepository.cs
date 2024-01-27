@@ -6,55 +6,28 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class NotificationRepository : INotificationRepository
+    public class NotificationRepository : BaseFilterableRepository<Notification, NotificationFilterBuilder>, INotificationRepository
     {
-        private readonly DataContext _dbContext;
+        public NotificationRepository(DataContext dbContext) : base(dbContext) { }
 
-        public NotificationRepository(DataContext dbContext)
+        public override async Task<List<Notification>> GetFilteredItemsAsync(Action<NotificationFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<Notification> AddAsync(Notification item)
+        protected override IQueryable<Notification> IncludeEntities(IQueryable<Notification> query)
         {
-            await _dbContext.Notifications.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var notification = await _dbContext.Notifications.FindAsync(id);
-            if (notification != null)
+            if (_filterBuilder.IncludeUser)
             {
-                _dbContext.Notifications.Remove(notification);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(n => n.User);
             }
-        }
 
-        public async Task<List<Notification>> GetAllAsync()
-        {
-            return await _dbContext.Notifications.ToListAsync();
-        }
-
-        public async Task<Notification?> GetByIdAsync(string id)
-        {
-            return await _dbContext.Notifications.FindAsync(id);
-        }
-
-        public async Task<List<Notification>> GetFilteredItemsAsync(Expression<Func<Notification, bool>> filter)
-        {
-            return await _dbContext.Notifications.Where(filter).ToListAsync();
-        }
-
-        public async Task UpdateAsync(Notification item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

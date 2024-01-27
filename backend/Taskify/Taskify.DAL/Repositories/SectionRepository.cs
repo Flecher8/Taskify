@@ -6,56 +6,33 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class SectionRepository : ISectionRepository
+    public class SectionRepository : BaseFilterableRepository<Section, SectionFilterBuilder>, ISectionRepository
     {
-        private readonly DataContext _dbContext;
+        public SectionRepository(DataContext dbContext) : base(dbContext) { }
 
-        public SectionRepository(DataContext dbContext)
+        public override async Task<List<Section>> GetFilteredItemsAsync(Action<SectionFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<Section> AddAsync(Section item)
+        protected override IQueryable<Section> IncludeEntities(IQueryable<Section> query)
         {
-            await _dbContext.Sections.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var section = await _dbContext.Sections.FindAsync(id);
-            if (section != null)
+            if (_filterBuilder.IncludeProject)
             {
-                _dbContext.Sections.Remove(section);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(s => s.Project);
             }
-        }
 
-        public async Task<List<Section>> GetAllAsync()
-        {
-            return await _dbContext.Sections.ToListAsync();
-        }
+            if (_filterBuilder.IncludeCustomTasks)
+            {
+                query = query.Include(s => s.CustomTasks);
+            }
 
-        public async Task<Section?> GetByIdAsync(string id)
-        {
-            return await _dbContext.Sections.FindAsync(id);
-        }
-
-        public async Task<List<Section>> GetFilteredItemsAsync(Expression<Func<Section, bool>> filter)
-        {
-            return await _dbContext.Sections.Where(filter).ToListAsync();
-        }
-
-        public async Task UpdateAsync(Section item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
-
 }

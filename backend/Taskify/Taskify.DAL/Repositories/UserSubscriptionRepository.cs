@@ -15,12 +15,12 @@ namespace Taskify.DAL.Repositories
     {
         public UserSubscriptionRepository(DataContext dbContext) : base(dbContext) { }
 
-        public override async Task<List<UserSubscription>> GetFilteredItemsAsync(Func<IQueryable<UserSubscription>, IQueryable<UserSubscription>> includeEntities, Action<UserSubscriptionFilterBuilder> buildFilter)
+        public override async Task<List<UserSubscription>> GetFilteredItemsAsync(Action<UserSubscriptionFilterBuilder> buildFilter)
         {
-            return await base.GetFilteredItemsAsync(IncludeEntities, buildFilter);
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        private IQueryable<UserSubscription> IncludeEntities(IQueryable<UserSubscription> query)
+        protected override IQueryable<UserSubscription> IncludeEntities(IQueryable<UserSubscription> query)
         {
             if (_filterBuilder.IncludeUser)
             {

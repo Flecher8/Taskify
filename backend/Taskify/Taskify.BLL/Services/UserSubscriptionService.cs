@@ -35,9 +35,10 @@ namespace Taskify.BLL.Services
         {
             try
             {
-                var userSubscriptions = await _userSubscriptionRepository.GetFilteredItemsAsync(builder =>
-                    builder.IncludeSubscriptionEntity()
-                           .WithFilter(us => us.User.Id == userId && us.EndDateTimeUtc > DateTime.UtcNow)
+                var userSubscriptions = await _userSubscriptionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                                    .IncludeSubscriptionEntity()
+                                    .WithFilter(us => us.User.Id == userId && us.EndDateTimeUtc > DateTime.UtcNow)
                 );
 
                 var activeSubscription = userSubscriptions.FirstOrDefault(us => us.EndDateTimeUtc > DateTime.UtcNow);

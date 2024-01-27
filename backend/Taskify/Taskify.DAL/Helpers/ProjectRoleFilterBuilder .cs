@@ -8,13 +8,13 @@ using Taskify.Core.DbModels;
 
 namespace Taskify.DAL.Helpers
 {
-    public class CompanyExpenseFilterBuilder : BaseFilterBuilder<CompanyExpense>
+    public class ProjectRoleFilterBuilder : BaseFilterBuilder<ProjectRole>
     {
-        public bool IncludeCompany { get; private set; }
+        public bool IncludeProject { get; private set; }
 
-        public CompanyExpenseFilterBuilder IncludeCompanyEntity()
+        public ProjectRoleFilterBuilder IncludeProjectEntity()
         {
-            IncludeCompany = true;
+            IncludeProject = true;
             return this;
         }
     }

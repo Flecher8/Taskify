@@ -8,11 +8,10 @@ using Taskify.Core.DbModels;
 
 namespace Taskify.DAL.Helpers
 {
-    public class UserSubscriptionFilterBuilder
+    public class UserSubscriptionFilterBuilder : BaseFilterBuilder<UserSubscription>
     {
         public bool IncludeUser { get; private set; }
         public bool IncludeSubscription { get; private set; }
-        public Expression<Func<UserSubscription, bool>> Filter { get; private set; } = _ => true;
 
         public UserSubscriptionFilterBuilder IncludeUserEntity()
         {
@@ -23,12 +22,6 @@ namespace Taskify.DAL.Helpers
         public UserSubscriptionFilterBuilder IncludeSubscriptionEntity()
         {
             IncludeSubscription = true;
-            return this;
-        }
-
-        public UserSubscriptionFilterBuilder WithFilter(Expression<Func<UserSubscription, bool>> filter)
-        {
-            Filter = filter;
             return this;
         }
     }
