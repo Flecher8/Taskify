@@ -8,12 +8,20 @@ namespace Taskify.API.Mapping
     {
         public AutoMapperProfile() 
         {
+            // Subscrioptions
             CreateMap<Subscription, SubscriptionDto>();
             CreateMap<SubscriptionDto, Subscription>();
             CreateMap<CreateSubscriptionDto, Subscription>();
-
+            // Users
             CreateMap<UserDto, User>();
             CreateMap<User, UserDto>();
+            // Projects
+            CreateMap<Project,  ProjectDto>();
+            CreateMap<ProjectDto, Project>();
+            CreateMap<CreateProjectDto, Project>()
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => new User { Id = src.UserId }));
+            CreateMap<UpdateProjectDto, Project>();
+
         }
     }
 }

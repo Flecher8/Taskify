@@ -9,7 +9,7 @@ namespace Taskify.DAL.Helpers
 {
     public class BaseFilterBuilder<T>
     {
-        protected Expression<Func<T, bool>> Filter { get; private set; } = _ => true;
+        public Expression<Func<T, bool>> Filter { get; private set; } = _ => true;
 
         public BaseFilterBuilder<T> WithFilter(Expression<Func<T, bool>> filter)
         {

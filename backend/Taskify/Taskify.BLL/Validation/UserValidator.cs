@@ -8,7 +8,7 @@ using Taskify.DAL.Migrations;
 
 namespace Taskify.BLL.Validation
 {
-    public class UserValidator : Validator<User>
+    public class UserValidator : BaseValidator<User>
     {
         public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(User user)
         {

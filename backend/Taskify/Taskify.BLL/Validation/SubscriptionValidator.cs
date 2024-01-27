@@ -8,7 +8,7 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.BLL.Validation
 {
-    public class SubscriptionValidator : Validator<Subscription>
+    public class SubscriptionValidator : BaseValidator<Subscription>
     {
         public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(Subscription subscription)
         {

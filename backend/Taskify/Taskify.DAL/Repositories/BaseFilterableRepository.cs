@@ -27,8 +27,18 @@ namespace Taskify.DAL.Repositories
             var query = _dbContext.Set<T>().AsQueryable();
             query = IncludeEntities(query);
 
+            var filterProperty = _filterBuilder.GetType().GetProperty("Filter");
+            var filter = filterProperty.GetValue(_filterBuilder) as Expression<Func<T, bool>>;
+
+            // Ensure that the Filter property is initialized
+            if (filter == null)
+            {
+                filter = _ => true; // Default filter if not set
+                filterProperty.SetValue(_filterBuilder, filter);
+            }
+
             return await query
-                .Where((Expression<Func<T, bool>>)_filterBuilder.GetType().GetProperty("Filter").GetValue(_filterBuilder))
+                .Where(filter)
                 .ToListAsync();
         }
 

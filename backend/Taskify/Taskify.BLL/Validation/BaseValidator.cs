@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Taskify.BLL.Validation
 {
-    public class Validator<T> : IValidator<T>
+    public class BaseValidator<T> : IValidator<T>
     {
         public virtual async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(T entity)
         {
