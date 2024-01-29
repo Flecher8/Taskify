@@ -15,18 +15,18 @@ namespace Taskify.BLL.Services
     public class ProjectsService : IProjectsService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly IValidator<Project> _validator;
         private readonly ILogger<ProjectsService> _logger;
 
         public ProjectsService(IProjectRepository projectRepository,
-            IUserRepository userRepository,
+            IUserService userService,
             IValidator<Project> validator,
             ILogger<ProjectsService> logger
         )
         {
             _projectRepository = projectRepository;
-            _userRepository = userRepository;
+            _userService = userService;
             _validator = validator;
             _logger = logger;
         }
@@ -40,11 +40,11 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<Project>("Can not find such user id.");
                 }
 
-                var user = await _userRepository.GetByIdAsync(project.User.Id);
+                var userResult = await _userService.GetUserByIdAsync(project.User.Id);
 
-                if (user == null)
-                {
-                    return ResultFactory.Failure<Project>("Can not find such user id.");
+                if (!userResult.IsSuccess) 
+                { 
+                    return ResultFactory.Failure<Project>(userResult.Errors);
                 }
 
                 // Validation
@@ -54,7 +54,7 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<Project>(validation.ErrorMessages);
                 }
 
-                project.User = user;
+                project.User = userResult.Data;
                 project.CreatedAt = DateTime.UtcNow;
 
                 // TODO

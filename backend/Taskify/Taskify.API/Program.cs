@@ -42,12 +42,14 @@ namespace Taskify.API
             builder.Services.AddScoped<IValidator<Subscription>, SubscriptionValidator>();
             builder.Services.AddScoped<IValidator<User>, UserValidator>();
             builder.Services.AddScoped<IValidator<Project>, ProjectValidator>();
+            builder.Services.AddScoped<IValidator<ProjectIncome>, ProjectIncomeValidator>();
 
             // Add services to the container.
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
             builder.Services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IProjectsService, ProjectsService>();
+            builder.Services.AddScoped<IProjectIncomesService, ProjectIncomesService>();
 
             // Add Identity services
             //builder.Services.AddIdentity<User, IdentityRole>()
