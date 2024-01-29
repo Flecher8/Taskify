@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Net;
+using System.Text.Json.Serialization;
 using Taskify.BLL.Interfaces;
 using Taskify.BLL.Services;
 using Taskify.BLL.Validation;
@@ -43,6 +44,7 @@ namespace Taskify.API
             builder.Services.AddScoped<IValidator<User>, UserValidator>();
             builder.Services.AddScoped<IValidator<Project>, ProjectValidator>();
             builder.Services.AddScoped<IValidator<ProjectIncome>, ProjectIncomeValidator>();
+            builder.Services.AddScoped<IValidator<Section>, SectionValidator>();
 
             // Add services to the container.
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
@@ -50,6 +52,7 @@ namespace Taskify.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IProjectsService, ProjectsService>();
             builder.Services.AddScoped<IProjectIncomesService, ProjectIncomesService>();
+            builder.Services.AddScoped<ISectionsService, SectionsService>();
 
             // Add Identity services
             //builder.Services.AddIdentity<User, IdentityRole>()
@@ -58,8 +61,11 @@ namespace Taskify.API
 
             builder.Services.AddIdentityApiEndpoints<User>()
                 .AddEntityFrameworkStores<DataContext>();
-
             builder.Services.AddControllers();
+            //builder.Services.AddControllers().AddJsonOptions(options =>
+            //{
+            //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            //});
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(option =>

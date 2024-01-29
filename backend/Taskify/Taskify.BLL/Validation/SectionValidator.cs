@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
-using Taskify.DAL.Migrations;
+using Taskify.Core.Enums;
 
 namespace Taskify.BLL.Validation
 {
-    public class ProjectValidator : BaseValidator<Project>
+    public class SectionValidator : BaseValidator<Section>
     {
-        public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(Project entity)
+        public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(Section entity)
         {
             var baseResult = await base.ValidateAsync(entity);
 
@@ -28,7 +28,18 @@ namespace Taskify.BLL.Validation
 
             if (string.IsNullOrWhiteSpace(entity.Name))
             {
-                errorMessages.Add("Project name cannot be null or empty.");
+                errorMessages.Add("Section name cannot be null or empty.");
+            }
+
+            if (entity.SequenceNumber < 0)
+            {
+                errorMessages.Add("Section sequence number can not be less than 0.");
+            }
+
+
+            if (!Enum.IsDefined(typeof(SectionType), entity.SectionType))
+            {
+                errorMessages.Add("Invalid section type.");
             }
 
             return (errorMessages.Count == 0, errorMessages);
