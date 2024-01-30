@@ -78,13 +78,49 @@ namespace Taskify.BLL.Services
         {
             try
             {
+                var sectionWithProject = await _sectionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .WithFilter(s => s.Id == id)
+                );
+
+                var sectionToDelete = sectionWithProject.FirstOrDefault();
+
+                if (sectionToDelete == null)
+                {
+                    return ResultFactory.Failure<bool>("Section with such id does not exist.");
+                }
+
+                // Delete the section
                 await _sectionRepository.DeleteAsync(id);
+
+                // Get the remaining sections in the project
+                var remainingSections = await _sectionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .WithFilter(s => s.Project.Id == sectionToDelete.Project.Id)
+                );
+
+                // Order the remaining sections by sequence number
+                remainingSections = remainingSections.OrderBy(s => s.SequenceNumber).ToList();
+
+                
+
+                // Update sequence numbers
+                for (int index = 0; index < remainingSections.Count; index++)
+                {
+                    var section = remainingSections[index];
+                    _logger.LogInformation(section.Id + " " + section.SequenceNumber);
+                    section.SequenceNumber = index;
+                    await _sectionRepository.UpdateAsync(section);
+                }
+
                 return ResultFactory.Success(true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<bool>("Can not delete the section.");
+                return ResultFactory.Failure<bool>("Error while deleting the section.");
             }
         }
 
@@ -172,67 +208,62 @@ namespace Taskify.BLL.Services
 
         public async Task<Result<bool>> MoveSectionAsync(string sectionId, int targetSequenceNumber)
         {
-            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            try
             {
-                try
+                var sectionWithProject = await _sectionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .WithFilter(s => s.Id == sectionId)
+                );
+
+                var sectionToMove = sectionWithProject.FirstOrDefault();
+
+                if (sectionToMove == null)
                 {
-                    var sectionToMove = await _sectionRepository.GetByIdAsync(sectionId);
-
-                    if (sectionToMove == null)
-                    {
-                        return ResultFactory.Failure<bool>("Section with such id does not exist.");
-                    }
-
-                    var sectionsInCurrentProject = await _sectionRepository.GetFilteredItemsAsync(
-                            builder => builder
-                            .IncludeProjectEntity()
-                            .WithFilter(s => s.Project.Id == sectionToMove.Project.Id)
-                        );
-
-                    sectionsInCurrentProject = sectionsInCurrentProject.OrderBy(s => s.SequenceNumber).ToList();
-
-                    int currentIndex = sectionsInCurrentProject.FindIndex(s => s.Id == sectionId);
-
-                    if (currentIndex == -1)
-                    {
-                        return ResultFactory.Failure<bool>("Section not found in the current project.");
-                    }
-
-                    // Ensure the target position is within bounds
-                    if (!IsTargetSequenceNumberValid(targetSequenceNumber, sectionsInCurrentProject.Count))
-                    {
-                        return ResultFactory.Failure<bool>("Invalid target sequence number.");
-                    }
-
-                    // Move section to the target position
-                    sectionsInCurrentProject.RemoveAt(currentIndex);
-                    sectionsInCurrentProject.Insert(targetSequenceNumber, sectionToMove);
-
-                    // Update sequence numbers
-                    // Update sequence numbers asynchronously
-                    var updateTasks = sectionsInCurrentProject.Select(async (section, index) =>
-                    {
-                        section.SequenceNumber = index;
-                        await _sectionRepository.UpdateAsync(section);
-                    });
-
-                    await Task.WhenAll(updateTasks);
-
-                    // If all updates are successful, commit the transaction
-                    transactionScope.Complete();
-
-                    return ResultFactory.Success(true);
+                    return ResultFactory.Failure<bool>("Section with such id does not exist.");
                 }
-                catch (Exception ex)
+
+                var sectionsInCurrentProject = await _sectionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .WithFilter(s => s.Project.Id == sectionToMove.Project.Id)
+                );
+
+                sectionsInCurrentProject = sectionsInCurrentProject.OrderBy(s => s.SequenceNumber).ToList();
+
+                int currentIndex = sectionsInCurrentProject.FindIndex(s => s.Id == sectionId);
+
+                if (currentIndex == -1)
                 {
-                    // Handle exceptions
-                    _logger.LogError(ex.Message);
-
-                    // Roll back changes in case of an error
-                    transactionScope.Dispose();
-                    // Optionally, rethrow the exception if needed
-                    return ResultFactory.Failure<bool>("Error while moving the section.");
+                    return ResultFactory.Failure<bool>("Section not found in the current project.");
                 }
+
+                // Ensure the target position is within bounds
+                if (!IsTargetSequenceNumberValid(targetSequenceNumber, sectionsInCurrentProject.Count))
+                {
+                    return ResultFactory.Failure<bool>("Invalid target sequence number.");
+                }
+
+                // Move section to the target position
+                sectionsInCurrentProject.RemoveAt(currentIndex);
+                sectionsInCurrentProject.Insert(targetSequenceNumber, sectionToMove);
+
+                // Update sequence numbers
+                for (int index = 0; index < sectionsInCurrentProject.Count; index++)
+                {
+                    var section = sectionsInCurrentProject[index];
+                    section.SequenceNumber = index;
+                    await _sectionRepository.UpdateAsync(section);
+                }
+
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                _logger.LogError(ex.Message);
+
+                return ResultFactory.Failure<bool>("Error while moving the section.");
             }
         }
 
