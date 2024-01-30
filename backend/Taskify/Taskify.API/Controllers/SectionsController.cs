@@ -101,12 +101,12 @@ namespace Taskify.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSection(string id)
+        [HttpDelete("{id}/redirect/{redirectSectionId}")]
+        public async Task<IActionResult> DeleteSection(string id, string redirectSectionId)
         {
             try
             {
-                var result = await _sectionsService.DeleteSectionAsync(id);
+                var result = await _sectionsService.DeleteSectionAsync(id, redirectSectionId);
 
                 return result.IsSuccess
                     ? NoContent()
@@ -133,6 +133,42 @@ namespace Taskify.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in MoveSection method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPatch("{id}/archive")]
+        public async Task<IActionResult> ArchiveSection(string id)
+        {
+            try
+            {
+                var result = await _sectionsService.ArchiveSectionAsync(id);
+
+                return result.IsSuccess
+                    ? Ok(result.Data)
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in ArchiveSection method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPatch("{id}/unarchive")]
+        public async Task<IActionResult> UnarchiveSection(string id)
+        {
+            try
+            {
+                var result = await _sectionsService.UnarchiveSectionAsync(id);
+
+                return result.IsSuccess
+                    ? Ok(result.Data)
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in UnarchiveSection method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

@@ -10,6 +10,7 @@ using Taskify.BLL.Validation;
 using Taskify.Core.DbModels;
 using Taskify.Core.Result;
 using Taskify.DAL.Interfaces;
+using Taskify.DAL.Repositories;
 
 namespace Taskify.BLL.Services
 {
@@ -17,18 +18,21 @@ namespace Taskify.BLL.Services
     {
         private readonly ISectionRepository _sectionRepository;
         private readonly IProjectRepository _projectRepository;
+        private readonly ICustomTaskRepository _customTaskRepository;
         private readonly IValidator<Section> _validator;
         private readonly ILogger<SectionsService> _logger;
 
         public SectionsService(
             ISectionRepository sectionRepository,
             IProjectRepository projectRepository,
+            ICustomTaskRepository customTaskRepository,
             IValidator<Section> validator,
             ILogger<SectionsService> logger
         )
         {
             _sectionRepository = sectionRepository;
             _projectRepository = projectRepository;
+            _customTaskRepository = customTaskRepository;
             _validator = validator;
             _logger = logger;
         }
@@ -74,7 +78,7 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<bool>> DeleteSectionAsync(string id)
+        public async Task<Result<bool>> DeleteSectionAsync(string id, string redirectSectionId)
         {
             try
             {
@@ -91,26 +95,53 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>("Section with such id does not exist.");
                 }
 
-                // Delete the section
-                await _sectionRepository.DeleteAsync(id);
+                var rediretionSection = await _sectionRepository.GetByIdAsync(redirectSectionId);
 
-                // Get the remaining sections in the project
-                var remainingSections = await _sectionRepository.GetFilteredItemsAsync(
+                if (rediretionSection == null)
+                {
+                    return ResultFactory.Failure<bool>("Redirection ection with such id does not exist.");
+                }
+
+                var projectSections = await _sectionRepository.GetFilteredItemsAsync(
                     builder => builder
                         .IncludeProjectEntity()
                         .WithFilter(s => s.Project.Id == sectionToDelete.Project.Id)
                 );
 
-                // Order the remaining sections by sequence number
-                remainingSections = remainingSections.OrderBy(s => s.SequenceNumber).ToList();
+                // Check if this is the last section in the project
+                if (projectSections.Count == 1)
+                {
+                    return ResultFactory.Failure<bool>("Cannot delete the last section in the project.");
+                }
+
+                // Redirect tasks from the deleted section to another section
+                var tasksToRedirect = await _customTaskRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeSectionEntity()
+                        .WithFilter(c => c.Section != null && c.Section.Id == id)
+                );
 
                 
+
+                foreach (var task in tasksToRedirect)
+                {
+                    task.Section = rediretionSection;
+                    await _customTaskRepository.UpdateAsync(task);
+                }
+
+                // Delete the section
+                await _sectionRepository.DeleteAsync(id);
+
+                // Get the remaining sections in the project
+                var remainingSections = projectSections
+                    .Where(s => s.Id != id)
+                    .OrderBy(s => s.SequenceNumber)
+                    .ToList();
 
                 // Update sequence numbers
                 for (int index = 0; index < remainingSections.Count; index++)
                 {
                     var section = remainingSections[index];
-                    _logger.LogInformation(section.Id + " " + section.SequenceNumber);
                     section.SequenceNumber = index;
                     await _sectionRepository.UpdateAsync(section);
                 }
@@ -270,6 +301,58 @@ namespace Taskify.BLL.Services
         private bool IsTargetSequenceNumberValid(int targetSequenceNumber, int sectionsCount)
         {
             return targetSequenceNumber >= 0 && targetSequenceNumber < sectionsCount;
+        }
+
+        public async Task<Result<bool>> ArchiveSectionAsync(string sectionId)
+        {
+            try
+            {
+                var section = await _sectionRepository.GetByIdAsync(sectionId);
+
+                if (section == null)
+                {
+                    return ResultFactory.Failure<bool>("Section with such id does not exist.");
+                }
+
+                section.IsArchived = true;
+
+                await _sectionRepository.UpdateAsync(section);
+
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                _logger.LogError(ex.Message);
+
+                return ResultFactory.Failure<bool>("Error while archiving the section.");
+            }
+        }
+
+        public async Task<Result<bool>> UnarchiveSectionAsync(string sectionId)
+        {
+            try
+            {
+                var section = await _sectionRepository.GetByIdAsync(sectionId);
+
+                if (section == null)
+                {
+                    return ResultFactory.Failure<bool>("Section with such id does not exist.");
+                }
+
+                section.IsArchived = false;
+
+                await _sectionRepository.UpdateAsync(section);
+
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                _logger.LogError(ex.Message);
+
+                return ResultFactory.Failure<bool>("Error while unarchiving the sectionk.");
+            }
         }
     }
 }

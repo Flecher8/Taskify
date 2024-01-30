@@ -139,6 +139,9 @@ namespace Taskify.BLL.Services
         {
             try
             {
+                // TODO
+                // Add projects that user didn't created but user is a member of a project
+                // ( use project members repository )
                 var result = await _projectRepository.GetFilteredItemsAsync(
                     builder => builder
                                     .IncludeUserEntity()
