@@ -155,12 +155,12 @@ namespace Taskify.API.Controllers
             }
         }
 
-        [HttpPatch("{id}/move/{targetSequenceNumber}")]
-        public async Task<IActionResult> MoveCustomTask(string id, int targetSequenceNumber)
+        [HttpPatch("move")]
+        public async Task<IActionResult> MoveCustomTask([FromBody] MoveCustomTaskDto moveCustomTaskDto)
         {
             try
             {
-                var result = await _customTasksService.MoveCustomTaskAsync(id, targetSequenceNumber);
+                var result = await _customTasksService.MoveCustomTaskAsync(moveCustomTaskDto.Id, moveCustomTaskDto.TargetSequenceNumber);
 
                 return result.IsSuccess
                     ? Ok(result.Data)
@@ -187,6 +187,27 @@ namespace Taskify.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in GetArchivedCustomTasksByProject method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPatch("redirect")]
+        public async Task<IActionResult> RedirectCustomTask([FromBody] RedirectCustomTaskDto redirectCustomTaskDto)
+        {
+            try
+            {
+                var result = await _customTasksService.RedirectCustomTaskAsync(
+                    redirectCustomTaskDto.Id,
+                    redirectCustomTaskDto.TargetSectionId,
+                    redirectCustomTaskDto.TargetSequenceNumber);
+
+                return result.IsSuccess
+                    ? Ok(result.Data)
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in RedirectCustomTask method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

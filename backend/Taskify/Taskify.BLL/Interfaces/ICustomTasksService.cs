@@ -19,5 +19,6 @@ namespace Taskify.BLL.Interfaces
         Task<Result<bool>> ArchiveCustomTaskAsync(string customTaskId);
         Task<Result<bool>> UnarchiveCustomTaskAsync(string customTaskId);
         Task<Result<List<CustomTask>>> GetArchivedCustomTasksByProjectAsync(string projectId);
+        Task<Result<bool>> RedirectCustomTaskAsync(string customTaskId, string targetSectionId, int? targetSequenceNumber);
     }
 }

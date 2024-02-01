@@ -10,8 +10,8 @@ namespace Taskify.Core.Dtos
     public class CustomTaskDto
     {
         public string Id { get; set; } = string.Empty;
-        public Section? Section { get; set; }
-        public User? ResponsibleUser { get; set; }
+        public SectionWithoutTasksDto? Section { get; set; }
+        public UserDto? ResponsibleUser { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime? StartDateTimeUtc { get; set; }

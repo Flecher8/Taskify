@@ -195,23 +195,15 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>("Can not find custom task with such id.");
                 }
 
-                if (customTask.Section == null)
-                {
-                    return ResultFactory.Failure<bool>("Section can not be found.");
-                }
-
-                var existingSection = await _sectionRepository.GetByIdAsync(customTask.Section.Id);
-
                 User? existingUser = null;
 
-                if(customTask.ResponsibleUser != null)
+                if(customTask.ResponsibleUser != null && !string.IsNullOrEmpty(customTask.ResponsibleUser.Id))
                 {
                     existingUser = await _userRepository.GetByIdAsync(customTask.ResponsibleUser.Id);
                 }
 
                 // Update custom task properties
                 existingCustomTask.Name = customTask.Name;
-                existingCustomTask.Section = existingSection;
                 existingCustomTask.ResponsibleUser = existingUser;
                 existingCustomTask.Description = customTask.Description;
                 existingCustomTask.StartDateTimeUtc = customTask.StartDateTimeUtc;
@@ -385,5 +377,312 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<List<CustomTask>>("Error while getting archived custom tasks by project.");
             }
         }
+
+
+        public async Task<Result<bool>> RedirectCustomTaskAsync(
+            string customTaskId,
+            string targetSectionId,
+            int? targetSequenceNumber)
+        {
+            try
+            {
+                var customTasksWithId = await _customTaskRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeSectionEntity()
+                        .WithFilter(ct => ct.Id == customTaskId)
+                    );
+
+                var customTaskToMove = customTasksWithId.FirstOrDefault();
+
+                if (customTaskToMove == null)
+                {
+                    return ResultFactory.Failure<bool>("Custom task with such id does not exist.");
+                }
+
+                var targetSectionToMove = await _sectionRepository.GetByIdAsync(targetSectionId);
+
+                if (targetSectionToMove == null)
+                {
+                    return ResultFactory.Failure<bool>("Section with such id does not exist.");
+                }
+
+                return await MoveCustomTaskAndUpdateSequenceAsync(customTaskToMove, targetSectionToMove, targetSequenceNumber);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error while redirecting the custom task.");
+            }
+        }
+
+        private async Task<Result<bool>> MoveCustomTaskAndUpdateSequenceAsync(
+            CustomTask customTaskToMove,
+            Section targetSection,
+            int? targetSequenceNumber)
+        {
+            try
+            {
+                // If targetSequenceNumber is provided, validate it
+                if (targetSequenceNumber.HasValue)
+                {
+                    var tasksInTargetSection = await _customTaskRepository.GetFilteredItemsAsync(
+                        builder => builder
+                            .IncludeSectionEntity()
+                            .WithFilter(c => c.Section != null && c.Section.Id == targetSection.Id)
+                    );
+
+                    tasksInTargetSection = tasksInTargetSection.OrderBy(c => c.SequenceNumber).ToList();
+
+                    if (!IsTargetSequenceNumberValid(targetSequenceNumber.Value, tasksInTargetSection.Count))
+                    {
+                        return ResultFactory.Failure<bool>("Invalid target sequence number.");
+                    }
+                }
+
+                var sourceSectionId = customTaskToMove.Section?.Id;
+
+                // Update CustomTask properties
+                customTaskToMove.Section = targetSection;
+
+                // If targetSequenceNumber is not provided, add the task at the end
+                if (!targetSequenceNumber.HasValue)
+                {
+                    await MoveCustomTaskToTargetSectionAsync(customTaskToMove, targetSection.Id, targetSequenceNumber);
+                }
+                else
+                {
+                    // Set the sequence number of the custom task to the specified targetSequenceNumber
+                    customTaskToMove.SequenceNumber = targetSequenceNumber.Value;
+
+                    await MoveCustomTaskToTargetPositionAsync(customTaskToMove, targetSection.Id, targetSequenceNumber);
+                }
+
+                // Remove the custom task from the source section
+                if (!string.IsNullOrEmpty(sourceSectionId))
+                {
+                    await RemoveCustomTaskFromSourceSectionAsync(customTaskToMove, sourceSectionId);
+                }
+
+                // Update the custom task in the database
+                await _customTaskRepository.UpdateAsync(customTaskToMove);
+
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error while moving and updating the custom task.");
+            }
+        }
+
+        private async Task<Result<bool>> MoveCustomTaskToTargetSectionAsync(CustomTask customTaskToMove, string targetSectionId, int? targetSequenceNumber)
+        {
+            try
+            {
+                // Retrieve tasks in the target section
+                var tasksInTargetSection = await _customTaskRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeSectionEntity()
+                        .WithFilter(c => c.Section != null && c.Section.Id == targetSectionId)
+                );
+
+                // Set the sequence number of the custom task to be the count of tasks in the target section
+                customTaskToMove.SequenceNumber = tasksInTargetSection.Count;
+
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error while moving the custom task to the target section.");
+            }
+        }
+
+        private async Task<Result<bool>> MoveCustomTaskToTargetPositionAsync(CustomTask customTaskToMove, string targetSectionId, int? targetSequenceNumber)
+        {
+            try
+            {
+                // Move custom task to the target position
+                var tasksInTargetSection = await _customTaskRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeSectionEntity()
+                        .WithFilter(c => c.Section != null && c.Section.Id == targetSectionId)
+                );
+
+                // Order tasks in the target section by sequence number
+                tasksInTargetSection = tasksInTargetSection.OrderBy(c => c.SequenceNumber).ToList();
+
+                // Insert the custom task at the specified targetSequenceNumber
+                tasksInTargetSection.Insert(targetSequenceNumber.Value, customTaskToMove);
+
+                // Update sequence numbers for tasks in the target section
+                for (int index = 0; index < tasksInTargetSection.Count; index++)
+                {
+                    var task = tasksInTargetSection[index];
+                    task.SequenceNumber = index;
+                    await _customTaskRepository.UpdateAsync(task);
+                }
+
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error while moving the custom task to the target position.");
+            }
+        }
+
+        private async Task<Result<bool>> RemoveCustomTaskFromSourceSectionAsync(CustomTask customTaskToMove, string sourceSectionId)
+        {
+            try
+            {
+                // Retrieve tasks in the source section
+                var tasksInSourceSection = await _customTaskRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeSectionEntity()
+                        .WithFilter(c => c.Section != null && c.Section.Id == sourceSectionId)
+                );
+
+                // Order tasks in the source section by sequence number
+                tasksInSourceSection = tasksInSourceSection.OrderBy(c => c.SequenceNumber).ToList();
+
+                // Remove the custom task from the source section
+                tasksInSourceSection.Remove(customTaskToMove);
+
+                // Update sequence numbers for tasks in the source section
+                for (int index = 0; index < tasksInSourceSection.Count; index++)
+                {
+                    var task = tasksInSourceSection[index];
+                    task.SequenceNumber = index;
+                    await _customTaskRepository.UpdateAsync(task);
+                }
+
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error while removing the custom task from the source section.");
+            }
+        }
+
+        //public async Task<Result<bool>> RedirectCustomTaskAsync(string customTaskId, string targetSectionId, int? targetSequenceNumber)
+        //{
+        //    try
+        //    {
+        //        var customTaskToMove = await _customTaskRepository.GetByIdAsync(customTaskId);
+
+        //        if (customTaskToMove == null)
+        //        {
+        //            return ResultFactory.Failure<bool>("Custom task with such id does not exist.");
+        //        }
+
+        //        // Check if the target section exists
+        //        var targetSection = await _sectionRepository.GetByIdAsync(targetSectionId);
+
+        //        if (targetSection == null)
+        //        {
+        //            return ResultFactory.Failure<bool>("Section with such id does not exist.");
+        //        }
+
+        //        // If targetSequenceNumber is provided, validate it
+        //        if (targetSequenceNumber.HasValue)
+        //        {
+        //            var tasksInTargetSection = await _customTaskRepository.GetFilteredItemsAsync(
+        //                builder => builder
+        //                    .IncludeSectionEntity()
+        //                    .WithFilter(c => c.Section != null && c.Section.Id == targetSectionId)
+        //            );
+
+        //            tasksInTargetSection = tasksInTargetSection.OrderBy(c => c.SequenceNumber).ToList();
+
+        //            if (!IsTargetSequenceNumberValid(targetSequenceNumber.Value, tasksInTargetSection.Count))
+        //            {
+        //                return ResultFactory.Failure<bool>("Invalid target sequence number.");
+        //            }
+        //        }
+
+        //        var sourceSectionId = customTaskToMove.Section?.Id;
+
+        //        // Update CustomTask properties
+        //        customTaskToMove.Section = targetSection;
+
+        //        // If targetSequenceNumber is not provided, add the task at the end
+        //        if (!targetSequenceNumber.HasValue)
+        //        {
+        //            // Retrieve tasks in the target section
+        //            var tasksInTargetSection = await _customTaskRepository.GetFilteredItemsAsync(
+        //                builder => builder
+        //                    .IncludeSectionEntity()
+        //                    .WithFilter(c => c.Section != null && c.Section.Id == targetSectionId)
+        //            );
+
+        //            // Set the sequence number of the custom task to be the count of tasks in the target section
+        //            customTaskToMove.SequenceNumber = tasksInTargetSection.Count;
+        //        }
+        //        else
+        //        {
+        //            // Set the sequence number of the custom task to the specified targetSequenceNumber
+        //            customTaskToMove.SequenceNumber = targetSequenceNumber.Value;
+
+        //            // Move custom task to the target position
+        //            var tasksInTargetSection = await _customTaskRepository.GetFilteredItemsAsync(
+        //                builder => builder
+        //                    .IncludeSectionEntity()
+        //                    .WithFilter(c => c.Section != null && c.Section.Id == targetSectionId)
+        //            );
+
+        //            // Order tasks in the target section by sequence number
+        //            tasksInTargetSection = tasksInTargetSection.OrderBy(c => c.SequenceNumber).ToList();
+
+        //            // Insert the custom task at the specified targetSequenceNumber
+        //            tasksInTargetSection.Insert(targetSequenceNumber.Value, customTaskToMove);
+
+        //            // Update sequence numbers for tasks in the target section
+        //            for (int index = 0; index < tasksInTargetSection.Count; index++)
+        //            {
+        //                var task = tasksInTargetSection[index];
+        //                task.SequenceNumber = index;
+        //                await _customTaskRepository.UpdateAsync(task);
+        //            }
+        //        }
+
+        //        // Remove the custom task from the source section
+        //        if (!string.IsNullOrEmpty(sourceSectionId))
+        //        {
+        //            // Retrieve tasks in the source section
+        //            var tasksInSourceSection = await _customTaskRepository.GetFilteredItemsAsync(
+        //                builder => builder
+        //                    .IncludeSectionEntity()
+        //                    .WithFilter(c => c.Section != null && c.Section.Id == sourceSectionId)
+        //            );
+
+        //            // Order tasks in the source section by sequence number
+        //            tasksInSourceSection = tasksInSourceSection.OrderBy(c => c.SequenceNumber).ToList();
+
+        //            // Remove the custom task from the source section
+        //            tasksInSourceSection.Remove(customTaskToMove);
+
+        //            // Update sequence numbers for tasks in the source section
+        //            for (int index = 0; index < tasksInSourceSection.Count; index++)
+        //            {
+        //                var task = tasksInSourceSection[index];
+        //                task.SequenceNumber = index;
+        //                await _customTaskRepository.UpdateAsync(task);
+        //            }
+        //        }
+
+        //        // Update the custom task in the database
+        //        await _customTaskRepository.UpdateAsync(customTaskToMove);
+
+        //        return ResultFactory.Success(true);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle exceptions
+        //        _logger.LogError(ex.Message);
+        //        return ResultFactory.Failure<bool>("Error while redirecting the custom task.");
+        //    }
+        //}
     }
 }
