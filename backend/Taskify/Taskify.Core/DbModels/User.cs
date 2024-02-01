@@ -12,9 +12,9 @@ namespace Taskify.Core.DbModels
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public DateTime CreatedAt { get; set; }
-        public List<Project>? Projects { get; set; }
-        public List<Notification>? Notifications { get; set; }
-        public List<CustomTask>? CustomTasks { get; set; }
-        public List<UserSubscription>? UserSubscriptions { get; set; }
+        public List<Project> Projects { get; set; }
+        public List<Notification> Notifications { get; set; }
+        public List<CustomTask> CustomTasks { get; set; }
+        public List<UserSubscription> UserSubscriptions { get; set; }
     }
 }

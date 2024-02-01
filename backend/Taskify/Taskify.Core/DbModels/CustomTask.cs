@@ -9,7 +9,7 @@ namespace Taskify.Core.DbModels
     public class CustomTask
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public Section? Section { get; set; }
+        public Section Section { get; set; }
         public User? ResponsibleUser { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
