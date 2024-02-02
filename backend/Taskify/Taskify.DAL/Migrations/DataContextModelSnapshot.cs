@@ -171,7 +171,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Companies");
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.CompanyExpense", b =>
@@ -197,7 +197,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("CompanyExpenses");
+                    b.ToTable("CompanyExpenses", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.CompanyInvitation", b =>
@@ -221,7 +221,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("NotificationId");
 
-                    b.ToTable("CompanyInvitations");
+                    b.ToTable("CompanyInvitations", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.CompanyMember", b =>
@@ -251,7 +251,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CompanyMembers");
+                    b.ToTable("CompanyMembers", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.CompanyMemberRole", b =>
@@ -271,7 +271,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("CompanyMemberRoles");
+                    b.ToTable("CompanyMemberRoles", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.CustomTask", b =>
@@ -317,7 +317,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("SectionId");
 
-                    b.ToTable("CustomTasks");
+                    b.ToTable("CustomTasks", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.Notification", b =>
@@ -341,7 +341,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.Project", b =>
@@ -363,7 +363,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.ProjectIncome", b =>
@@ -384,7 +384,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectIncomes");
+                    b.ToTable("ProjectIncomes", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.ProjectInvitation", b =>
@@ -408,7 +408,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectInvitations");
+                    b.ToTable("ProjectInvitations", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.ProjectMember", b =>
@@ -433,7 +433,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProjectMembers");
+                    b.ToTable("ProjectMembers", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.ProjectRole", b =>
@@ -455,7 +455,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectRoles");
+                    b.ToTable("ProjectRoles", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.Section", b =>
@@ -487,7 +487,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Sections");
+                    b.ToTable("Sections", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.Subscription", b =>
@@ -523,7 +523,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions");
+                    b.ToTable("Subscriptions", (string)null);
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.User", b =>
@@ -625,7 +625,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSubscriptions");
+                    b.ToTable("UserSubscriptions", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

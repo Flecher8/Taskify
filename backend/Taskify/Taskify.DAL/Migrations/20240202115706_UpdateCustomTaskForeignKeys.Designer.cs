@@ -12,8 +12,8 @@ using Taskify.DAL;
 namespace Taskify.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240201164837_AddOnDeleteCascadeForTables")]
-    partial class AddOnDeleteCascadeForTables
+    [Migration("20240202115706_UpdateCustomTaskForeignKeys")]
+    partial class UpdateCustomTaskForeignKeys
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -237,6 +237,7 @@ namespace Taskify.DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Salary")
@@ -728,7 +729,9 @@ namespace Taskify.DAL.Migrations
 
                     b.HasOne("Taskify.Core.DbModels.CompanyMemberRole", "Role")
                         .WithMany("CompanyMembers")
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Taskify.Core.DbModels.User", "User")
                         .WithMany()

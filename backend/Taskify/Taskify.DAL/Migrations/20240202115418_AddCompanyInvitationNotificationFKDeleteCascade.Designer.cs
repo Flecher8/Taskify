@@ -12,8 +12,8 @@ using Taskify.DAL;
 namespace Taskify.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240201170256_ChangedModel")]
-    partial class ChangedModel
+    [Migration("20240202115418_AddCompanyInvitationNotificationFKDeleteCascade")]
+    partial class AddCompanyInvitationNotificationFKDeleteCascade
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
