@@ -101,12 +101,30 @@ namespace Taskify.API.Controllers
             }
         }
 
-        [HttpDelete("{id}/redirect/{redirectSectionId}")]
-        public async Task<IActionResult> DeleteSection(string id, string redirectSectionId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSection(string id)
         {
             try
             {
-                var result = await _sectionsService.DeleteSectionAsync(id, redirectSectionId);
+                var result = await _sectionsService.DeleteSectionAsync(id);
+
+                return result.IsSuccess
+                    ? NoContent()
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in DeleteSection method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete("{id}/redirect/{redirectSectionId}")]
+        public async Task<IActionResult> DeleteSectionAndRedirectTasks(string id, string redirectSectionId)
+        {
+            try
+            {
+                var result = await _sectionsService.DeleteSectionAndRedirectTasksAsync(id, redirectSectionId);
 
                 return result.IsSuccess
                     ? NoContent()

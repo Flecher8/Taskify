@@ -88,6 +88,9 @@ namespace Taskify.API
             builder.Services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Taskify.DAL"));
+
+                // Enable sensitive data logging
+                options.EnableSensitiveDataLogging();
             });
 
             // Enable CORS

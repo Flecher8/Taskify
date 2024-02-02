@@ -78,7 +78,68 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<bool>> DeleteSectionAsync(string id, string redirectSectionId)
+        public async Task<Result<bool>> DeleteSectionAsync(string id)
+        {
+            try
+            {
+                var sectionWithProject = await _sectionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .IncludeCustomTasksEntity()
+                        .WithFilter(s => s.Id == id)
+                );
+
+                var sectionToDelete = sectionWithProject.FirstOrDefault();
+
+                if (sectionToDelete == null)
+                {
+                    return ResultFactory.Failure<bool>("Section with such id does not exist.");
+                }
+
+                if (sectionToDelete.CustomTasks.Count != 0)
+                {
+                    return ResultFactory.Failure<bool>("There are custom tasks in this section, please move them or delete them before deleting this section.");
+                }
+
+                var projectSections = await _sectionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .WithFilter(s => s.Project.Id == sectionToDelete.Project.Id)
+                );
+
+                // Check if this is the last section in the project
+                if (projectSections.Count == 1)
+                {
+                    return ResultFactory.Failure<bool>("Can not delete the last section in the project.");
+                }
+
+                // Delete the section
+                await _sectionRepository.DeleteAsync(id);
+
+                // Get the remaining sections in the project
+                var remainingSections = projectSections
+                    .Where(s => s.Id != id)
+                    .OrderBy(s => s.SequenceNumber)
+                    .ToList();
+
+                // Update sequence numbers
+                for (int index = 0; index < remainingSections.Count; index++)
+                {
+                    var section = remainingSections[index];
+                    section.SequenceNumber = index;
+                    await _sectionRepository.UpdateAsync(section);
+                }
+
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error while deleting the section.");
+            }
+        }
+
+        public async Task<Result<bool>> DeleteSectionAndRedirectTasksAsync(string id, string redirectSectionId)
         {
             try
             {
@@ -95,9 +156,16 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>("Section with such id does not exist.");
                 }
 
-                var rediretionSection = await _sectionRepository.GetByIdAsync(redirectSectionId);
+                var findRedirectionSection = await _sectionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .IncludeCustomTasksEntity()
+                        .WithFilter(s => s.Id == redirectSectionId)
+                );
 
-                if (rediretionSection == null)
+                var redirectionSection = findRedirectionSection.FirstOrDefault();
+
+                if (redirectionSection == null)
                 {
                     return ResultFactory.Failure<bool>("Redirection ection with such id does not exist.");
                 }
@@ -121,11 +189,17 @@ namespace Taskify.BLL.Services
                         .WithFilter(c => c.Section != null && c.Section.Id == id)
                 );
 
-                
+                // Move tasks to the redirection section and update sequence numbers
+                foreach (var task in tasksToRedirect)
+                {
+                    task.Section = redirectionSection;
+                    task.SequenceNumber = redirectionSection.CustomTasks.Count; // Set the sequence number to the end
+                    await _customTaskRepository.UpdateAsync(task);
+                }
 
                 foreach (var task in tasksToRedirect)
                 {
-                    task.Section = rediretionSection;
+                    task.Section = redirectionSection;
                     await _customTaskRepository.UpdateAsync(task);
                 }
 
