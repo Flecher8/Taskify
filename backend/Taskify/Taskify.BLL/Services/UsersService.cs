@@ -14,13 +14,13 @@ using Taskify.DAL.Repositories;
 
 namespace Taskify.BLL.Services
 {
-    public class UserService : IUserService
+    public class UsersService : IUsersService
     {
         private readonly IUserRepository _userRepository;
         private readonly IValidator<User> _validator;
-        private readonly ILogger<UserService> _logger;
+        private readonly ILogger<UsersService> _logger;
 
-        public UserService(IUserRepository userRepository, IValidator<User> validator, ILogger<UserService> logger)
+        public UsersService(IUserRepository userRepository, IValidator<User> validator, ILogger<UsersService> logger)
         {
             _userRepository = userRepository;
             _validator = validator;

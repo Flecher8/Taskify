@@ -15,12 +15,12 @@ namespace Taskify.BLL.Services
     public class ProjectsService : IProjectsService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IUserService _userService;
+        private readonly IUsersService _userService;
         private readonly IValidator<Project> _validator;
         private readonly ILogger<ProjectsService> _logger;
 
         public ProjectsService(IProjectRepository projectRepository,
-            IUserService userService,
+            IUsersService userService,
             IValidator<Project> validator,
             ILogger<ProjectsService> logger
         )

@@ -14,11 +14,11 @@ namespace Taskify.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUsersService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IUserService userService, IMapper mapper, ILogger<UsersController> logger) 
+        public UsersController(IUsersService userService, IMapper mapper, ILogger<UsersController> logger) 
         {
             _userService = userService;
             _mapper = mapper;

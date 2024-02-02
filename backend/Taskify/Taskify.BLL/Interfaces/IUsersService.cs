@@ -8,7 +8,7 @@ using Taskify.Core.Result;
 
 namespace Taskify.BLL.Interfaces
 {
-    public interface IUserService
+    public interface IUsersService
     {
         Task<Result<User>> GetUserByIdAsync(string id);
 
