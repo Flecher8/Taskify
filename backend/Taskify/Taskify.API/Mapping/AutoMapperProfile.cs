@@ -42,6 +42,13 @@ namespace Taskify.API.Mapping
                 .ForMember(dest => dest.Section, opt => opt.MapFrom(src => new Section { Id = src.SectionId }));
             CreateMap<UpdateCustomTaskDto, CustomTask>()
                 .ForMember(dest => dest.ResponsibleUser, opt => opt.MapFrom(src => new User { Id = src.ResponsibleUserId }));
+            // Project roles
+            CreateMap<ProjectRoleDto, ProjectRole>();
+            CreateMap<ProjectRole, ProjectRoleDto>();
+            CreateMap<CreateProjectRoleDto, ProjectRole>()
+                .ForMember(dest => dest.Project, opt => opt.MapFrom(src => new Project { Id = src.ProjectId }));
+            CreateMap<UpdateProjectRoleDto, ProjectRole>()
+                .ForMember(dest => dest.Project, opt => opt.MapFrom(src => new Project { Id = src.ProjectId }));
 
         }
     }
