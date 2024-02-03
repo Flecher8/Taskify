@@ -57,6 +57,16 @@ namespace Taskify.API.Mapping
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new User { Id = src.UserId }));
             CreateMap<UpdateProjectMemberDto, ProjectMember>()
                 .ForMember(dest => dest.ProjectRole, opt => opt.MapFrom(src => new ProjectRole { Id = src.ProjectRoleId }));
+            // Notifications
+            CreateMap<Notification, NotificationDto>();
+            CreateMap<NotificationDto, Notification>();
+            CreateMap<CreateNotificationDto, Notification>()
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => new User { Id = src.UserId }));
+            // Project Invitations
+            CreateMap<ProjectInvitation, ProjectInvitationDto>();
+            CreateMap<ProjectInvitationDto, ProjectInvitation>();
+            CreateMap<CreateProjectInvitationDto, ProjectInvitation>()
+                .ForMember(dest => dest.Project, opt => opt.MapFrom(src => new Project { Id = src.ProjectId }));
         }
     }
 }

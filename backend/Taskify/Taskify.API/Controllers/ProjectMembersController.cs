@@ -156,6 +156,24 @@ namespace Taskify.API.Controllers
             }
         }
 
+        [HttpGet("user/{userId}/projects/")]
+        public async Task<IActionResult> GetProjectsByUserId(string userId)
+        {
+            try
+            {
+                var result = await _projectMembersService.GetProjectsByUserIdAsync(userId);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<List<ProjectDto>>(result.Data))
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetProjectsByUserId method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProjectMemberById(string id)
         {

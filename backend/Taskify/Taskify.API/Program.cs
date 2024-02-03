@@ -48,8 +48,10 @@ namespace Taskify.API
             builder.Services.AddScoped<IValidator<CustomTask>, CustomTaskValidator>();
             builder.Services.AddScoped<IValidator<ProjectRole>, ProjectRoleValidator>();
             builder.Services.AddScoped<IValidator<ProjectMember>, ProjectMemberValidator>();
+            builder.Services.AddScoped<IValidator<Notification>, NotificationValidator>();
+            builder.Services.AddScoped<IValidator<ProjectInvitation>, ProjectInvitationValidator>();
 
-            // Add services to the container.
+            // Services
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
             builder.Services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             builder.Services.AddScoped<IUsersService, UsersService>();
@@ -59,6 +61,8 @@ namespace Taskify.API
             builder.Services.AddScoped<ICustomTasksService, CustomTasksService>();
             builder.Services.AddScoped<IProjectRolesService, ProjectRolesService>();
             builder.Services.AddScoped<IProjectMembersService, ProjectMembersService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IProjectInvitationService, ProjectInvitationService>();
 
             // Add Identity services
             //builder.Services.AddIdentity<User, IdentityRole>()

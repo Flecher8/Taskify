@@ -305,5 +305,27 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<ProjectMember>("Can not get the project member by id.");
             }
         }
+
+        public async Task<Result<List<Project>>> GetProjectsByUserIdAsync(string userId)
+        {
+            try
+            {
+                var result = await _projectMemberRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .IncludeUserEntity()
+                        .WithFilter(pm => pm.User.Id == userId)
+                );
+
+                var projects = result.Select(pm => pm.Project).ToList();
+
+                return ResultFactory.Success(projects);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<List<Project>>("Can not get projects by user id.");
+            }
+        }
     }
 }

@@ -25,5 +25,7 @@ namespace Taskify.BLL.Interfaces
         Task<Result<ProjectRole>> GetRoleByUserIdAsync(string userId);
 
         Task<Result<ProjectMember>> GetProjectMemberByIdAsync(string id);
+
+        Task<Result<List<Project>>> GetProjectsByUserIdAsync(string userId);
     }
 }
