@@ -8,7 +8,7 @@ using Taskify.Core.Result;
 
 namespace Taskify.BLL.Interfaces
 {
-    public interface IProjectInvitationService
+    public interface IProjectInvitationsService
     {
         Task<Result<ProjectInvitation>> CreateProjectInvitationAsync(string userId, ProjectInvitation projectInvitation);
         Task<Result<bool>> RespondToProjectInvitationAsync(string projectInvitationId, bool isAccepted);

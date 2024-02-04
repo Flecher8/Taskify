@@ -11,11 +11,11 @@ namespace Taskify.API.Controllers
     [ApiController]
     public class ProjectInvitationsController : ControllerBase
     {
-        private readonly IProjectInvitationService _projectInvitationService;
+        private readonly IProjectInvitationsService _projectInvitationService;
         private readonly IMapper _mapper;
         private readonly ILogger<ProjectInvitationsController> _logger;
 
-        public ProjectInvitationsController(IProjectInvitationService projectInvitationService, IMapper mapper, ILogger<ProjectInvitationsController> logger)
+        public ProjectInvitationsController(IProjectInvitationsService projectInvitationService, IMapper mapper, ILogger<ProjectInvitationsController> logger)
         {
             _projectInvitationService = projectInvitationService;
             _mapper = mapper;

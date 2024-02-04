@@ -14,21 +14,21 @@ using Taskify.DAL.Repositories;
 
 namespace Taskify.BLL.Services
 {
-    public class ProjectInvitationService : IProjectInvitationService
+    public class ProjectInvitationsService : IProjectInvitationsService
     {
         private readonly IProjectInvitationRepository _projectInvitationRepository;
         private readonly IUserRepository _userRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IValidator<ProjectInvitation> _validator;
-        private readonly ILogger<ProjectInvitationService> _logger;
+        private readonly ILogger<ProjectInvitationsService> _logger;
         private readonly INotificationService _notificationService;
         private readonly IProjectMembersService _projectMembersService;
 
-        public ProjectInvitationService(IProjectInvitationRepository projectInvitationRepository,
+        public ProjectInvitationsService(IProjectInvitationRepository projectInvitationRepository,
             IUserRepository userRepository,
             IProjectRepository projectRepository,
             IValidator<ProjectInvitation> validator,
-            ILogger<ProjectInvitationService> logger,
+            ILogger<ProjectInvitationsService> logger,
             INotificationService notificationService,
             IProjectMembersService projectMembersService)
         {
