@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
-using Taskify.Core.Enums;
 
 namespace Taskify.BLL.Validation
 {
-    public class ProjectIncomeValidator : BaseValidator<ProjectIncome>
+    public class CompanyMemberValidator : BaseValidator<CompanyMember>
     {
-        public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(ProjectIncome entity)
+        public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(CompanyMember entity)
         {
             var baseResult = await base.ValidateAsync(entity);
 
@@ -23,17 +22,12 @@ namespace Taskify.BLL.Validation
 
             if (!Guid.TryParse(entity.Id, out _))
             {
-                errorMessages.Add("Invalid project income Id format.");
+                errorMessages.Add("Invalid company member Id format.");
             }
 
-            if (entity.Amount <= 0)
+            if (entity.Salary <= 0)
             {
-                errorMessages.Add("Amount can not be less than 0.");
-            }
-
-            if (!Enum.IsDefined(typeof(ProjectIncomeFrequency), entity.Frequency))
-            {
-                errorMessages.Add("Invalid project income frequency.");
+                errorMessages.Add("Salary can not be less than 0.");
             }
 
             return (errorMessages.Count == 0, errorMessages);

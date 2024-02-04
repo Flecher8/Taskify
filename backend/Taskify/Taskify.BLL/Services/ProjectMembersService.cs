@@ -59,13 +59,11 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<ProjectMember>("User is not specified.");
                 }
 
-                var findProject = await _projectRepository.GetFilteredItemsAsync(
+                var project = (await _projectRepository.GetFilteredItemsAsync(
                     builder => builder
                         .IncludeUserEntity()
                         .WithFilter(project => project.Id == projectMember.Project.Id)
-                        );
-
-                var project = findProject.FirstOrDefault();
+                )).FirstOrDefault();
 
                 var user = await _userRepository.GetByIdAsync(projectMember.User.Id);
 
@@ -220,34 +218,6 @@ namespace Taskify.BLL.Services
             {
                 _logger.LogError(ex.Message);
                 return ResultFactory.Failure<List<ProjectMember>>("Can not get project members by role id.");
-            }
-        }
-
-        public async Task<Result<ProjectMember>> GetMemberByUserIdAsync(string userId)
-        {
-            try
-            {
-                var result = await _projectMemberRepository.GetFilteredItemsAsync(
-                    builder => builder
-                        .IncludeProjectEntity()
-                        .IncludeUserEntity()
-                        .IncludeProjectRoleEntity()
-                        .WithFilter(pm => pm.User.Id == userId)
-                );
-
-                var projectMember = result.FirstOrDefault();
-
-                if (projectMember == null)
-                {
-                    return ResultFactory.Failure<ProjectMember>("Project member with such user id does not exist.");
-                }
-
-                return ResultFactory.Success(projectMember);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return ResultFactory.Failure<ProjectMember>("Can not get project member by user id.");
             }
         }
 

@@ -120,24 +120,6 @@ namespace Taskify.API.Controllers
             }
         }
 
-        [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetMemberByUserId(string userId)
-        {
-            try
-            {
-                var result = await _projectMembersService.GetMemberByUserIdAsync(userId);
-
-                return result.IsSuccess
-                    ? Ok(_mapper.Map<ProjectMemberDto>(result.Data))
-                    : BadRequest(result.Errors);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred in GetRoleByUserId method.");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         [HttpGet("role/user/{userId}")]
         public async Task<IActionResult> GetRoleByUserId(string userId)
         {
