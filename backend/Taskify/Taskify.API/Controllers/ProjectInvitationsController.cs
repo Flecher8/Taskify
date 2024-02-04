@@ -41,7 +41,7 @@ namespace Taskify.API.Controllers
             }
         }
 
-        [HttpPut("{id}/accepted/{isAccepted}")]
+        [HttpPut("{projectInvitationId}/accepted/{isAccepted}")]
         public async Task<IActionResult> RespondToProjectInvitation(string projectInvitationId, bool isAccepted)
         {
             try

@@ -327,5 +327,25 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<List<Project>>("Can not get projects by user id.");
             }
         }
+
+        public async Task<Result<bool>> IsUserAlreadyMemberAsync(string userId, string projectId)
+        {
+            try
+            {
+                var existingMemberResult = await _projectMemberRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .IncludeUserEntity()
+                        .WithFilter(pm => pm.User.Id == userId && pm.Project.Id == projectId)
+                );
+
+                return ResultFactory.Success(existingMemberResult.Any());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error checking if user is already a member.");
+            }
+        }
     }
 }

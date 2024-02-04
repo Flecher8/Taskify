@@ -27,5 +27,7 @@ namespace Taskify.BLL.Interfaces
         Task<Result<ProjectMember>> GetProjectMemberByIdAsync(string id);
 
         Task<Result<List<Project>>> GetProjectsByUserIdAsync(string userId);
+
+        Task<Result<bool>> IsUserAlreadyMemberAsync(string userId, string projectId);
     }
 }

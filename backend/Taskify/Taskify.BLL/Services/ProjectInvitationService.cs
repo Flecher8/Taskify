@@ -10,6 +10,7 @@ using Taskify.Core.DbModels;
 using Taskify.Core.Enums;
 using Taskify.Core.Result;
 using Taskify.DAL.Interfaces;
+using Taskify.DAL.Repositories;
 
 namespace Taskify.BLL.Services
 {
@@ -61,6 +62,14 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<ProjectInvitation>("Invalid user specified.");
                 }
 
+                // Check if the user is already a member of the project using ProjectMembersService
+                var isUserAlreadyMemberResult = await _projectMembersService.IsUserAlreadyMemberAsync(userId, projectInvitation.Project.Id);
+
+                if (isUserAlreadyMemberResult.IsSuccess && isUserAlreadyMemberResult.Data)
+                {
+                    return ResultFactory.Failure<ProjectInvitation>("User is already a member of this project.");
+                }
+
                 var user = await _userRepository.GetByIdAsync(userId);
                 var project = (await _projectRepository.GetFilteredItemsAsync(
                     builder => builder
@@ -94,6 +103,7 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<ProjectInvitation>(notificationResult.Errors);
                 }
 
+                projectInvitation.Notification = notificationResult.Data;
                 projectInvitation.IsAccepted = null;
                 projectInvitation.Project = project;
 
@@ -124,6 +134,11 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>("Project invitation with such id does not exist.");
                 }
 
+                if (projectInvitation.IsAccepted != null)
+                {
+                    return ResultFactory.Failure<bool>("A response to this project invitation has already been received.");
+                }
+
                 var notificationFindResult = await _notificationService.GetNotificationByIdAsync(projectInvitation.Notification.Id);
 
                 if (!notificationFindResult.IsSuccess)
@@ -136,8 +151,6 @@ namespace Taskify.BLL.Services
                 projectInvitation.IsAccepted = isAccepted;
 
                 await _notificationService.MarkNotificationAsReadAsync(projectInvitation.Notification.Id);
-
-                projectInvitation.IsAccepted = isAccepted;
 
                 await _projectInvitationRepository.UpdateAsync(projectInvitation);
 
