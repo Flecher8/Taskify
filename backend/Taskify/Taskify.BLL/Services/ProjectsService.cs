@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using Taskify.BLL.Interfaces;
 using Taskify.BLL.Validation;
 using Taskify.Core.DbModels;
+using Taskify.Core.Enums;
 using Taskify.Core.Result;
 using Taskify.DAL.Interfaces;
+using Taskify.DAL.Repositories;
 
 namespace Taskify.BLL.Services
 {
@@ -16,17 +18,29 @@ namespace Taskify.BLL.Services
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IUsersService _userService;
+        private readonly ISectionRepository _sectionRepository;
+        private readonly IProjectInvitationRepository _projectInvitationRepository;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly IProjectRoleRepository _projectRoleRepository;
         private readonly IValidator<Project> _validator;
         private readonly ILogger<ProjectsService> _logger;
 
         public ProjectsService(IProjectRepository projectRepository,
             IUsersService userService,
+            ISectionRepository sectionRepository,
+            IProjectInvitationRepository projectInvitationRepository,
+            INotificationRepository notificationRepository,
+            IProjectRoleRepository projectRoleRepository,
             IValidator<Project> validator,
             ILogger<ProjectsService> logger
         )
         {
             _projectRepository = projectRepository;
             _userService = userService;
+            _sectionRepository = sectionRepository;
+            _projectInvitationRepository = projectInvitationRepository;
+            _notificationRepository = notificationRepository;
+            _projectRoleRepository = projectRoleRepository;
             _validator = validator;
             _logger = logger;
         }
@@ -57,11 +71,38 @@ namespace Taskify.BLL.Services
                 project.User = userResult.Data;
                 project.CreatedAt = DateTime.UtcNow;
 
-                // TODO
-                // - Create starting sections for project
-                // - Create starting roles for project ( give creator role for user creator)
-
                 var result = await _projectRepository.AddAsync(project);
+
+                // Template for standart sections in project
+                // TO DO
+                Section todo = new Section();
+                todo.Name = "To do";
+                todo.Project = result;
+                todo.CreatedAt = DateTime.UtcNow;
+                todo.SectionType = SectionType.ToDo;
+                todo.SequenceNumber = 0;
+                todo.IsArchived = false;
+                // Doing
+                Section doing = new Section();
+                doing.Name = "Doing";
+                doing.Project = result;
+                doing.CreatedAt = DateTime.UtcNow;
+                doing.SectionType = SectionType.Doing;
+                doing.SequenceNumber = 1;
+                doing.IsArchived = false;
+                // Done
+                Section done = new Section();
+                done.Name = "Done";
+                done.Project = result;
+                done.CreatedAt = DateTime.UtcNow;
+                done.SectionType = SectionType.Done;
+                done.SequenceNumber = 2;
+                done.IsArchived = false;
+
+                await _sectionRepository.AddAsync(todo);
+                await _sectionRepository.AddAsync(doing);
+                await _sectionRepository.AddAsync(done);
+
 
                 return ResultFactory.Success(result);
             }
@@ -76,7 +117,38 @@ namespace Taskify.BLL.Services
         {
             try
             {
+                // Delete ProjectRoles related to the project
+                var projectRolesToDelete = await _projectRoleRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .WithFilter(pr => pr.Project.Id == id)
+                );
+
+                foreach (var projectRole in projectRolesToDelete)
+                {
+                    await _projectRoleRepository.DeleteAsync(projectRole.Id);
+                }
+
+                // Find ProjectInvitations related to the project
+                var projectInvitationsToDelete = await _projectInvitationRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeNotificationEntity()
+                        .IncludeProjectEntity()
+                        .WithFilter(pi => pi.Project.Id == id)
+                );
+
+                foreach (var projectInvitation in projectInvitationsToDelete)
+                {
+                    // Delete associated Notification
+                    await _notificationRepository.DeleteAsync(projectInvitation.Notification.Id);
+
+                    // Delete ProjectInvitation
+                    await _projectInvitationRepository.DeleteAsync(projectInvitation.Id);
+                }
+
+                // Delete project
                 await _projectRepository.DeleteAsync(id);
+
                 return ResultFactory.Success(true);
             }
             catch (Exception ex)
