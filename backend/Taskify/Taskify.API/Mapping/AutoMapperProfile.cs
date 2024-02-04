@@ -73,6 +73,12 @@ namespace Taskify.API.Mapping
             CreateMap<CreateCompanyDto, Company>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new User { Id = src.UserId }));
             CreateMap<UpdateCompanyDto, Company>();
+            // Company Expenses
+            CreateMap<CompanyExpense,  CompanyExpenseDto>();
+            CreateMap<CompanyExpenseDto, CompanyExpense>();
+            CreateMap<CreateCompanyExpenseDto, CompanyExpense>()
+                .ForMember(dest => dest.Company, opt => opt.MapFrom(src => new Company { Id = src.CompanyId }));
+            CreateMap<UpdateCompanyExpenseDto, CompanyExpense>();
         }
     }
 }

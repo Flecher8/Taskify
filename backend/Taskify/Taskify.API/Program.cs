@@ -51,6 +51,7 @@ namespace Taskify.API
             builder.Services.AddScoped<IValidator<Notification>, NotificationValidator>();
             builder.Services.AddScoped<IValidator<ProjectInvitation>, ProjectInvitationValidator>();
             builder.Services.AddScoped<IValidator<Company>, CompanyValidator>();
+            builder.Services.AddScoped<IValidator<CompanyExpense>, CompanyExpenseValidator>();
 
             // Services
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
@@ -65,6 +66,7 @@ namespace Taskify.API
             builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<IProjectInvitationService, ProjectInvitationService>();
             builder.Services.AddScoped<ICompaniesService, CompaniesService>();
+            builder.Services.AddScoped<ICompanyExpensesService, CompanyExpensesService>();
 
             // Add Identity services
             //builder.Services.AddIdentity<User, IdentityRole>()

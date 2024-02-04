@@ -8,9 +8,9 @@ using Taskify.Core.Enums;
 
 namespace Taskify.BLL.Validation
 {
-    public class ProjectIncomeValidator : BaseValidator<ProjectIncome>
+    public class CompanyExpenseValidator : BaseValidator<CompanyExpense>
     {
-        public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(ProjectIncome entity)
+        public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(CompanyExpense entity)
         {
             var baseResult = await base.ValidateAsync(entity);
 
@@ -23,7 +23,7 @@ namespace Taskify.BLL.Validation
 
             if (!Guid.TryParse(entity.Id, out _))
             {
-                errorMessages.Add("Invalid project income Id format.");
+                errorMessages.Add("Invalid company expense Id format.");
             }
 
             if (entity.Amount < 0)
@@ -31,9 +31,14 @@ namespace Taskify.BLL.Validation
                 errorMessages.Add("Amount can not be less than 0.");
             }
 
-            if (!Enum.IsDefined(typeof(ProjectIncomeFrequency), entity.Frequency))
+            if (string.IsNullOrWhiteSpace(entity.Name))
             {
-                errorMessages.Add("Invalid project income frequency.");
+                errorMessages.Add("Company expense name can not be null or empty.");
+            }
+
+            if (!Enum.IsDefined(typeof(CompanyExpenseFrequency), entity.Frequency))
+            {
+                errorMessages.Add("Invalid company expense frequency.");
             }
 
             return (errorMessages.Count == 0, errorMessages);
