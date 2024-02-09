@@ -103,5 +103,23 @@ namespace Taskify.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            try
+            {
+                var result = await _userService.GetUserByEmailAsync(email);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<UserDto>(result.Data))
+                    : NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetUserById method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

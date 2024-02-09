@@ -108,5 +108,32 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<bool>("Can not update subscription.");
             }
         }
+
+        public async Task<Result<User>> GetUserByEmailAsync(string email)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    return ResultFactory.Failure<User>("Email can not be empty.");
+                }
+
+                var result = (await _userRepository
+                    .GetFilteredItemsAsync(u => u.Email == email.ToLower()))
+                    .FirstOrDefault();
+
+                if (result == null)
+                {
+                    return ResultFactory.Failure<User>("User with such email does not exist.");
+                }
+
+                return ResultFactory.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<User>("Can not get user by email.");
+            }
+        }
     }
 }

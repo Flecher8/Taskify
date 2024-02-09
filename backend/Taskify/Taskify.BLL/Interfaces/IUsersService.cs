@@ -17,5 +17,7 @@ namespace Taskify.BLL.Interfaces
         Task<Result<bool>> UpdateUserAsync(User user);
 
         Task<Result<bool>> DeleteUserAsync(string id);
+
+        Task<Result<User>> GetUserByEmailAsync(string email);
     }
 }
