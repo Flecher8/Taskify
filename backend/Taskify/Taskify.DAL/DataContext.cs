@@ -12,6 +12,8 @@ namespace Taskify.DAL
 {
     public class DataContext : IdentityDbContext<User>
     {
+        public DataContext() { }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public override DbSet<User> Users { get; set; }
