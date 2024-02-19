@@ -13,7 +13,6 @@ namespace Taskify.Core.Dtos
         public string Name { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<SectionDto>? Sections { get; set; }
-        //public List<ProjectInvitation>? ProjectInvitations { get; set; }
         public List<ProjectMemberDto>? ProjectMembers { get; set; }
         public List<ProjectRoleDto>? ProjectRoles { get; set; }
     }
