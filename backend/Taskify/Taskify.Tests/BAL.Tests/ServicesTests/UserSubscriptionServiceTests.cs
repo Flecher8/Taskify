@@ -47,33 +47,6 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task GetUserSubscription_UserSubscriptionNotFound_ReturnsSuccessWithNull()
-        {
-            // Arrange
-            var userId = "valid_user_id";
-
-            var userSubscriptionRepositoryMock = new Mock<IUserSubscriptionRepository>();
-            userSubscriptionRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<UserSubscriptionFilterBuilder>>()))
-                                           .ReturnsAsync(new List<UserSubscription>());
-
-            var userRepositoryMock = new Mock<IUserRepository>();
-            var subscriptionRepositoryMock = new Mock<ISubscriptionRepository>();
-            var loggerMock = new Mock<ILogger<UserSubscriptionService>>();
-
-            var userSubscriptionService = new UserSubscriptionService(userSubscriptionRepositoryMock.Object,
-                                                                     subscriptionRepositoryMock.Object,
-                                                                     userRepositoryMock.Object,
-                                                                     loggerMock.Object);
-
-            // Act
-            var result = await userSubscriptionService.GetUserSubscription(userId);
-
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.Null(result.Data);
-        }
-
-        [Fact]
         public async Task GetUserSubscription_ExceptionThrown_ReturnsFailure()
         {
             // Arrange

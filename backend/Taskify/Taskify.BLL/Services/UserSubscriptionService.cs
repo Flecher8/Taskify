@@ -45,13 +45,24 @@ namespace Taskify.BLL.Services
 
                 return activeSubscription != null
                     ? ResultFactory.Success(activeSubscription.Subscription)
-                    : ResultFactory.Success<Subscription>(null);
+                    : ResultFactory.Success(GetDefaultSubscription());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while fetching user subscription.");
                 return ResultFactory.Failure<Subscription>("An error occurred while fetching user subscription.");
             }
+        }
+
+        private Subscription GetDefaultSubscription()
+        {
+            var subscription = new Subscription();
+            subscription.Name = "Default";
+            subscription.ProjectMembersLimit = 10;
+            subscription.ProjectsLimit = 10;
+            subscription.ProjectTasksLimit = 100;
+            subscription.ProjectSectionsLimit = 100;
+            return subscription;
         }
 
         public async Task<Result<bool>> CreateUserSubscription(string userId, string subscriptionId)
