@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Taskify.BLL.Interfaces;
 using Taskify.Core.DbModels;
 using Taskify.Core.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Taskify.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SubscriptionsController : ControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;

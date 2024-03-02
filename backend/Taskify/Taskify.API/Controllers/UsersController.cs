@@ -12,6 +12,7 @@ namespace Taskify.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _userService;

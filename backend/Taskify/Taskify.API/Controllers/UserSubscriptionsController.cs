@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Taskify.BLL.Interfaces;
@@ -8,6 +9,7 @@ namespace Taskify.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserSubscriptionsController : ControllerBase
     {
         private readonly IUserSubscriptionService _userSubscriptionService;
