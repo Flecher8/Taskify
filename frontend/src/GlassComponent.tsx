@@ -70,8 +70,7 @@ const GlassComponent: React.FC = () => {
         ))}
   
         {/* Content */}
-        <div className="relative z-10 h-full flex flex-col justify-center items-center">
-          <h1 className="text-4xl font-bold text-white mb-8">Glass Component</h1>
+        <div className="relativ h-full flex flex-col">
           <Outlet />
         </div>
       </div>

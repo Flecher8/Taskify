@@ -1,0 +1,29 @@
+.authHeader{
+
+    .signupbutton a {
+        color: white; 
+    }
+
+    .textNearButton {
+        pointer-events: none;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .signupbutton .linkButton {
+        font-size: 14px;
+        font-weight: 700;
+        min-height: 1rem;
+        padding: 0 20px;
+        height: 40px;
+        box-shadow: 0 10px 25px #7b68ee80;
+        letter-spacing: .4px;
+    }
+
+    // Hide textBeforeButton on screens smaller than desktop size
+    @media (max-width: 1024px) {
+        .textNearButton {
+            display: none;
+        }
+  }
+}

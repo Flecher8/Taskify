@@ -1,19 +1,33 @@
+import AuthHeader from "components/headers/authHeader";
 import React, { FC } from "react";
 import { Outlet } from "react-router-dom";
-import MainHeader from "components/headers/mainHeader";
+
 
 interface AuthLayoutProps {
-	showHeader?: boolean;
+	showLoginHeader?: boolean;
 }
 
-const AuthLayout: FC<AuthLayoutProps> = ({ showHeader = true }) => {
+const AuthLayout: FC<AuthLayoutProps> = ({ showLoginHeader = true }) => {
 	return (
-		<React.Fragment>
-			{showHeader && <MainHeader />}
-			<main>
+		<div className="">
+			{showLoginHeader && (
+				<AuthHeader
+				buttonText={"Sign up"}
+				buttonLink={"/signup"}
+				textBeforeButton="Don't have an account?"
+				/>
+			)}
+			{!showLoginHeader && (
+				<AuthHeader
+				buttonText={"Login"}
+				buttonLink={"/login"}
+				textBeforeButton="Already have an account?"
+				/>
+			)}
+			<main className="">
 				<Outlet />
 			</main>
-		</React.Fragment>
+    	</div>
 	);
 };
 

@@ -32,6 +32,15 @@ const PublicHeader: FC = () => {
 						</li>
 					</ul>
 				</nav>
+				<nav>
+					<ul className="flex space-x-4">
+						<li>
+							<Link to="/login" className="hover:text-gray-300">
+								Login
+							</Link>
+						</li>
+					</ul>
+				</nav>
 			</div>
 		</header>
 	);

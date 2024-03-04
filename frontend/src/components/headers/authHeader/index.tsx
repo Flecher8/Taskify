@@ -2,39 +2,32 @@ import React, { FC, MouseEventHandler } from "react";
 import { Link } from "react-router-dom";
 import "./authHeader.scss";
 
-// interface HeaderProps {
-//   isSidebarOpen?: boolean;
-//   showMenu?: boolean;
-// 	onToggleSidebar: MouseEventHandler<HTMLButtonElement>;
-// }
+interface AuthHeaderProps {
+	buttonText: string;
+    buttonLink: string;
+    textBeforeButton: string;
+}
 
-const AuthHeader: FC = () => {
+const AuthHeader: FC<AuthHeaderProps>  = ({buttonText, buttonLink, textBeforeButton}) => {
 	return (
-		<header className="bg-primary text-white header p-4">
-			<div className="container mx-auto flex justify-between items-center">
-				<h1 className="text-xl font-semibold">Taskify</h1>
-				<nav>
-					<ul className="flex space-x-4">
-						<li>
-							<Link to="/" className="hover:text-gray-300">
-								Home
-							</Link>
-						</li>
-						<li>
-							<Link to="/about" className="hover:text-gray-300">
-								About
-							</Link>
-						</li>
-						<li>
-							<Link to="/contact" className="hover:text-gray-300">
-								Contact
-							</Link>
-						</li>
-					</ul>
-				</nav>
-			</div>
-		</header>
-	);
+        <header className="authHeader header p-4">
+            <div className="container mx-auto flex justify-between items-center">
+                <div className="flex items-center">
+                    <h1 className="text-xl font-semibold">
+                        <Link to="/" className="">
+                            Taskify
+                        </Link>
+                    </h1>
+                </div>
+                <div className="signupbutton flex items-center">
+                    <p className="mr-4 textNearButton text-sm"><label>{textBeforeButton}</label></p>
+                    <Link to={buttonLink} className="linkButton btn btn-primary text-sm">
+                        {buttonText}
+                    </Link>
+                </div>
+            </div>
+        </header>
+    );
 };
 
 export default AuthHeader;

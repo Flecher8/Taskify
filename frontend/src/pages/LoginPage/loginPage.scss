@@ -1,0 +1,40 @@
+.loginPage {
+    .loginForm{
+        width: 25rem;
+    }
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center; /* Vertical centering */
+    height: 80vh; /* Full height of the viewport */
+
+
+    .loginButton{
+        font-size: 14px;
+        font-weight: 700;
+        height: 50px;
+        max-height: 1rem;
+        box-shadow: 0 10px 25px rgba(123, 104, 238, 0.5019607843);
+    }
+
+    .form-row-label {
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 11px;
+        display: block;
+        color: #292d34;
+        padding: 0 0 8px 2px;
+    }
+
+    input {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        width: 100%;
+        border: 1px solid #d6d9de;
+        box-sizing: border-box;
+        border-radius: 9px;
+        padding: 0 20px 0 36px;
+        height: 40px;
+        color: #2a2e34;
+    }
+}
