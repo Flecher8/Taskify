@@ -22,3 +22,7 @@ main {
   padding: 10px;
   transition: all 0.3s ease-in-out;
 }
+.content-wrapper {
+  overflow-x: hidden;
+  width: 100%; /* Ensure the content wrapper takes up full width */
+}

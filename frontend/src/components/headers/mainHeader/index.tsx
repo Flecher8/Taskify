@@ -1,18 +1,17 @@
 import React, { FC, MouseEventHandler } from "react";
 import { Link } from "react-router-dom";
-import "./header.scss";
+import "./mainHeader.scss";
 
-interface HeaderProps {
-  isSidebarOpen?: boolean;
-  showMenu?: boolean;
-	onToggleSidebar: MouseEventHandler<HTMLButtonElement>;
-}
+// interface HeaderProps {
+//   isSidebarOpen?: boolean;
+//   showMenu?: boolean;
+// 	onToggleSidebar: MouseEventHandler<HTMLButtonElement>;
+// }
 
-const Header: FC<HeaderProps> = ({ isSidebarOpen, showMenu, onToggleSidebar }) => {
+const MainHeader: FC = () => {
 	return (
 		<header className="bg-primary text-white header p-4">
 			<div className="container mx-auto flex justify-between items-center">
-				{showMenu && <button onClick={onToggleSidebar}>{isSidebarOpen ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars"></i>}</button>}
 				<h1 className="text-xl font-semibold">Taskify</h1>
 				<nav>
 					<ul className="flex space-x-4">
@@ -38,4 +37,4 @@ const Header: FC<HeaderProps> = ({ isSidebarOpen, showMenu, onToggleSidebar }) =
 	);
 };
 
-export default Header;
+export default MainHeader;

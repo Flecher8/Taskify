@@ -1,7 +1,8 @@
 import React, { FC, MouseEventHandler, useState } from "react";
 import { Outlet } from "react-router-dom";
-import Header from "components/header";
+import MainHeader from "components/headers/mainHeader";
 import SideMenu from "components/sideMenu";
+import { SIDEBAR_WIDTH } from "./constants"; 
 
 interface LayoutProps {
 	showHeader?: boolean;
@@ -9,7 +10,7 @@ interface LayoutProps {
 }
 
 const Layout: FC<LayoutProps> = ({ showHeader = true, showMenu = true }) => {
-	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
 	const toggleSidebar: MouseEventHandler<HTMLButtonElement> = () => {
 		setIsSidebarOpen(!isSidebarOpen);
@@ -17,10 +18,13 @@ const Layout: FC<LayoutProps> = ({ showHeader = true, showMenu = true }) => {
 
 	return (
 		<React.Fragment>
-			{showHeader && <Header isSidebarOpen={isSidebarOpen} showMenu={showMenu} onToggleSidebar={toggleSidebar} />}
+			{showHeader && <MainHeader />}
 			{showMenu && <SideMenu isOpen={isSidebarOpen} />}
-			<main style={showMenu && isSidebarOpen ? { marginLeft: "20%" } : {}}>
+			<main style={showMenu && isSidebarOpen ? { marginLeft:  SIDEBAR_WIDTH } : {}}>
+			{showMenu && <button onClick={toggleSidebar}>{isSidebarOpen ? <i className="fa-light fa-sidebar"></i> : <i className="fa-light fa-sidebar"></i>}</button>}
+			<div className="content-wrapper">
 				<Outlet />
+			</div>
 			</main>
 		</React.Fragment>
 	);
