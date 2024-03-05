@@ -9,7 +9,7 @@ interface AuthLayoutProps {
 
 const AuthLayout: FC<AuthLayoutProps> = ({ showLoginHeader = true }) => {
 	return (
-		<div className="">
+		<div className="authLayout">
 			{showLoginHeader && (
 				<AuthHeader
 				buttonText={"Sign up"}
