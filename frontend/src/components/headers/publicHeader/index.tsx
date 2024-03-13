@@ -10,24 +10,30 @@ import "./publicHeader.scss";
 
 const PublicHeader: FC = () => {
 	return (
-		<header className="bg-primary text-white header p-4">
+		<header className="text-black header p-4">
 			<div className="container mx-auto flex justify-between items-center">
-				<h1 className="text-xl font-semibold">Taskify</h1>
+				<div className="flex items-center">
+					<h1 className="text-xl font-semibold">
+						<Link to="/" className="">
+							Taskify
+						</Link>
+					</h1>
+				</div>
 				<nav>
-					<ul className="flex space-x-4">
+					<ul className="flex space-x-12">
 						<li>
-							<Link to="/" className="hover:text-gray-300">
-								Home
+							<Link to="/product" className="hover:text-gray-300">
+								Product
 							</Link>
 						</li>
 						<li>
-							<Link to="/about" className="hover:text-gray-300">
-								About
+							<Link to="/pricing" className="hover:text-gray-300">
+								Pricing
 							</Link>
 						</li>
 						<li>
-							<Link to="/contact" className="hover:text-gray-300">
-								Contact
+							<Link to="/contacts" className="hover:text-gray-300">
+								Contacts
 							</Link>
 						</li>
 					</ul>
@@ -36,7 +42,7 @@ const PublicHeader: FC = () => {
 					<ul className="flex space-x-4">
 						<li>
 							<Link to="/login" className="hover:text-gray-300">
-								Login
+								Log In
 							</Link>
 						</li>
 					</ul>

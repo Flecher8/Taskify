@@ -97,7 +97,6 @@ namespace Taskify.BLL.Services
 
                 userToUpdate.FirstName = user.FirstName;
                 userToUpdate.LastName = user.LastName;
-                userToUpdate.CreatedAt = user.CreatedAt;
                 await _userRepository.UpdateAsync(userToUpdate);
                 
                 return ResultFactory.Success(true);

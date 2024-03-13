@@ -1,8 +1,27 @@
+.error-container {
+	position: fixed;
+	bottom: 3em;
+	left: 3em;
+	padding: 10px;
+	max-width: 55rem;
+
+	// Add this for initial state
+	transform: translateY(100%);
+	opacity: 0;
+	transition: all 0.5s ease-in-out;
+
+	// Add this for visible state
+	&.show {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
 .loginPage {
 	display: flex;
 	justify-content: center; /* Horizontal centering */
 	align-items: center; /* Vertical centering */
-	height: 80vh; /* Full height of the viewport */
+	height: 90vh; /* Full height of the viewport */
 
 	.loginForm {
 		width: 25rem;
