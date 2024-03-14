@@ -7,14 +7,22 @@
 	margin: 0;
 	background-color: transparent;
 	outline: none;
-	border: none;
 	font-size: 1em;
 	text-decoration: none;
 	list-style: none;
 }
 
+body {
+	height: 100%;
+}
+
+#root {
+	height: 100%;
+}
+
 html {
 	font-size: 20px;
+	height: 100%;
 }
 
 main {

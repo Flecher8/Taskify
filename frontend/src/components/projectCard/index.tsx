@@ -2,14 +2,14 @@ import { maxProjectNameLength } from "../../constants";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { Project } from "api/services/projectsService";
+import { truncateString } from "utilities/truncateString";
 
 interface ProjectCardProps {
 	project: Project;
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
-	const truncatedName =
-		project.name.length > maxProjectNameLength ? `${project.name.slice(0, maxProjectNameLength)}...` : project.name;
+	const truncatedName = truncateString(project.name, maxProjectNameLength);
 
 	return (
 		<Link to={`/board/${project.id}`}>

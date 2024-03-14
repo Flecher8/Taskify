@@ -15,7 +15,7 @@ class ProjectsStore {
 
 			return result;
 		} catch (error) {
-			throw new Error("Can not find projects for this user");
+			throw new Error("Can not find projects for this user.");
 		}
 	}
 
@@ -32,7 +32,7 @@ class ProjectsStore {
 
 			return result;
 		} catch (error) {
-			throw new Error("Can not create new project");
+			throw new Error("Can not create new project.");
 		}
 	}
 
@@ -44,7 +44,25 @@ class ProjectsStore {
 				throw new Error();
 			}
 		} catch (error) {
-			throw new Error("Can not update this project");
+			throw new Error("Can not update this project.");
+		}
+	}
+
+	async getProjectById(id: string | undefined): Promise<Project> {
+		try {
+			if (id === undefined) {
+				throw new Error();
+			}
+
+			const result = await ProjectsService.getById(id);
+
+			if (result === undefined) {
+				throw new Error();
+			}
+
+			return result;
+		} catch (error) {
+			throw new Error("Can not get project by this id.");
 		}
 	}
 }

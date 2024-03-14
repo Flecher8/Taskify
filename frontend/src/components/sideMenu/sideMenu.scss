@@ -1,16 +1,14 @@
 .sidebar {
-  position: absolute;
-  top: 4rem; // Adjust this according to your header's height
-  left: 0;
-  height: calc(100vh - 4rem); // Full height minus the header height
-  z-index: 1000;
-  transition: transform 0.3s ease-in-out;
+	top: 4rem; // Adjust this according to your header's height
+	left: 0;
+	height: calc(100vh - 4rem); // Full height minus the header height
+	transition: transform 0.3s ease-in-out;
 
-  &.open {
-    transform: translateX(0); // Sidebar is fully visible
-  }
+	&.open {
+		transform: translateX(0); // Sidebar is fully visible
+	}
 
-  &.closed {
-    transform: translateX(-100%); // Sidebar is completely hidden
-  }
+	&.closed {
+		transform: translateX(-100%); // Sidebar is completely hidden
+	}
 }

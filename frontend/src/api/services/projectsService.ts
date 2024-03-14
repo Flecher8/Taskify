@@ -20,6 +20,7 @@ export default class ProjectsService {
 				throw new Error("Can not find projects for this user");
 			}
 			const response = await api.get(`/api/Projects/user/${userId}`);
+
 			return response.data;
 		} catch (error) {
 			throw error;
@@ -29,6 +30,7 @@ export default class ProjectsService {
 	static async create(data: CreateProjectData): Promise<Project | undefined> {
 		try {
 			const response = await api.post(`/api/Projects`, data);
+
 			return response.data;
 		} catch (error) {
 			throw error;
@@ -38,6 +40,17 @@ export default class ProjectsService {
 	static async update(id: string, project: Project): Promise<boolean | undefined> {
 		try {
 			const response = await api.put(`/api/Projects/${id}`, project);
+
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async getById(id: string): Promise<Project | undefined> {
+		try {
+			const response = await api.get(`/api/Projects/${id}`);
+
 			return response.data;
 		} catch (error) {
 			throw error;

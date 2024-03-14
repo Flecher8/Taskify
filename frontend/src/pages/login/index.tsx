@@ -46,7 +46,9 @@ const LoginPage: FC<LoginPageProps> = () => {
 			<div className="loginPage flex justify-center items-center">
 				<div className="loginForm p-6 rounded-md shadow-md w-full max-w-md">
 					<h2 className="text-2xl font-semibold text-center mb-6">
-						<label>Welcome back!</label>
+						<label>
+							Welcome back!<i className="fa-light fa-bars absolute"></i>
+						</label>
 					</h2>
 					<form onSubmit={handleSubmit}>
 						<div className="mb-4">

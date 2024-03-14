@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import CreateProjectForm from "components/createProjectForm";
 import projectsStore from "stores/projectsStore";
 import { Project } from "api/services/projectsService";
+import authStore from "stores/authStore";
 
 interface ProjectsPageProps {}
 
@@ -47,6 +48,10 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 		}
 	};
 
+	const unv = () => {
+		authStore.logout();
+	};
+
 	useEffect(() => {
 		getProjects();
 	}, []);
@@ -54,7 +59,12 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 	return (
 		<div className="projectsPage flex flex-col w-100 m-10">
 			<div className="flex flex-row justify-normal mb-10 items-center">
-				<h1 className="projectsPage-header mr-5">Projects</h1>
+				<h1 className="projectsPage-header mr-5">
+					Projects
+					{/* <button className="btn" onClick={unv}>
+						Click to unauthorize
+					</button> */}
+				</h1>
 				<div className="dropdown">
 					<div
 						tabIndex={0}

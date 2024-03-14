@@ -11,10 +11,10 @@ interface MainLayoutProps {
 }
 
 const MainLayout: FC<MainLayoutProps> = observer(({ showHeader = true, showMenu = true }) => {
-	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+	const [isOpen, setIsOpen] = useState(true);
 
-	const toggleSidebar: MouseEventHandler<HTMLButtonElement> = () => {
-		setIsSidebarOpen(!isSidebarOpen);
+	const toggleSidebar = () => {
+		setIsOpen(!isOpen);
 	};
 
 	useEffect(() => {
@@ -26,16 +26,19 @@ const MainLayout: FC<MainLayoutProps> = observer(({ showHeader = true, showMenu 
 
 	return (
 		<React.Fragment>
-			{showHeader && <MainHeader />}
-			{showMenu && <SideMenu isOpen={isSidebarOpen} />}
-			<main>
-				{showMenu && (
-					<button onClick={toggleSidebar}>
-						{isSidebarOpen ? <i className="fa-light fa-sidebar"></i> : <i className="fa-light fa-sidebar"></i>}
-					</button>
-				)}
-				<Outlet />
-			</main>
+			<div className="flex flex-col h-full">
+				{showHeader && <MainHeader />}
+				<div className="flex flex-row h-full">
+					{showMenu && (
+						<div className={`${isOpen ? "w-[250px]" : "w-[15px]"} duration-200`}>
+							<SideMenu isOpen={isOpen} toggleSidebar={toggleSidebar} />
+						</div>
+					)}
+					<main className="w-full">
+						<Outlet />
+					</main>
+				</div>
+			</div>
 		</React.Fragment>
 	);
 });

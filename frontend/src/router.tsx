@@ -11,6 +11,8 @@ import SignUpPage from "pages/signUp";
 import MainLayout from "components/layouts/mainLayout";
 import ProjectsPage from "pages/projects";
 import authStore from "stores/authStore";
+import BoardPage from "pages/board";
+import ProfilePage from "pages/profile";
 
 const Router = () => {
 	return (
@@ -28,12 +30,20 @@ const Router = () => {
 					<Route index element={<SignUpPage />} />
 				</Route>
 
-				<Route path="projects" element={<MainLayout showHeader={true} showMenu={false} />}>
+				<Route path="/billing" element={<MainLayout showHeader={true} showMenu={false} />}>
+					<Route index element={<PricingPage />} />
+				</Route>
+
+				<Route path="/projects" element={<MainLayout showHeader={true} showMenu={false} />}>
 					<Route index element={<ProjectsPage />} />
 				</Route>
 
-				<Route path="billing" element={<MainLayout showHeader={true} showMenu={false} />}>
-					<Route index element={<PricingPage />} />
+				<Route path="/board/:projectId" element={<MainLayout showHeader={true} showMenu={true} />}>
+					<Route index element={<BoardPage />} />
+				</Route>
+
+				<Route path="/profile" element={<MainLayout showHeader={true} showMenu={false} />}>
+					<Route index element={<ProfilePage />} />
 				</Route>
 
 				<Route path="*" element={<NotFound />} />
