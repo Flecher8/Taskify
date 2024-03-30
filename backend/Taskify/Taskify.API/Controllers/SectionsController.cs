@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Taskify.BLL.Interfaces;
 using Taskify.Core.DbModels;
 using Taskify.Core.Dtos;
@@ -66,8 +67,9 @@ namespace Taskify.API.Controllers
         {
             try
             {
+                
                 var result = await _sectionsService.GetSectionsByProjectIdAsync(projectId);
-
+                
                 return result.IsSuccess
                     ? Ok(_mapper.Map<List<SectionDto>>(result.Data))
                     : NotFound();

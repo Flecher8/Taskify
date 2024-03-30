@@ -1,8 +1,7 @@
-import { Project } from "api/services/projectsService";
 import ProjectCard from "components/projectCard";
+import { Project } from "entities/project";
 import { observer } from "mobx-react-lite";
 import { FC, useEffect, useState } from "react";
-import projectsStore from "stores/projectsStore";
 
 interface ProjectsListProps {
 	projects: Project[];

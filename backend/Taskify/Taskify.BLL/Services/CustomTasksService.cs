@@ -74,6 +74,7 @@ namespace Taskify.BLL.Services
                 customTask.IsArchived = false;
                 customTask.CreatedAt = DateTime.UtcNow;
                 customTask.SequenceNumber = tasksInCurrentSection.Count;
+                customTask.Description = string.Empty;
 
                 var result = await _customTaskRepository.AddAsync(customTask);
 
@@ -294,7 +295,7 @@ namespace Taskify.BLL.Services
 
         private bool IsTargetSequenceNumberValid(int targetSequenceNumber, int tasksCount)
         {
-            return targetSequenceNumber >= 0 && targetSequenceNumber < tasksCount;
+            return targetSequenceNumber >= 0 && targetSequenceNumber <= tasksCount;
         }
 
         public async Task<Result<bool>> ArchiveCustomTaskAsync(string customTaskId)
@@ -432,6 +433,13 @@ namespace Taskify.BLL.Services
                     );
 
                     tasksInTargetSection = tasksInTargetSection.OrderBy(c => c.SequenceNumber).ToList();
+
+                    _logger.LogInformation("INFO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    _logger.LogInformation("");
+                    _logger.LogInformation("");
+                    _logger.LogInformation("");
+                    _logger.LogInformation("");
+                    _logger.LogInformation(tasksInTargetSection.Count.ToString());
 
                     if (!IsTargetSequenceNumberValid(targetSequenceNumber.Value, tasksInTargetSection.Count))
                     {

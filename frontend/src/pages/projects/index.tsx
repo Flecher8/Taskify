@@ -5,8 +5,8 @@ import userStore from "stores/userStore";
 import { observer } from "mobx-react-lite";
 import CreateProjectForm from "components/createProjectForm";
 import projectsStore from "stores/projectsStore";
-import { Project } from "api/services/projectsService";
 import authStore from "stores/authStore";
+import { Project } from "entities/project";
 
 interface ProjectsPageProps {}
 
@@ -46,10 +46,6 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 		} finally {
 			setIsLoading(false);
 		}
-	};
-
-	const unv = () => {
-		authStore.logout();
 	};
 
 	useEffect(() => {

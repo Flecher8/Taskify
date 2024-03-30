@@ -1,12 +1,6 @@
 import { api } from "api/axious/api";
 import Result from "./result";
-
-export interface Project {
-	id: string;
-	userId: string;
-	name: string;
-	createdAt: string;
-}
+import { Project } from "entities/project";
 
 interface CreateProjectData {
 	userId: string;

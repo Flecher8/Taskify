@@ -28,7 +28,7 @@ const MainLayout: FC<MainLayoutProps> = observer(({ showHeader = true, showMenu 
 		<React.Fragment>
 			<div className="flex flex-col h-full">
 				{showHeader && <MainHeader />}
-				<div className="flex flex-row h-full">
+				<div className="flex flex-row h-full relative">
 					{showMenu && (
 						<div className={`${isOpen ? "w-[250px]" : "w-[15px]"} duration-200`}>
 							<SideMenu isOpen={isOpen} toggleSidebar={toggleSidebar} />

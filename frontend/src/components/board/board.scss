@@ -1,0 +1,19 @@
+.board {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: flex-start;
+	width: 100%;
+}
+
+.board::-webkit-scrollbar {
+	width: 50px; /* Ширина полосы прокрутки */
+}
+.board::-webkit-scrollbar-thumb {
+	background-color: #888; /* Цвет ползунка */
+	border-radius: 5px; /* Скругление углов ползунка */
+}
+
+.board::-webkit-scrollbar-track {
+	background-color: #eee; /* Цвет фона полосы прокрутки */
+}

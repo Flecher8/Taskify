@@ -81,7 +81,16 @@ namespace Taskify.API
 
             builder.Services.AddIdentityApiEndpoints<User>()
                 .AddEntityFrameworkStores<DataContext>();
-            builder.Services.AddControllers();
+            //builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            }); ;
+            // Can be added to remove json cycles
+            //.AddJsonOptions(options =>
+            // {
+            //     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            // });
             //builder.Services.AddControllers().AddJsonOptions(options =>
             //{
             //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;

@@ -1,9 +1,7 @@
-import { Project } from "api/services/projectsService";
-import { maxProjectNameLength } from "../../constants";
 import { FC, useEffect, useState } from "react";
-import { truncateString } from "utilities/truncateString";
 import "./boardMenu.scss";
 import projectsStore from "stores/projectsStore";
+import { Project } from "entities/project";
 
 interface BoardMenuProps {
 	project: Project | null;
@@ -16,7 +14,6 @@ const BoardMenu: FC<BoardMenuProps> = ({ project }) => {
 	const [isEditable, setIsEditable] = useState(false);
 
 	useEffect(() => {
-		console.log("Start", project);
 		if (project !== null) {
 			setProjectName(project.name);
 		}
@@ -45,7 +42,7 @@ const BoardMenu: FC<BoardMenuProps> = ({ project }) => {
 	};
 
 	return (
-		<div className="boardMenu flex flex-row justify-between items-center border border-b-stone-900">
+		<div className="boardMenu flex flex-row justify-between items-center border-b-stone-900">
 			<div className="m-5 p-1 flex flex-row justify-start">
 				<div
 					className={`${isHovered ? (isEditable ? "bg-white" : "bg-gray-300") : ""} duration-300`}
@@ -62,7 +59,7 @@ const BoardMenu: FC<BoardMenuProps> = ({ project }) => {
 							autoFocus
 						/>
 					) : (
-						<input type="text" className="p-1" value={projectName} readOnly onClick={handleInputClick} />
+						<input type="text" className="p-1 truncate" value={projectName} readOnly onClick={handleInputClick} />
 					)}
 				</div>
 			</div>

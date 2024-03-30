@@ -12,11 +12,15 @@ interface SideMenuProps {
 
 const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
 	return (
-		<div className={`flex h-full relative bg-slate-300`}>
+		<div className={`flex h-full relative`}>
 			<div
-				className="flex absolute cursor-pointer rounded-full justify-center items-center -right-2 w-5 h-5 top-5 bg-blue-200"
+				className="flex absolute bg-primary cursor-pointer rounded-full justify-center items-center -right-[12px] w-5 h-5 top-5"
 				onClick={toggleSidebar}>
-				{isOpen ? <i className="fa-light fa-angle-left"></i> : <i className="fa-light fa-angle-right"></i>}
+				{isOpen ? (
+					<i className="fa-light fa-angle-left text-white"></i>
+				) : (
+					<i className="fa-light fa-angle-right text-white"></i>
+				)}
 			</div>
 			<div className={`${!isOpen && "hidden"} origin-left duration-200`}>
 				<div>123</div>

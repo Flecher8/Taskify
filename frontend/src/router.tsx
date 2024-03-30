@@ -14,6 +14,8 @@ import authStore from "stores/authStore";
 import BoardPage from "pages/board";
 import ProfilePage from "pages/profile";
 
+export const path = {};
+
 const Router = () => {
 	return (
 		<BrowserRouter>
@@ -38,7 +40,7 @@ const Router = () => {
 					<Route index element={<ProjectsPage />} />
 				</Route>
 
-				<Route path="/board/:projectId" element={<MainLayout showHeader={true} showMenu={true} />}>
+				<Route path="/project/:projectId" element={<MainLayout showHeader={true} showMenu={true} />}>
 					<Route index element={<BoardPage />} />
 				</Route>
 

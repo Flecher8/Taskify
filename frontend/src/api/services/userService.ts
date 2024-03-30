@@ -1,19 +1,12 @@
 import { api } from "api/axious/api";
 import Result from "./result";
+import { User } from "entities/user";
 
 interface GetUserByEmailResponse {
 	id: string;
 	email: string;
 	firstName: string;
 	lastName: string;
-	createdAt: Date;
-}
-
-export interface User {
-	id: string;
-	email: string;
-	firstName?: string;
-	lastName?: string;
 	createdAt: Date;
 }
 

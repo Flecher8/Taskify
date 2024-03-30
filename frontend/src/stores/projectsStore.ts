@@ -1,4 +1,5 @@
-import ProjectsService, { Project } from "api/services/projectsService";
+import ProjectsService from "api/services/projectsService";
+import { Project } from "entities/project";
 import { makeAutoObservable } from "mobx";
 
 class ProjectsStore {

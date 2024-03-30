@@ -8,6 +8,7 @@ using System.Transactions;
 using Taskify.BLL.Interfaces;
 using Taskify.BLL.Validation;
 using Taskify.Core.DbModels;
+using Taskify.Core.Enums;
 using Taskify.Core.Result;
 using Taskify.DAL.Interfaces;
 using Taskify.DAL.Repositories;
@@ -66,6 +67,7 @@ namespace Taskify.BLL.Services
                 section.CreatedAt = DateTime.UtcNow;
                 section.SequenceNumber = sectionsInCurrentProject.Count;
                 section.IsArchived = false;
+                section.SectionType = SectionType.Doing;
 
                 var result = await _sectionRepository.AddAsync(section);
 
