@@ -12,7 +12,7 @@ interface SideMenuProps {
 
 const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
 	return (
-		<div className={`flex h-full relative`}>
+		<div className={`flex h-full relative transition-all duration-300 ${isOpen ? "w-[250px]" : "w-[15px]"}`}>
 			<div
 				className="flex absolute bg-primary cursor-pointer rounded-full justify-center items-center -right-[12px] w-5 h-5 top-5"
 				onClick={toggleSidebar}>
