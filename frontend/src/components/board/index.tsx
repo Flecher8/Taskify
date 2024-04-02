@@ -6,7 +6,7 @@ import {
 	DropResult,
 	DraggableLocation
 } from "@hello-pangea/dnd";
-import SectionCard from "components/section";
+import SectionCard from "components/sectionCard";
 import { CustomTask } from "entities/customTask";
 import { Project } from "entities/project";
 import { Section, SectionType } from "entities/section";
@@ -14,7 +14,6 @@ import { FC, useEffect, useRef, useState } from "react";
 import sectionsStore from "stores/sectionsStore";
 import "./board.scss";
 import customTaskStore from "stores/customTasksStore";
-import CreateItemByNameForm from "components/createItemForm";
 
 interface BoardProps {
 	project: Project;

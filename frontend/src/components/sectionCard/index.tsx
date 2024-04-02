@@ -3,7 +3,6 @@ import TaskCard from "components/taskCard";
 import { Section } from "entities/section";
 import { FC, useEffect, useRef, useState } from "react";
 import "./section.scss";
-import CreateItemByNameForm from "components/createItemForm";
 
 interface SectionCardProps {
 	section: Section;
