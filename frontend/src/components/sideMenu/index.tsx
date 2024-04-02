@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import React, { MouseEventHandler, useEffect, useState } from "react";
 import "./sideMenu.scss";
 import { SIDEBAR_WIDTH } from "../../constants";
@@ -11,6 +11,8 @@ interface SideMenuProps {
 // TODO WHY icon does not loads after F5??? --- <i className="fa-light fa-bars"></i>
 
 const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
+	const { projectId } = useParams<{ projectId: string }>();
+
 	return (
 		<div className={`flex h-full relative transition-all duration-300 ${isOpen ? "w-[250px]" : "w-[15px]"}`}>
 			<div
@@ -23,7 +25,12 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
 				)}
 			</div>
 			<div className={`${!isOpen && "hidden"} origin-left duration-200`}>
-				<div>123</div>
+				<div>
+					<Link to={`/project/${projectId}`}>Board</Link>
+				</div>
+				<div>
+					<Link to={`/project/${projectId}/roles`}>Roles</Link>
+				</div>
 			</div>
 		</div>
 	);

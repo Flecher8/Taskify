@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import "./boardMenu.scss";
 import projectsStore from "stores/projectsStore";
 import { Project } from "entities/project";
-import ClickToEditText from "components/сlickToEditText";
+import ClickToEditText from "components/clickToEditText";
 
 interface BoardMenuProps {
 	project: Project | null;
@@ -11,34 +11,11 @@ interface BoardMenuProps {
 const BoardMenu: FC<BoardMenuProps> = ({ project }) => {
 	const [projectName, setProjectName] = useState("");
 
-	const [isHovered, setIsHovered] = useState(false);
-	const [isEditable, setIsEditable] = useState(false);
-
 	useEffect(() => {
 		if (project !== null) {
 			setProjectName(project.name);
 		}
 	}, [project]);
-
-	// const handleProjectNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-	// 	setProjectName(event.target.value);
-	// };
-
-	// const handleInputClick = () => {
-	// 	setIsEditable(true);
-	// };
-
-	// const handleInputBlur = () => {
-	// 	setIsEditable(false);
-	// 	updateProject(projectName);
-	// };
-
-	// const updateProject = (newName: string) => {
-	// 	if (project) {
-	// 		project.name = newName;
-	// 		projectsStore.updateProject(project.id, project);
-	// 	}
-	// };
 
 	const handleProjectNameChange = (newName: string) => {
 		if (project) {

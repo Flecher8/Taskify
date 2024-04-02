@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 interface ClickToEditTextProps {
 	initialText: string;
 	onTextChange: (newText: string) => void;
+	useHover?: boolean;
 }
 
-const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextChange }) => {
+const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextChange, useHover = true }) => {
 	const [text, setText] = useState(initialText);
 	const [previousText, setPreviousText] = useState(initialText);
 	const [isEditing, setIsEditing] = useState(false);
@@ -43,7 +44,9 @@ const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextCh
 
 	return (
 		<div
-			className={`relative ${isEditing ? "bg-white" : isHovered ? "bg-gray-300" : ""} duration-300`}
+			className={`relative ${
+				isEditing ? "bg-white" : useHover ? (isHovered ? "bg-gray-300" : "") : ""
+			} duration-300`}
 			onBlur={handleStopEditing}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}>

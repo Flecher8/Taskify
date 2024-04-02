@@ -156,7 +156,9 @@ const Board: FC<BoardProps> = ({ project }) => {
 		setSections(newSections);
 	};
 
-	const onDragStart = (start: DragStart | undefined) => {};
+	const onDragStart = (start: DragStart | undefined) => {
+		console.log("Drag started");
+	};
 
 	const createTask = async (sectionId: string, newTaskName: string) => {
 		try {

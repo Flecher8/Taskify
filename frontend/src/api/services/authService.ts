@@ -35,13 +35,14 @@ interface LoginData {
 export default class AuthService {
 	static async login(data: LoginData): Promise<LoginResponse | undefined> {
 		try {
+			console.log("123");
 			const response = await api.post<LoginResponse>("/login", data);
-			if (response.status >= 200) {
-				return response.data;
-			}
+			console.log("321");
+			console.log(response);
+			return response.data;
 		} catch (err: any) {
 			console.log("Error: ");
-
+			console.log(err);
 			if (err.response?.status >= 400) {
 				throw new Error(err.response.data);
 			}

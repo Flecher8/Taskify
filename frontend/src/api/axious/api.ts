@@ -48,14 +48,14 @@ api.interceptors.response.use(
 			!error.config._isRetry
 		) {
 			try {
-				if (
-					localStorage.getItem("refreshToken") === null ||
-					localStorage.getItem("refreshToken") === "" ||
-					localStorage.getItem("refreshToken") === undefined
-				) {
-					console.log("RefreshToken is null");
-					return;
-				}
+				// if (
+				// 	localStorage.getItem("refreshToken") === null ||
+				// 	localStorage.getItem("refreshToken") === "" ||
+				// 	localStorage.getItem("refreshToken") === undefined
+				// ) {
+				// 	console.log("RefreshToken is null");
+				// 	return;
+				// }
 				console.log("Start refreshing token");
 				// запрос на обновление токенов
 				const resp = await api.post("/refresh", { refreshToken: localStorage.getItem("refreshToken") });

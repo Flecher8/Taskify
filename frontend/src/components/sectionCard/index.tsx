@@ -3,6 +3,7 @@ import TaskCard from "components/taskCard";
 import { Section } from "entities/section";
 import { FC, useEffect, useRef, useState } from "react";
 import "./section.scss";
+import ClickToEditText from "components/clickToEditText";
 
 interface SectionCardProps {
 	section: Section;
@@ -13,6 +14,7 @@ interface SectionCardProps {
 const SectionCard: FC<SectionCardProps> = ({ section, index, createTask }) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
 	const [newTaskName, setNewTaskName] = useState("");
+
 	const inputRef = useRef<HTMLInputElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 
@@ -52,8 +54,8 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask }) => {
 		setNewTaskName("");
 	};
 
-	const createSection = (name: string) => {
-		createTask(section.id, name);
+	const handleSectionNameChange = (newName: string) => {
+		// TODO
 	};
 
 	return (
@@ -65,6 +67,7 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask }) => {
 					ref={sectionProvided.innerRef}>
 					<div className="p-[12px]" {...sectionProvided.dragHandleProps}>
 						<h3 className="break-words text-base">{section.name}</h3>
+						{/* <ClickToEditText initialText={section.name} onTextChange={handleSectionNameChange} useHover={false} /> */}
 					</div>
 					<Droppable droppableId={section.id} type="task">
 						{providedDroppable => {
