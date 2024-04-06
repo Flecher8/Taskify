@@ -56,6 +56,7 @@ namespace Taskify.BLL.Services
                 }
 
                 projectRole.Project = project;
+                projectRole.CreatedAt = DateTime.UtcNow;
 
                 var result = await _projectRoleRepository.AddAsync(projectRole);
                 return ResultFactory.Success(result);
