@@ -29,7 +29,7 @@ const BoardPage: FC<BoardPageProps> = () => {
 	}, [projectId]);
 
 	return (
-		<div className="flex flex-col h-full">
+		<div className="flex flex-col w-full h-full">
 			<BoardMenu project={project} />
 			{project === null ? <div>Loading...</div> : <Board project={project} />}
 		</div>

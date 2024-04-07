@@ -281,7 +281,7 @@ const Board: FC<BoardProps> = ({ project }) => {
 	}, [project]);
 
 	return (
-		<div className="board flex flex-row flex-nowrap overflow-x-auto h-full">
+		<div className="board flex flex-row flex-nowrap overflow-x-auto w-full h-full">
 			<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
 				<Droppable droppableId="all-sections" direction="horizontal" type="column">
 					{provided => (

@@ -4,6 +4,7 @@ import { Section } from "entities/section";
 import { FC, useEffect, useRef, useState } from "react";
 import "./section.scss";
 import ClickToEditText from "components/clickToEditText";
+import sectionsStore from "stores/sectionsStore";
 
 interface SectionCardProps {
 	section: Section;
@@ -54,8 +55,15 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask }) => {
 		setNewTaskName("");
 	};
 
-	const handleSectionNameChange = (newName: string) => {
-		// TODO
+	const handleSectionNameChange = async (newName: string) => {
+		try {
+			const newSection = section;
+			newSection.name = newName;
+			await sectionsStore.updateSection(section.id, newSection);
+			section.name = newName;
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
@@ -66,14 +74,13 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask }) => {
 					{...sectionProvided.draggableProps}
 					ref={sectionProvided.innerRef}>
 					<div className="p-[12px]" {...sectionProvided.dragHandleProps}>
-						<h3 className="break-words text-base">{section.name}</h3>
-						{/* <ClickToEditText initialText={section.name} onTextChange={handleSectionNameChange} useHover={false} /> */}
+						<ClickToEditText initialText={section.name} onTextChange={handleSectionNameChange} useHover={false} />
 					</div>
 					<Droppable droppableId={section.id} type="task">
 						{providedDroppable => {
 							return (
 								<div
-									className="p-[8px] min-h-[5px] text-sm"
+									className="section p-[8px] min-h-[5px] text-sm max-h-96 overflow-y-auto"
 									{...providedDroppable.droppableProps}
 									ref={providedDroppable.innerRef}>
 									{section.customTasks.map((customTask, index) => (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ClickToEditTextProps {
 	initialText: string;
@@ -11,9 +11,13 @@ const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextCh
 	const [previousText, setPreviousText] = useState(initialText);
 	const [isEditing, setIsEditing] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
+	const itemRef = useRef<HTMLDivElement>(null);
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setText(event.target.value);
+		const newText = event.target.value;
+		if (newText.length <= 100) {
+			setText(newText);
+		}
 	};
 
 	const handleStartEditing = () => {
@@ -22,7 +26,7 @@ const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextCh
 	};
 
 	const handleStopEditing = () => {
-		if (text.length === 0) {
+		if (text.length === 0 || text.length > 100) {
 			setText(previousText);
 		} else {
 			onTextChange(text);
@@ -44,6 +48,7 @@ const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextCh
 
 	return (
 		<div
+			ref={itemRef}
 			className={`relative ${
 				isEditing ? "bg-white" : useHover ? (isHovered ? "bg-gray-300" : "") : ""
 			} duration-300`}
@@ -59,7 +64,10 @@ const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextCh
 					autoFocus
 				/>
 			) : (
-				<input type="text" className="p-1 truncate" value={text} readOnly onClick={handleStartEditing} />
+				// <input type="text" className="p-1 truncate" value={text} readOnly onClick={handleStartEditing} />
+				<p className="p-1 truncate" onClick={handleStartEditing}>
+					{text}
+				</p>
 			)}
 		</div>
 	);

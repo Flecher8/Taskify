@@ -30,7 +30,7 @@ const MainLayout: FC<MainLayoutProps> = observer(({ showHeader = true, showMenu 
 				{showHeader && <MainHeader />}
 				<div className="flex h-full">
 					{showMenu && <SideMenu isOpen={isOpen} toggleSidebar={toggleSidebar} />}
-					<main className="w-full flex-grow overflow-auto">
+					<main className="w-3/4 flex flex-grow">
 						<Outlet />
 					</main>
 				</div>

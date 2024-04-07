@@ -24,7 +24,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
 					<i className="fa-light fa-angle-right text-white"></i>
 				)}
 			</div>
-			<div className={`${!isOpen && "hidden"} origin-left duration-200`}>
+			<div className={`${!isOpen && "hidden"} w-full origin-left duration-200`}>
 				<div>
 					<Link to={`/project/${projectId}`}>Board</Link>
 				</div>
