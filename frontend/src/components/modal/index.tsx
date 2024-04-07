@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 
 interface ModalProps {
 	id: string;
-	openButtonText: string;
+	openButtonText: ReactNode;
 	openButtonStyle: string;
 	children: ReactNode;
 }

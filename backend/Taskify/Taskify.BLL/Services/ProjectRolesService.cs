@@ -144,20 +144,8 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>("Can not find project role with such id.");
                 }
 
-                if (projectRole.Project == null || string.IsNullOrEmpty(projectRole.Project.Id))
-                {
-                    return ResultFactory.Failure<bool>("Project is not specified.");
-                }
-
-                var project = await _projectRepository.GetByIdAsync(projectRole.Project.Id);
-
-                if (project == null)
-                {
-                    return ResultFactory.Failure<bool>("Can not find project with such id.");
-                }
 
                 roleToUpdate.Name = projectRole.Name;
-                roleToUpdate.Project = project;
                 roleToUpdate.ProjectRoleType = projectRole.ProjectRoleType;
 
                 await _projectRoleRepository.UpdateAsync(roleToUpdate);

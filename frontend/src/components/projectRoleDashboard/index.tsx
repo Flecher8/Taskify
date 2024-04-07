@@ -23,7 +23,11 @@ const ProjectRoleDashboard: FC<ProjectRoleDashboardProps> = ({ projectId }) => {
 	const loadProjectRoles = async () => {
 		try {
 			const roles = await projectRolesStore.getProjectRolesByProjectId(projectId);
-			setProjectRoles(roles);
+			const sortedProjectRoles = roles.slice().sort((a: ProjectRole, b: ProjectRole) => {
+				return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+			});
+
+			setProjectRoles(sortedProjectRoles);
 		} catch (error) {
 			console.error("Error loading project roles:", error);
 		}
@@ -52,15 +56,33 @@ const ProjectRoleDashboard: FC<ProjectRoleDashboardProps> = ({ projectId }) => {
 	};
 
 	const editRole = async (role: ProjectRole) => {
-		console.log("Edit role:", role);
+		try {
+			if (projectId === undefined) {
+				throw new Error("Can not find projectId");
+			}
+			await projectRolesStore.updateProjectRole(role.id, role);
+
+			loadProjectRoles();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const deleteRole = async (id: string) => {
-		console.log("Delete role:", id);
+		try {
+			if (projectId === undefined) {
+				throw new Error("Can not find projectId");
+			}
+			await projectRolesStore.deleteProjectRole(id);
+
+			loadProjectRoles();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
-		<div className="flex flex-col w-full justify-centerspace-y-4">
+		<div className="flex flex-col w-full justify-centerspace-y-4 h-full">
 			<div className="flex justify-between">
 				<input
 					type="text"
@@ -73,11 +95,16 @@ const ProjectRoleDashboard: FC<ProjectRoleDashboardProps> = ({ projectId }) => {
 					<CreateProjectRoleForm create={createRole} close={closeModal} />
 				</Modal>
 			</div>
-			<div className="mt-5">
+			<div className="mt-5 h-full">
 				{projectRoles.length === 0 ? (
-					<p className="flex text-xl italic justify-center">There are no roles in this project.</p>
+					<p className="flex text-xl italic justify-center overflow-auto">There are no roles in this project.</p>
 				) : (
-					<ProjectRoleList projectRoles={projectRoles} editRole={editRole} deleteRole={deleteRole} />
+					<ProjectRoleList
+						projectRoles={projectRoles}
+						filterName={filterByName}
+						editRole={editRole}
+						deleteRole={deleteRole}
+					/>
 				)}
 			</div>
 		</div>
