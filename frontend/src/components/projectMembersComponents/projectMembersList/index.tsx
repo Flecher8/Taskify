@@ -1,5 +1,6 @@
 import { ProjectMember } from "entities/projectMember";
 import { FC } from "react";
+import ProjectMembersListItem from "../projectMembersListItem";
 
 interface ProjectMemebersListProps {
 	projectMembers: ProjectMember[];
@@ -14,7 +15,27 @@ const ProjectMemebersList: FC<ProjectMemebersListProps> = ({
 	editMember,
 	deleteMember
 }) => {
-	return <div>ProjectMemebersList</div>;
+	return (
+		<div className="flex flex-col flex-between h-full">
+			<div className="flex flex-col border-b max-h-96 overflow-auto">
+				{projectMembers
+					.filter(projectMember =>
+						(projectMember.user.firstName + " " + projectMember.user.lastName)
+							.toLowerCase()
+							.includes(filterName.toLowerCase())
+					)
+
+					.map(projectMember => (
+						<ProjectMembersListItem
+							key={projectMember.id}
+							projectMember={projectMember}
+							editMember={editMember}
+							deleteMember={deleteMember}
+						/>
+					))}
+			</div>
+		</div>
+	);
 };
 
 export default ProjectMemebersList;

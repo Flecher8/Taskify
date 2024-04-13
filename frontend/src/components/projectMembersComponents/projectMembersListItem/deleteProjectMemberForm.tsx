@@ -1,15 +1,15 @@
-import { ProjectRole, ProjectRoleType } from "entities/projectRole";
-import { FC, useEffect, useState } from "react";
+import { ProjectMember } from "entities/projectMember";
+import { FC } from "react";
 
-interface DeleteProjectRoleFormProps {
-	role: ProjectRole;
-	deleteRole: (id: string) => void;
+interface DeleteProjectMemberFormProps {
+	member: ProjectMember;
+	deleteMember: (id: string) => void;
 	close: () => void;
 }
 
-const DeleteProjectRoleForm: FC<DeleteProjectRoleFormProps> = ({ role, deleteRole, close }) => {
-	const handleDeleteProjectRole = () => {
-		deleteRole(role.id);
+const DeleteProjectMemberForm: FC<DeleteProjectMemberFormProps> = ({ member, deleteMember, close }) => {
+	const handleDeleteProjectMember = () => {
+		deleteMember(member.id);
 		close();
 	};
 
@@ -20,7 +20,7 @@ const DeleteProjectRoleForm: FC<DeleteProjectRoleFormProps> = ({ role, deleteRol
 	return (
 		<div className="p-4">
 			<div>
-				<h2 className="text-xl font-bold mb-4">Deleting Project Role</h2>
+				<h2 className="text-xl font-bold mb-4">Deleting Project Member</h2>
 			</div>
 			<div>
 				<p>Are you sure?</p>
@@ -28,7 +28,7 @@ const DeleteProjectRoleForm: FC<DeleteProjectRoleFormProps> = ({ role, deleteRol
 			<div className="flex flex-row mt-5">
 				<button
 					className="border border-red-600 text-red-600 hover:bg-red-800 hover:text-white transition duration-300 ease-out py-2 px-4 rounded mr-3"
-					onClick={handleDeleteProjectRole}>
+					onClick={handleDeleteProjectMember}>
 					Delete
 				</button>
 				<button
@@ -41,4 +41,4 @@ const DeleteProjectRoleForm: FC<DeleteProjectRoleFormProps> = ({ role, deleteRol
 	);
 };
 
-export default DeleteProjectRoleForm;
+export default DeleteProjectMemberForm;

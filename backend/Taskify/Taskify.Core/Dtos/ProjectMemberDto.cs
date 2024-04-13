@@ -10,6 +10,7 @@ namespace Taskify.Core.Dtos
     public class ProjectMemberDto
     {
         public string Id { get; set; } = string.Empty;
+        public ProjectDto Project { get; set; }
         public UserDto User { get; set; }
         public ProjectRoleDto? ProjectRole { get; set; }
     }

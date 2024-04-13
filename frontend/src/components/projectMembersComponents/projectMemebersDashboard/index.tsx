@@ -31,6 +31,7 @@ const ProjectMembersDashboard: FC<ProjectMembersDashboardProps> = ({ projectId }
 			});
 
 			setProjectMembers(sortedProjectMembers);
+			console.log(sortedProjectMembers);
 		} catch (error) {
 			console.error("Error loading project roles:", error);
 		}
@@ -59,7 +60,7 @@ const ProjectMembersDashboard: FC<ProjectMembersDashboardProps> = ({ projectId }
 			}
 			const updateMember = {
 				id: member.id,
-				projectRoleId: member.projectRole === undefined ? "" : member.projectRole.id
+				projectRoleId: member.projectRole === null ? "" : member.projectRole.id
 			};
 
 			await projectMembersStore.updateProjectMember(member.id, updateMember);

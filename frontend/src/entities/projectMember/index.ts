@@ -6,5 +6,5 @@ export interface ProjectMember {
 	id: string;
 	project: Project;
 	user: User;
-	projectRole?: ProjectRole;
+	projectRole: ProjectRole | null;
 }
