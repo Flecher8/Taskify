@@ -70,6 +70,25 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<ProjectInvitation>("User is already a member of this project.");
                 }
 
+                // Check if an invitation to this user for this project already exists and has not been accepted yet
+                var notificationsByUser = await _notificationService.GetNotificationsByUserIdAsync(userId);
+                var existingProjectInvitationsForUser = notificationsByUser.Data
+                    .FindAll(n => n.NotificationType == NotificationType.ProjectInvitation);
+
+                foreach (var existingNotification in existingProjectInvitationsForUser)
+                {
+                    var existingProjectInvitation = (await _projectInvitationRepository.GetFilteredItemsAsync(
+                        builder => builder
+                            .IncludeNotificationEntity()
+                            .IncludeProjectEntity()
+                            .WithFilter(p => p.Notification.Id == existingNotification.Id && p.Project.Id == projectInvitation.Project.Id)
+                        )).FirstOrDefault() ;
+                    if (existingProjectInvitation != null && existingProjectInvitation.IsAccepted == null)
+                    {
+                        return ResultFactory.Failure<ProjectInvitation>("Invitation to this user for this project already exists and has not been accepted yet.");
+                    }
+                }
+
                 var user = await _userRepository.GetByIdAsync(userId);
                 var project = (await _projectRepository.GetFilteredItemsAsync(
                     builder => builder
@@ -320,6 +339,31 @@ namespace Taskify.BLL.Services
             {
                 _logger.LogError(ex.Message);
                 return ResultFactory.Failure<ProjectInvitation>("Can not get project invitation by id.");
+            }
+        }
+
+        public async Task<Result<ProjectInvitation>> GetProjectInvitationByNotificationIdAsync(string notificationId)
+        {
+            try
+            {
+                var projectInvitation = (await _projectInvitationRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeNotificationEntity()
+                        .IncludeProjectEntity()
+                        .WithFilter(pi => pi.Notification.Id == notificationId)
+                    )).FirstOrDefault();
+
+                if (projectInvitation == null)
+                {
+                    return ResultFactory.Failure<ProjectInvitation>("Project invitation with such notification id does not exist.");
+                }
+
+                return ResultFactory.Success(projectInvitation);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<ProjectInvitation>("Can not get project invitation by notification id.");
             }
         }
     }

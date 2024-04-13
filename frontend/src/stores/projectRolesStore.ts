@@ -1,4 +1,4 @@
-import ProjectRolesService, { CreateProjectRoleData } from "api/services/projectRoleService";
+import ProjectRolesService, { CreateProjectRoleData } from "api/services/projectRolesService";
 import { ProjectRole } from "entities/projectRole";
 import { makeAutoObservable } from "mobx";
 

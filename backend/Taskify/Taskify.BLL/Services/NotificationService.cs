@@ -52,7 +52,7 @@ namespace Taskify.BLL.Services
                 {
                     return ResultFactory.Failure<Notification>("Can not find user with such id.");
                 }
-
+                notification.NotificationType = notification.NotificationType;
                 notification.User = user;
                 notification.CreatedAt = DateTime.UtcNow;
                 notification.IsRead = false;

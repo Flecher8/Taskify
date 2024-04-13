@@ -14,8 +14,7 @@ import authStore from "stores/authStore";
 import BoardPage from "pages/board";
 import ProfilePage from "pages/profile";
 import ProjectRolesPage from "pages/projectRoles";
-
-export const path = {};
+import ProjectMembersPage from "pages/projectMembers";
 
 const Router = () => {
 	return (
@@ -44,6 +43,7 @@ const Router = () => {
 				<Route path="/project/:projectId" element={<MainLayout showHeader={true} showMenu={true} />}>
 					<Route index element={<BoardPage />} />
 					<Route path="roles" element={<ProjectRolesPage />} />
+					<Route path="members" element={<ProjectMembersPage />} />
 				</Route>
 
 				<Route path="/profile" element={<MainLayout showHeader={true} showMenu={false} />}>

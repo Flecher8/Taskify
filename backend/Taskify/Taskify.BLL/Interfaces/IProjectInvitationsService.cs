@@ -17,5 +17,6 @@ namespace Taskify.BLL.Interfaces
         Task<Result<bool>> MarkProjectInvitationAsReadAsync(string projectInvitationId);
         Task<Result<bool>> DeleteProjectInvitationAsync(string projectInvitationId);
         Task<Result<ProjectInvitation>> GetProjectInvitationByIdAsync(string projectInvitationId);
+        Task<Result<ProjectInvitation>> GetProjectInvitationByNotificationIdAsync(string notificationId);
     }
 }

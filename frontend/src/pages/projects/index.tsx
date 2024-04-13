@@ -7,6 +7,7 @@ import CreateProjectForm from "components/createProjectForm";
 import projectsStore from "stores/projectsStore";
 import authStore from "stores/authStore";
 import { Project } from "entities/project";
+import DropDownContext from "components/dropDownContext";
 
 interface ProjectsPageProps {}
 
@@ -15,12 +16,12 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 	const [showCreateForm, setShowCreateForm] = useState(false);
 
 	const [projects, setProjects] = useState<Project[]>([]);
+	const [projectsMembership, setProjectsMembership] = useState<Project[]>([]);
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const handleCreateProject = async (name: string) => {
 		try {
-			console.log("Creating project:", name);
 			toggleCreateFormVisibility();
 			const result = await projectsStore.createProject(userId, name);
 			setProjects(prev => [...prev, result]);
@@ -30,6 +31,18 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 	const toggleCreateFormVisibility = () => {
 		setShowCreateForm(prevState => !prevState);
 		console.log(localStorage);
+	};
+
+	const loadData = async () => {
+		setIsLoading(true);
+		try {
+			getProjects();
+			getProjectsMembership();
+		} catch (error) {
+			console.error("Error loading data:", error);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const getProjects = async () => {
@@ -48,19 +61,30 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 		}
 	};
 
+	const getProjectsMembership = async () => {
+		setIsLoading(true);
+		try {
+			const newProjectsMembership = await projectsStore.getProjectsByMember(userId);
+			const sortedProjectsMembership = newProjectsMembership.sort((a, b) => {
+				// Assuming createdAt is a Date object or a string that can be parsed to a Date
+				return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+			});
+			setProjectsMembership(sortedProjectsMembership);
+		} catch (error: any) {
+			console.error("Error loading projects membership:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	useEffect(() => {
-		getProjects();
+		loadData();
 	}, []);
 
 	return (
-		<div className="projectsPage flex flex-col w-100 m-10">
+		<div className="projectsPage flex flex-col w-full m-10">
 			<div className="flex flex-row justify-normal mb-10 items-center">
-				<h1 className="projectsPage-header mr-5">
-					Projects
-					{/* <button className="btn" onClick={unv}>
-						Click to unauthorize
-					</button> */}
-				</h1>
+				<h1 className="projectsPage-header mr-5">Projects</h1>
 				<div className="dropdown">
 					<div
 						tabIndex={0}
@@ -76,7 +100,15 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 					/>
 				</div>
 			</div>
-			<ProjectsList projects={projects} isLoading={isLoading} />
+			<div className="w-full">
+				<ProjectsList projects={projects} isLoading={isLoading} />
+			</div>
+			<div className="flex flex-row justify-normal mb-10 items-center">
+				<h1 className="projectsPage-header mr-5">Projects membership</h1>
+			</div>
+			<div className="w-full">
+				<ProjectsList projects={projectsMembership} isLoading={isLoading} />
+			</div>
 		</div>
 	);
 });

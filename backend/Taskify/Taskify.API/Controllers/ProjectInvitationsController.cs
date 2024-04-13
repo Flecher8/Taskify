@@ -142,7 +142,25 @@ namespace Taskify.API.Controllers
 
                 return result.IsSuccess
                     ? Ok(_mapper.Map<ProjectInvitationDto>(result.Data))
-                    : NotFound();
+                    : NotFound(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetProjectInvitationById method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("notification/{notificationId}")]
+        public async Task<IActionResult> GetProjectInvitationByNotificationId(string notificationId)
+        {
+            try
+            {
+                var result = await _projectInvitationService.GetProjectInvitationByNotificationIdAsync(notificationId);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<ProjectInvitationDto>(result.Data))
+                    : NotFound(result.Errors);
             }
             catch (Exception ex)
             {

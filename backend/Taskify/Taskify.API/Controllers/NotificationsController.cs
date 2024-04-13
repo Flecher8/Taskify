@@ -61,7 +61,7 @@ namespace Taskify.API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("markAsRead/{id}")]
         public async Task<IActionResult> MarkNotificationAsRead(string id)
         {
             try

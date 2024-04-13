@@ -1,5 +1,5 @@
-import ProjectRoleDashboard from "components/projectRoleDashboard";
-import ProjectRolesMenu from "components/projectRolesMenu";
+import ProjectRoleDashboard from "components/projectRolesComponents/projectRoleDashboard";
+import ProjectRolesMenu from "components/projectRolesComponents/projectRolesMenu";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 

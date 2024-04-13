@@ -12,17 +12,17 @@ const ProjectsList: FC<ProjectsListProps> = observer(({ projects, isLoading }) =
 	useEffect(() => {}, [projects, isLoading]);
 
 	return (
-		<div className="flex w-100">
+		<div className="flex w-100 h-full">
 			{isLoading ? (
 				<div className="flex items-center justify-center h-96">
 					<span className="loading loading-spinner text-primary"></span>
 				</div>
 			) : (
-				<div className="flex justify-center items-center">
+				<div className="flex w-full">
 					{projects.length === 0 ? (
-						<div className="text-center">
+						<div className="text-center w-full">
 							<i className="far fa-magnifying-glass text-5xl text-black-500 mb-4"></i>
-							<p className="text-black-500 text-xl">No projects found for your request</p>
+							<p className="text-black-500 text-xl">No projects found</p>
 						</div>
 					) : (
 						<div className="flex flex-wrap justify-start">

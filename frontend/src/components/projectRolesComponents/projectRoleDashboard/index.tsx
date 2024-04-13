@@ -1,5 +1,5 @@
 import Modal from "components/modal";
-import ProjectRoleList from "components/projectRoleList";
+import ProjectRoleList from "components/projectRolesComponents/projectRoleList";
 import { ProjectRole, ProjectRoleType } from "entities/projectRole";
 import { FC, useEffect, useState } from "react";
 import projectRolesStore from "stores/projectRolesStore";

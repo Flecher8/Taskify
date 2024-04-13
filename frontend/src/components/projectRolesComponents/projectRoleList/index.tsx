@@ -1,4 +1,4 @@
-import ProjectRoleListItem from "components/projectRoleListItem";
+import ProjectRoleListItem from "components/projectRolesComponents/projectRoleListItem";
 import { ProjectRole } from "entities/projectRole";
 import { FC } from "react";
 

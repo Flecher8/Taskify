@@ -31,6 +31,9 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
 				<div>
 					<Link to={`/project/${projectId}/roles`}>Roles</Link>
 				</div>
+				<div>
+					<Link to={`/project/${projectId}/members`}>Members</Link>
+				</div>
 			</div>
 		</div>
 	);
