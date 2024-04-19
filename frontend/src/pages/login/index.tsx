@@ -37,7 +37,7 @@ const LoginPage: FC<LoginPageProps> = () => {
 
 	const handleNewButtonClick = () => {
 		// Handle button click logic here
-		console.log(localStorage.getItem("userId"));
+		console.log(localStorage);
 		console.log(authStore.isAuth);
 	};
 

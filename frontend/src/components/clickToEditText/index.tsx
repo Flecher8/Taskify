@@ -51,7 +51,7 @@ const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextCh
 			ref={itemRef}
 			className={`relative ${
 				isEditing ? "bg-white" : useHover ? (isHovered ? "bg-gray-300" : "") : ""
-			} duration-300`}
+			} duration-300 hover:cursor-pointer`}
 			onBlur={handleStopEditing}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}>

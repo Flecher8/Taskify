@@ -145,6 +145,11 @@ namespace Taskify.BLL.Services
         {
             try
             {
+                if(id == redirectSectionId)
+                {
+                    return ResultFactory.Failure<bool>("You can not redirect to the same section.");
+                }
+
                 var sectionWithProject = await _sectionRepository.GetFilteredItemsAsync(
                     builder => builder
                         .IncludeProjectEntity()
@@ -185,17 +190,18 @@ namespace Taskify.BLL.Services
                 }
 
                 // Redirect tasks from the deleted section to another section
-                var tasksToRedirect = await _customTaskRepository.GetFilteredItemsAsync(
+                var tasksToRedirect = (await _customTaskRepository.GetFilteredItemsAsync(
                     builder => builder
                         .IncludeSectionEntity()
                         .WithFilter(c => c.Section != null && c.Section.Id == id)
-                );
+                )).OrderBy(t => t.SequenceNumber);
 
                 // Move tasks to the redirection section and update sequence numbers
                 foreach (var task in tasksToRedirect)
                 {
                     task.Section = redirectionSection;
                     task.SequenceNumber = redirectionSection.CustomTasks.Count; // Set the sequence number to the end
+                    redirectionSection.CustomTasks.Add(task);
                     await _customTaskRepository.UpdateAsync(task);
                 }
 

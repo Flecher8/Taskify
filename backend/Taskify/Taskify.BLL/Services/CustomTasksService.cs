@@ -434,13 +434,6 @@ namespace Taskify.BLL.Services
 
                     tasksInTargetSection = tasksInTargetSection.OrderBy(c => c.SequenceNumber).ToList();
 
-                    _logger.LogInformation("INFO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    _logger.LogInformation("");
-                    _logger.LogInformation("");
-                    _logger.LogInformation("");
-                    _logger.LogInformation("");
-                    _logger.LogInformation(tasksInTargetSection.Count.ToString());
-
                     if (!IsTargetSequenceNumberValid(targetSequenceNumber.Value, tasksInTargetSection.Count))
                     {
                         return ResultFactory.Failure<bool>("Invalid target sequence number.");

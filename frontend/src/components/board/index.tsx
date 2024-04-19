@@ -276,6 +276,27 @@ const Board: FC<BoardProps> = ({ project }) => {
 		setNewSectionName("");
 	};
 
+	const editSection = async (section: Section) => {
+		try {
+			await sectionsStore.updateSection(section.id, section);
+			// Update the sections state with the updated section
+			const updatedSections = sections.map(s => (s.id === section.id ? section : s));
+			setSections(updatedSections);
+		} catch (error) {
+			console.error("Error editing section:", error);
+		}
+	};
+
+	const deleteSection = async (id: string, redirectId: string) => {
+		try {
+			await sectionsStore.deleteRedirect(id, redirectId);
+
+			loadData();
+		} catch (error) {
+			console.error("Error deleting section:", error);
+		}
+	};
+
 	useEffect(() => {
 		loadData();
 	}, [project]);
@@ -290,7 +311,17 @@ const Board: FC<BoardProps> = ({ project }) => {
 							{...provided.droppableProps}
 							ref={provided.innerRef}>
 							{sections.map((section, index) => {
-								return <SectionCard key={section.id} section={section} index={index} createTask={createTask} />;
+								return (
+									<SectionCard
+										key={section.id}
+										section={section}
+										index={index}
+										createTask={createTask}
+										editSection={editSection}
+										deleteSection={deleteSection}
+										sections={sections}
+									/>
+								);
 							})}
 							{provided.placeholder}
 						</div>

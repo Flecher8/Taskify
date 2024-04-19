@@ -28,7 +28,7 @@ const MainHeader: FC = () => {
 						</li>
 						<li>
 							<Link to="/profile" className="hover:text-gray-300 text-white">
-								Profile
+								<i className="fa-light fa-user"></i>
 							</Link>
 						</li>
 					</ul>

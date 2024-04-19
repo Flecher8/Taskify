@@ -1,18 +1,24 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import TaskCard from "components/taskCard";
-import { Section } from "entities/section";
+import { Section, SectionType } from "entities/section";
 import { FC, useEffect, useRef, useState } from "react";
 import "./section.scss";
 import ClickToEditText from "components/clickToEditText";
 import sectionsStore from "stores/sectionsStore";
+import DropDownContext from "components/dropDownContext";
+import MyDropDownContext from "components/myDropDownContext";
+import SectionCardMenu from "./sectionCardMenu";
 
 interface SectionCardProps {
 	section: Section;
 	index: number;
 	createTask: (sectionId: string, newTaskName: string) => void;
+	editSection: (section: Section) => void;
+	deleteSection: (id: string, redirectId: string) => void;
+	sections: Section[];
 }
 
-const SectionCard: FC<SectionCardProps> = ({ section, index, createTask }) => {
+const SectionCard: FC<SectionCardProps> = ({ section, index, createTask, editSection, deleteSection, sections }) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
 	const [newTaskName, setNewTaskName] = useState("");
 
@@ -73,8 +79,48 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask }) => {
 					className="bg-white m-[8px] border rounded-lg w-[300px] flex flex-col shrink-0"
 					{...sectionProvided.draggableProps}
 					ref={sectionProvided.innerRef}>
-					<div className="p-[12px]" {...sectionProvided.dragHandleProps}>
-						<ClickToEditText initialText={section.name} onTextChange={handleSectionNameChange} useHover={false} />
+					<div
+						className="p-[12px] flex flex-row justify-between items-center"
+						{...sectionProvided.dragHandleProps}>
+						<div className="flex flex-row gap-1 items-center">
+							<ClickToEditText
+								initialText={section.name}
+								onTextChange={handleSectionNameChange}
+								useHover={false}
+							/>
+							<div
+								className={`w-[10px] h-[10px] rounded-full border ${
+									section.sectionType === SectionType.ToDo
+										? "bg-gray-300"
+										: section.sectionType === SectionType.Doing
+										? "bg-blue-300"
+										: "bg-green-300"
+								}`}></div>
+						</div>
+						<div
+							className="flex items-center"
+							data-rfd-drag-handle-context-id={
+								sectionProvided.dragHandleProps?.["data-rfd-drag-handle-context-id"]
+							}
+							data-rfd-drag-handle-draggable-id="gibberish"
+							style={{
+								// When you set the data-rbd-drag-handle-context-id, RBD applies cursor: grab, so we need to revert that
+								cursor: "auto"
+							}}>
+							<MyDropDownContext
+								openDropDownButtonContent={<i className="fa-light fa-ellipsis"></i>}
+								openDropDownButtonStyle={
+									"p-1 flex items-center hover:bg-gray-200 hover:cursor-pointer transition duration-300"
+								}
+								dropDownContentStyle={"bg-white"}>
+								<SectionCardMenu
+									section={section}
+									editSection={editSection}
+									deleteSection={deleteSection}
+									sections={sections}
+								/>
+							</MyDropDownContext>
+						</div>
 					</div>
 					<Droppable droppableId={section.id} type="task">
 						{providedDroppable => {

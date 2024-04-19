@@ -1,17 +1,10 @@
-.board {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	align-items: flex-start;
-	width: 100%;
-}
-
 .board::-webkit-scrollbar {
-	width: 10px; /* Ширина полосы прокрутки */
+	width: 5px; /* Ширина полосы прокрутки */
+	height: 15px;
 }
 .board::-webkit-scrollbar-thumb {
 	background-color: #888; /* Цвет ползунка */
-	border-radius: 5px; /* Скругление углов ползунка */
+	border-radius: 20px; /* Скругление углов ползунка */
 }
 
 .board::-webkit-scrollbar-track {
