@@ -162,7 +162,12 @@ namespace Taskify.BLL.Services
         {
             try
             {
-                var result = await _projectRepository.GetByIdAsync(id);
+                var result = (await _projectRepository.GetFilteredItemsAsync(
+                    builder => builder
+                    .IncludeMembersEntity()
+                    .IncludeUserEntity()
+                    .WithFilter(p => p.Id == id)
+                )).FirstOrDefault();
 
                 if (result == null)
                 {

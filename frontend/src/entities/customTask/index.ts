@@ -4,7 +4,7 @@ import { User } from "entities/user";
 export interface CustomTask {
 	id: string;
 	section?: Section;
-	responsibleUser?: User;
+	responsibleUser: User | null;
 	name: string;
 	description: string;
 	startDateTimeUtc: Date;

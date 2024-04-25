@@ -1,37 +1,73 @@
 import React, { useEffect, useRef, useState } from "react";
+import { types } from "util";
 
 interface ClickToEditTextProps {
-	initialText: string;
-	onTextChange: (newText: string) => void;
+	initialValue: string | number;
+	initialTextStyle?: string;
+	inputStyle?: string;
+	onValueChange: (newText: string) => void;
 	useHover?: boolean;
+	checkEmptyText?: boolean;
+	maxLength?: number;
+	isTextArea?: boolean;
+	type?: string;
+	minValue?: number;
+	maxValue?: number;
 }
 
-const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextChange, useHover = true }) => {
-	const [text, setText] = useState(initialText);
-	const [previousText, setPreviousText] = useState(initialText);
+const ClickToEditText: React.FC<ClickToEditTextProps> = ({
+	initialValue,
+	initialTextStyle = "",
+	inputStyle = "",
+	onValueChange,
+	useHover = true,
+	checkEmptyText = true,
+	maxLength = 100,
+	isTextArea = false,
+	type = "text",
+	minValue = 0,
+	maxValue = 10000000
+}) => {
+	const [value, setValue] = useState<string | number>(initialValue);
+	const [previousValue, setPreviousValue] = useState<string | number>(initialValue);
 	const [isEditing, setIsEditing] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 	const itemRef = useRef<HTMLDivElement>(null);
 
-	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const newText = event.target.value;
-		if (newText.length <= 100) {
-			setText(newText);
+		if (newText.length <= maxLength) {
+			setValue(newText);
 		}
 	};
 
 	const handleStartEditing = () => {
 		setIsEditing(true);
-		setPreviousText(text);
+		setPreviousValue(value);
 	};
 
 	const handleStopEditing = () => {
-		if (text.length === 0 || text.length > 100) {
-			setText(previousText);
-		} else {
-			onTextChange(text);
+		if (typeof value === "string") {
+			if (checkEmptyText) {
+				if (value.length === 0 || value.length > maxLength) {
+					setValue(previousValue);
+				} else {
+					onValueChange(value);
+				}
+				setIsEditing(false);
+			} else {
+				onValueChange(value);
+				setIsEditing(false);
+			}
+		} else if (typeof value === "number") {
+			if (value >= minValue && value <= maxValue) {
+				onValueChange(value.toString());
+			} else {
+				// Reset to previous value if out of range
+				setValue(previousValue);
+			}
+			setIsEditing(false);
 		}
-		setIsEditing(false);
 	};
 
 	const handleMouseEnter = () => {
@@ -43,8 +79,8 @@ const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextCh
 	};
 
 	useEffect(() => {
-		setText(initialText);
-	}, [initialText]);
+		setValue(initialValue);
+	}, [initialValue]);
 
 	return (
 		<div
@@ -56,17 +92,25 @@ const ClickToEditText: React.FC<ClickToEditTextProps> = ({ initialText, onTextCh
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}>
 			{isEditing ? (
-				<input
-					type="text"
-					className="p-1 bg-white border border-purple-900"
-					value={text}
-					onChange={handleTextChange}
-					autoFocus
-				/>
+				isTextArea ? (
+					<textarea
+						className={`p-1 bg-white border border-purple-900 resize-none ${inputStyle}`}
+						value={value}
+						onChange={handleTextChange}
+						autoFocus
+					/>
+				) : (
+					<input
+						type={`${type}`}
+						className={`p-1 bg-white border border-purple-900 resize-none ${inputStyle}`}
+						value={value}
+						onChange={handleTextChange}
+						autoFocus
+					/>
+				)
 			) : (
-				// <input type="text" className="p-1 truncate" value={text} readOnly onClick={handleStartEditing} />
-				<p className="p-1 truncate" onClick={handleStartEditing}>
-					{text}
+				<p className={`p-1 truncate ${initialTextStyle}`} onClick={handleStartEditing}>
+					{value}
 				</p>
 			)}
 		</div>

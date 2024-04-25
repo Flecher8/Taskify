@@ -39,8 +39,6 @@ const Board: FC<BoardProps> = ({ project }) => {
 	};
 
 	const onDragEnd = (result: DropResult) => {
-		console.log(result);
-
 		const { destination, source, draggableId, type } = result;
 
 		if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
@@ -132,11 +130,6 @@ const Board: FC<BoardProps> = ({ project }) => {
 				targetSectionId: finish.id,
 				targetSequenceNumber: movedTask.sequenceNumber
 			});
-			console.log({
-				id: movedTask.id,
-				targetSectionId: finish.id,
-				targetSequenceNumber: movedTask.sequenceNumber
-			});
 		} catch (error: any) {
 			console.error(error);
 		}
@@ -156,16 +149,13 @@ const Board: FC<BoardProps> = ({ project }) => {
 		setSections(newSections);
 	};
 
-	const onDragStart = (start: DragStart | undefined) => {
-		console.log("Drag started");
-	};
-
 	const createTask = async (sectionId: string, newTaskName: string) => {
 		try {
 			// Create a temporary task locally
 			const temporaryTask: CustomTask = {
 				id: `temp-task-${Date.now()}`, // Generate a temporary ID
 				name: newTaskName,
+				responsibleUser: null,
 				description: "",
 				startDateTimeUtc: new Date(),
 				endDateTimeUtc: new Date(),
@@ -213,6 +203,7 @@ const Board: FC<BoardProps> = ({ project }) => {
 			const temporarySection: Section = {
 				id: `temp-section-${Date.now()}`, // Generate a temporary ID
 				name: name, // Provide a default name or let the user input it
+				project: project,
 				createdAt: new Date(),
 				sequenceNumber: sections.length, // Set sequence number based on current sections length
 				sectionType: SectionType.Doing,
@@ -297,13 +288,29 @@ const Board: FC<BoardProps> = ({ project }) => {
 		}
 	};
 
+	const editTask = async (customTask: CustomTask) => {
+		try {
+			console.log("Edit task");
+		} catch (error) {
+			console.error("Error editing task:", error);
+		}
+	};
+
+	const deleteTask = async (id: string) => {
+		try {
+			console.log("Delete task");
+		} catch (error) {
+			console.error("Error deleting task:", error);
+		}
+	};
+
 	useEffect(() => {
 		loadData();
 	}, [project]);
 
 	return (
 		<div className="board flex flex-row flex-nowrap overflow-x-auto w-full h-full">
-			<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+			<DragDropContext onDragEnd={onDragEnd}>
 				<Droppable droppableId="all-sections" direction="horizontal" type="column">
 					{provided => (
 						<div
@@ -317,6 +324,8 @@ const Board: FC<BoardProps> = ({ project }) => {
 										section={section}
 										index={index}
 										createTask={createTask}
+										editTask={editTask}
+										deleteTask={deleteTask}
 										editSection={editSection}
 										deleteSection={deleteSection}
 										sections={sections}

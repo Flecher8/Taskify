@@ -8,17 +8,29 @@ import sectionsStore from "stores/sectionsStore";
 import DropDownContext from "components/dropDownContext";
 import MyDropDownContext from "components/myDropDownContext";
 import SectionCardMenu from "./sectionCardMenu";
+import { CustomTask } from "entities/customTask";
 
 interface SectionCardProps {
 	section: Section;
 	index: number;
 	createTask: (sectionId: string, newTaskName: string) => void;
+	editTask: (customTask: CustomTask) => void;
+	deleteTask: (id: string) => void;
 	editSection: (section: Section) => void;
 	deleteSection: (id: string, redirectId: string) => void;
 	sections: Section[];
 }
 
-const SectionCard: FC<SectionCardProps> = ({ section, index, createTask, editSection, deleteSection, sections }) => {
+const SectionCard: FC<SectionCardProps> = ({
+	section,
+	index,
+	createTask,
+	editTask,
+	deleteTask,
+	editSection,
+	deleteSection,
+	sections
+}) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
 	const [newTaskName, setNewTaskName] = useState("");
 
@@ -84,8 +96,8 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask, editSec
 						{...sectionProvided.dragHandleProps}>
 						<div className="flex flex-row gap-1 items-center">
 							<ClickToEditText
-								initialText={section.name}
-								onTextChange={handleSectionNameChange}
+								initialValue={section.name}
+								onValueChange={handleSectionNameChange}
 								useHover={false}
 							/>
 							<div
@@ -107,7 +119,8 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask, editSec
 								// When you set the data-rbd-drag-handle-context-id, RBD applies cursor: grab, so we need to revert that
 								cursor: "auto"
 							}}>
-							<MyDropDownContext
+							<DropDownContext
+								dropDownDirection={"dropdown-start"}
 								openDropDownButtonContent={<i className="fa-light fa-ellipsis"></i>}
 								openDropDownButtonStyle={
 									"p-1 flex items-center hover:bg-gray-200 hover:cursor-pointer transition duration-300"
@@ -119,7 +132,7 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask, editSec
 									deleteSection={deleteSection}
 									sections={sections}
 								/>
-							</MyDropDownContext>
+							</DropDownContext>
 						</div>
 					</div>
 					<Droppable droppableId={section.id} type="task">
@@ -130,7 +143,14 @@ const SectionCard: FC<SectionCardProps> = ({ section, index, createTask, editSec
 									{...providedDroppable.droppableProps}
 									ref={providedDroppable.innerRef}>
 									{section.customTasks.map((customTask, index) => (
-										<TaskCard key={customTask.id} customTask={customTask} index={index} />
+										<TaskCard
+											key={customTask.id}
+											customTask={customTask}
+											index={index}
+											editTask={editTask}
+											deleteTask={deleteTask}
+											section={section}
+										/>
 									))}
 									{providedDroppable.placeholder}
 								</div>

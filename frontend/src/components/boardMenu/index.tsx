@@ -27,7 +27,7 @@ const BoardMenu: FC<BoardMenuProps> = ({ project }) => {
 	return (
 		<div className="boardMenu flex-shrink-0 overflow-auto flex flex-row justify-between items-center  border-b-stone-900">
 			<div className="m-5 p-1 flex flex-row justify-start">
-				<ClickToEditText initialText={projectName} onTextChange={handleProjectNameChange} />
+				<ClickToEditText initialValue={projectName} onValueChange={handleProjectNameChange} />
 			</div>
 			<div className="p-1 m-5 flex flex-row justify-end hover:bg-gray-300 duration-300">
 				<button className="flex items-center">

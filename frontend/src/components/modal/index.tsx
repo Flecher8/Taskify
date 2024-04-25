@@ -1,13 +1,14 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 interface ModalProps {
 	id: string;
 	openButtonText: ReactNode;
 	openButtonStyle: string;
+	modalBoxStyle?: string;
 	children: ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ id, openButtonText, openButtonStyle, children }) => {
+const Modal: React.FC<ModalProps> = ({ id, openButtonText, openButtonStyle, modalBoxStyle = "", children }) => {
 	const openModal = () => {
 		const modal = document.getElementById(id) as HTMLDialogElement;
 		modal.showModal();
@@ -24,7 +25,7 @@ const Modal: React.FC<ModalProps> = ({ id, openButtonText, openButtonStyle, chil
 				{openButtonText}
 			</button>
 			<dialog id={id} className="modal" onClick={e => e.stopPropagation()}>
-				<div className="modal-box">
+				<div className={`modal-box ${modalBoxStyle}`}>
 					<form method="dialog">
 						{/* if there is a button in form, it will close the modal */}
 						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={closeModal}>

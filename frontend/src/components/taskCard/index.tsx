@@ -2,16 +2,25 @@ import { Draggable } from "@hello-pangea/dnd";
 import Modal from "components/modal";
 import TaskInfo from "components/taskInfo";
 import { CustomTask } from "entities/customTask";
+import { Section } from "entities/section";
 import { FC, useState } from "react";
 
 interface TaskCardProps {
 	customTask: CustomTask;
 	index: number;
+	editTask: (customTask: CustomTask) => void;
+	deleteTask: (id: string) => void;
+	section: Section;
 }
 
-const TaskCard: FC<TaskCardProps> = ({ customTask, index }) => {
-	const [showItemMoreButton, setShowItemMoreButton] = useState(false);
+const TaskCard: FC<TaskCardProps> = ({ customTask, index, editTask, deleteTask, section }) => {
 	const modalId = customTask.id + "editTask";
+
+	const closeModal = () => {
+		const modal = document.getElementById(modalId) as HTMLDialogElement;
+		modal.close();
+	};
+
 	return (
 		<Draggable draggableId={customTask.id} index={index}>
 			{provided => (
@@ -19,15 +28,12 @@ const TaskCard: FC<TaskCardProps> = ({ customTask, index }) => {
 					className="border rounded-lg p-[8px] mb-[8px] bg-white hover:border hover:border-purple-300"
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
-					ref={provided.innerRef}
-					onMouseEnter={() => setShowItemMoreButton(true)}
-					onMouseLeave={() => setShowItemMoreButton(false)}>
+					ref={provided.innerRef}>
 					<div className="flex flex-row justify-between items-center">
 						<div>
 							<h3 className="break-words">{customTask.name}</h3>
 						</div>
 						<div
-							className={`${!showItemMoreButton ? "hidden" : ""}`}
 							data-rfd-drag-handle-context-id={provided.dragHandleProps?.["data-rfd-drag-handle-context-id"]}
 							data-rfd-drag-handle-draggable-id="gibberish"
 							style={{
@@ -36,11 +42,18 @@ const TaskCard: FC<TaskCardProps> = ({ customTask, index }) => {
 							}}>
 							<Modal
 								id={modalId}
+								modalBoxStyle={"h-full"}
 								openButtonText={<i className="fa-light fa-ellipsis"></i>}
 								openButtonStyle={
 									"hover:cursor-pointer hover:bg-gray-300 rounded-full px-1 transition duration-300"
 								}>
-								<TaskInfo customTask={customTask} />
+								<TaskInfo
+									customTask={customTask}
+									section={section}
+									close={closeModal}
+									editTask={editTask}
+									deleteTask={deleteTask}
+								/>
 							</Modal>
 						</div>
 					</div>

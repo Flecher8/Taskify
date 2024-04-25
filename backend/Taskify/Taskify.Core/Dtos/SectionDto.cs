@@ -12,6 +12,7 @@ namespace Taskify.Core.Dtos
     {
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
+        public ProjectDto Project { get; set; }
         public DateTime CreatedAt { get; set; }
         public int SequenceNumber { get; set; }
         public SectionType SectionType { get; set; }

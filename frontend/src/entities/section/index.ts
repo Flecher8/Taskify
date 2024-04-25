@@ -3,7 +3,7 @@ import { Project } from "entities/project";
 
 export interface Section {
 	id: string;
-	project?: Project;
+	project?: Project | null;
 	name: string;
 	createdAt: Date;
 	sequenceNumber: number;
