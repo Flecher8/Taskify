@@ -3,7 +3,7 @@ import TaskCard from "components/taskCard";
 import { Section, SectionType } from "entities/section";
 import { FC, useEffect, useRef, useState } from "react";
 import "./section.scss";
-import ClickToEditText from "components/clickToEditText";
+import ClickToEdit from "components/clickToEditText";
 import sectionsStore from "stores/sectionsStore";
 import DropDownContext from "components/dropDownContext";
 import MyDropDownContext from "components/myDropDownContext";
@@ -95,7 +95,7 @@ const SectionCard: FC<SectionCardProps> = ({
 						className="p-[12px] flex flex-row justify-between items-center"
 						{...sectionProvided.dragHandleProps}>
 						<div className="flex flex-row gap-1 items-center">
-							<ClickToEditText
+							<ClickToEdit
 								initialValue={section.name}
 								onValueChange={handleSectionNameChange}
 								useHover={false}

@@ -7,8 +7,8 @@ export interface CustomTask {
 	responsibleUser: User | null;
 	name: string;
 	description: string;
-	startDateTimeUtc: Date;
-	endDateTimeUtc: Date;
+	startDateTimeUtc: Date | null;
+	endDateTimeUtc: Date | null;
 	storyPoints: number | null;
 	isArchived: boolean;
 	createdAt: Date;

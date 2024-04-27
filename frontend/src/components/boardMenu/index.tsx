@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import "./boardMenu.scss";
 import projectsStore from "stores/projectsStore";
 import { Project } from "entities/project";
-import ClickToEditText from "components/clickToEditText";
+import ClickToEdit from "components/clickToEditText";
 
 interface BoardMenuProps {
 	project: Project | null;
@@ -27,7 +27,7 @@ const BoardMenu: FC<BoardMenuProps> = ({ project }) => {
 	return (
 		<div className="boardMenu flex-shrink-0 overflow-auto flex flex-row justify-between items-center  border-b-stone-900">
 			<div className="m-5 p-1 flex flex-row justify-start">
-				<ClickToEditText initialValue={projectName} onValueChange={handleProjectNameChange} />
+				<ClickToEdit initialValue={projectName} onValueChange={handleProjectNameChange} />
 			</div>
 			<div className="p-1 m-5 flex flex-row justify-end hover:bg-gray-300 duration-300">
 				<button className="flex items-center">

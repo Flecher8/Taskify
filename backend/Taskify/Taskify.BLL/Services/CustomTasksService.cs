@@ -189,7 +189,11 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>(validation.ErrorMessages);
                 }
 
-                var existingCustomTask = await _customTaskRepository.GetByIdAsync(customTask.Id);
+                var existingCustomTask = (await _customTaskRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeResponsibleUserEntity()
+                        .WithFilter(ct => ct.Id == customTask.Id)
+                    )).FirstOrDefault();
 
                 if (existingCustomTask == null)
                 {
@@ -198,7 +202,7 @@ namespace Taskify.BLL.Services
 
                 User? existingUser = null;
 
-                if(customTask.ResponsibleUser != null && !string.IsNullOrEmpty(customTask.ResponsibleUser.Id))
+                if (customTask.ResponsibleUser != null && !string.IsNullOrEmpty(customTask.ResponsibleUser.Id))
                 {
                     existingUser = await _userRepository.GetByIdAsync(customTask.ResponsibleUser.Id);
                 }

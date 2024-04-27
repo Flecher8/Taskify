@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Section } from "entities/section";
 import { CustomTask } from "entities/customTask";
-import ClickToEditText from "components/clickToEditText";
+import ClickToEdit from "components/clickToEditText";
 import DateTimePicker from "components/dateTimePicker";
 import DropDownContext from "components/dropDownContext";
 import { User } from "entities/user";
@@ -9,8 +9,9 @@ import projectMembersStore from "stores/projectMembersStore";
 import projectsStore from "stores/projectsStore";
 import SelectUsersWithFilter from "components/selectUsersWithFilter";
 import { dateToIDay, iDayToDate } from "utilities/date_IDay_Converter";
-import { IDay } from "react-calendar-datetime-picker/dist/types/type";
+import { IDay, IRange } from "react-calendar-datetime-picker/dist/types/type";
 import { localToUTC, utcToLocal } from "utilities/timeConverter";
+import RangeDateTimePicker from "components/rangeDateTimePicker";
 
 interface TaskInfoProps {
 	customTask: CustomTask;
@@ -23,18 +24,15 @@ interface TaskInfoProps {
 const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, deleteTask }) => {
 	const [selectedUser, setSelectedUser] = useState<User | null>(customTask.responsibleUser);
 	const [startDate, setStartDate] = useState<Date | null>(
-		customTask.startDateTimeUtc ? utcToLocal(customTask.startDateTimeUtc) : null
+		customTask.startDateTimeUtc !== null ? utcToLocal(customTask.startDateTimeUtc) : null
 	);
 	const [endDate, setEndDate] = useState<Date | null>(
-		customTask.endDateTimeUtc ? utcToLocal(customTask.endDateTimeUtc) : null
+		customTask.endDateTimeUtc !== null ? utcToLocal(customTask.endDateTimeUtc) : null
 	);
 
 	const [assignableUsers, setAssignableUsers] = useState<User[]>([]);
 
-	useEffect(() => {
-		setStartDate(customTask.startDateTimeUtc || null);
-		setEndDate(customTask.endDateTimeUtc || null);
-	}, [customTask.startDateTimeUtc, customTask.endDateTimeUtc]);
+	useEffect(() => {}, []);
 
 	useEffect(() => {
 		loadProjectMembers();
@@ -73,29 +71,69 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 			if (newDate === null) {
 				return;
 			}
-			setStartDate(newDate);
-			const updatedTask: CustomTask = { ...customTask, startDateTimeUtc: localToUTC(newDate) };
-			editTask(updatedTask);
-		}
 
-		setStartDate(null);
+			if (newDate !== null && startDate !== null && newDate.getTime() === startDate.getTime()) {
+				return;
+			}
+
+			// const utcDate = localToUTC(newDate);
+			const utcDate = newDate;
+
+			// Check if the new start date is after the current end date
+			if (endDate !== null && newDate.getTime() > endDate.getTime()) {
+				setEndDate(newDate);
+				const updatedTask: CustomTask = { ...customTask, endDateTimeUtc: utcDate, startDateTimeUtc: utcDate };
+				editTask(updatedTask);
+				return;
+			}
+
+			setStartDate(newDate);
+			const updatedTask: CustomTask = { ...customTask, startDateTimeUtc: utcDate };
+			editTask(updatedTask);
+		} else {
+			setStartDate(null);
+		}
 	};
 
 	const handleEndDateChange = (date: IDay | null) => {
 		if (date !== null) {
 			const newDate = iDayToDate(date);
-			if (newDate === null) {
+			if (newDate === null || newDate === endDate) {
 				return;
 			}
-			setEndDate(newDate);
-			const updatedTask: CustomTask = { ...customTask, endDateTimeUtc: localToUTC(newDate) };
-			editTask(updatedTask);
-		}
 
-		setEndDate(null);
+			if (newDate !== null && endDate !== null && newDate.getTime() === endDate.getTime()) {
+				return;
+			}
+
+			// const utcDate = localToUTC(newDate);
+			const utcDate = newDate;
+
+			// Check if the new end date is before the current start date
+			if (startDate !== null && newDate.getTime() < startDate.getTime()) {
+				setStartDate(newDate);
+				const updatedTask: CustomTask = { ...customTask, endDateTimeUtc: utcDate, startDateTimeUtc: utcDate };
+				editTask(updatedTask);
+				return;
+			}
+
+			setEndDate(newDate);
+			const updatedTask: CustomTask = { ...customTask, endDateTimeUtc: utcDate };
+			editTask(updatedTask);
+		} else {
+			setEndDate(null);
+		}
 	};
 
-	const handleDescriptionChange = (newDescription: string) => {};
+	const handleDescriptionChange = (newDescription: string) => {
+		const updatedTask: CustomTask = { ...customTask, description: newDescription };
+		editTask(updatedTask);
+	};
+
+	const handleStoryPointsChange = (newStoryPoints: number | null) => {
+		const updatedTask: CustomTask = { ...customTask, storyPoints: newStoryPoints };
+		editTask(updatedTask);
+	};
 
 	const handleDeleteTask = () => {
 		deleteTask(customTask.id);
@@ -109,7 +147,7 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 						<i className="fa-light fa-list-check"></i>
 					</div>
 					<div>
-						<ClickToEditText initialValue={customTask.name} onValueChange={handleTaskNameChange} />
+						<ClickToEdit initialValue={customTask.name} onValueChange={handleTaskNameChange} />
 					</div>
 				</div>
 				<div className="flex flex-row gap-x-5 items-center">
@@ -133,6 +171,10 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 						<SelectUsersWithFilter users={assignableUsers} onSelect={handleUserChange} current={selectedUser} />
 					</DropDownContext>
 				</div>
+				{/* <div>
+					<label>Dates</label>
+					<RangeDateTimePicker initValue={rangeDates} onChange={handleDatesChange} />
+				</div> */}
 				<div className="flex flex-row items-center">
 					<label className="w-full">Start date</label>
 					<DateTimePicker initValue={dateToIDay(startDate)} onChange={handleStartDateChange} />
@@ -143,22 +185,23 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 				</div>
 				<div className="flex flex-row items-center">
 					<label>Story points</label>
-					<ClickToEditText
+					<ClickToEdit
 						initialTextStyle={
-							"bg-gray-100 hover:bg-gray-300 transition duration-300 w-5 flex justify-center items-center"
+							"bg-gray-100 hover:bg-gray-300 transition duration-300 w-5 flex justify-center items-center px-5"
 						}
-						inputStyle={"w-[50px] bg-gray-100 w-5 flex justify-center items-center"}
-						initialValue={customTask.storyPoints || 1}
-						onValueChange={handleDescriptionChange}
+						inputStyle={"w-[100px] bg-gray-100 w-5 flex justify-center items-center"}
+						initialValue={customTask.storyPoints || null}
+						onValueChange={handleStoryPointsChange}
 						checkEmptyText={false}
 						type={"number"}
 						minValue={1}
 						maxValue={100}
+						placeholder={"-"}
 					/>
 				</div>
 				<div>
 					<label>Description</label>
-					<ClickToEditText
+					<ClickToEdit
 						initialTextStyle={"bg-gray-100 hover:bg-gray-300 h-[50px] hover:bg-gray-300 transition duration-300"}
 						inputStyle={"h-[200px] w-full "}
 						initialValue={customTask.description || ""}
@@ -166,6 +209,7 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 						checkEmptyText={false}
 						maxLength={10000}
 						isTextArea={true}
+						placeholder={"Add description..."}
 					/>
 				</div>
 			</div>

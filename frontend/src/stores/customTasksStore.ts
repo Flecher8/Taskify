@@ -1,7 +1,8 @@
 import CustomTaskService, {
 	CreateCustomTask,
 	MoveCustomTask,
-	RedirectCustomTask
+	RedirectCustomTask,
+	UpdateCustomTask
 } from "api/services/customTasksService";
 import { CustomTask } from "entities/customTask";
 import { makeAutoObservable } from "mobx";
@@ -30,7 +31,18 @@ class CustomTasksStore {
 
 	async updateCustomTask(id: string, customTask: CustomTask): Promise<void> {
 		try {
-			const result = await CustomTaskService.update(id, customTask);
+			console.log("Update task", customTask);
+			const updateCustomTask: UpdateCustomTask = {
+				id: customTask.id,
+				responsibleUserId: customTask.responsibleUser !== null ? customTask.responsibleUser.id : null,
+				name: customTask.name,
+				description: customTask.description,
+				startDateTimeUtc: customTask.startDateTimeUtc,
+				endDateTimeUtc: customTask.endDateTimeUtc,
+				storyPoints: customTask.storyPoints
+			};
+
+			const result = await CustomTaskService.update(id, updateCustomTask);
 			if (result === undefined) {
 				throw new Error("Failed to update custom task.");
 			}

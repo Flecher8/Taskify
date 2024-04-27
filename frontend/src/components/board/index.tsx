@@ -288,9 +288,26 @@ const Board: FC<BoardProps> = ({ project }) => {
 		}
 	};
 
-	const editTask = async (customTask: CustomTask) => {
+	const editTask = async (updatedTask: CustomTask) => {
 		try {
-			console.log("Edit task");
+			// Iterate over each section
+			const updatedSections = sections.map(section => {
+				// Find the task in the section by ID
+				const updatedTasks = section.customTasks.map(task => {
+					if (task.id === updatedTask.id) {
+						// Update the task with the new values
+						return updatedTask;
+					}
+					return task;
+				});
+				// Update the section with the updated tasks
+				return { ...section, customTasks: updatedTasks };
+			});
+			// Update the state with the updated sections
+			setSections(updatedSections);
+
+			// Send request to update the task on the server
+			await customTaskStore.updateCustomTask(updatedTask.id, updatedTask);
 		} catch (error) {
 			console.error("Error editing task:", error);
 		}

@@ -17,6 +17,7 @@ const DateTimePicker: FC<DateTimePickerProps> = ({ initValue, onChange }) => {
 			showTimeInput={true}
 			minDate={{ year: 2000, month: 1, day: 1 }}
 			placeholder={"Choice date"}
+			autoClose={false}
 		/>
 	);
 };

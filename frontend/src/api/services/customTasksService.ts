@@ -18,6 +18,16 @@ export interface RedirectCustomTask {
 	targetSequenceNumber: number | null;
 }
 
+export interface UpdateCustomTask {
+	id: string;
+	responsibleUserId: string | null;
+	name: string;
+	description: string;
+	startDateTimeUtc: Date | null;
+	endDateTimeUtc: Date | null;
+	storyPoints: number | null;
+}
+
 export default class CustomTaskService {
 	// Create a custom task
 	static async create(data: CreateCustomTask): Promise<CustomTask | undefined> {
@@ -35,7 +45,7 @@ export default class CustomTaskService {
 	}
 
 	// Update a custom task
-	static async update(id: string, customTask: CustomTask): Promise<boolean | undefined> {
+	static async update(id: string, customTask: UpdateCustomTask): Promise<boolean | undefined> {
 		try {
 			const response: AxiosResponse<boolean> = await api.put(`/api/customTasks/${id}`, customTask);
 			return response.data;
