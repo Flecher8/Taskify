@@ -31,7 +31,7 @@ const TaskCard: FC<TaskCardProps> = ({ customTask, index, editTask, deleteTask, 
 					ref={provided.innerRef}>
 					<div className="flex flex-row justify-between items-center">
 						<div>
-							<h3 className="break-words">{customTask.name}</h3>
+							<h3 className="max-w-[220px] text-ellipsis overflow-hidden">{customTask.name}</h3>
 						</div>
 						<div
 							data-rfd-drag-handle-context-id={provided.dragHandleProps?.["data-rfd-drag-handle-context-id"]}
@@ -43,7 +43,11 @@ const TaskCard: FC<TaskCardProps> = ({ customTask, index, editTask, deleteTask, 
 							<Modal
 								id={modalId}
 								modalBoxStyle={"h-full"}
-								openButtonText={<i className="fa-light fa-ellipsis"></i>}
+								openButtonText={
+									<div className="relative top-0 left-0">
+										<i className="fa-light fa-ellipsis"></i>
+									</div>
+								}
 								openButtonStyle={
 									"hover:cursor-pointer hover:bg-gray-300 rounded-full px-1 transition duration-300"
 								}>

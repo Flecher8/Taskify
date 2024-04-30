@@ -151,31 +151,6 @@ const Board: FC<BoardProps> = ({ project }) => {
 
 	const createTask = async (sectionId: string, newTaskName: string) => {
 		try {
-			// Create a temporary task locally
-			const temporaryTask: CustomTask = {
-				id: `temp-task-${Date.now()}`, // Generate a temporary ID
-				name: newTaskName,
-				responsibleUser: null,
-				description: "",
-				startDateTimeUtc: new Date(),
-				endDateTimeUtc: new Date(),
-				storyPoints: 0,
-				isArchived: false,
-				createdAt: new Date(),
-				sequenceNumber: sections.find(s => s.id === sectionId)?.customTasks.length ?? 0
-			};
-
-			// Update UI with the temporary task
-			setSections(prevSections => {
-				const newSections = [...prevSections];
-				const sectionIndex = newSections.findIndex(s => s.id === sectionId);
-				if (sectionIndex !== -1) {
-					newSections[sectionIndex].customTasks.push(temporaryTask);
-				}
-
-				return newSections;
-			});
-
 			// Send request to create the task on the server
 			const createdTask = await customTaskStore.createCustomTask({ sectionId: sectionId, name: newTaskName });
 
@@ -184,10 +159,7 @@ const Board: FC<BoardProps> = ({ project }) => {
 				const newSections = [...prevSections];
 				const sectionIndex = newSections.findIndex(s => s.id === sectionId);
 				if (sectionIndex !== -1) {
-					const taskIndex = newSections[sectionIndex].customTasks.findIndex(t => t.id === temporaryTask.id);
-					if (taskIndex !== -1) {
-						newSections[sectionIndex].customTasks[taskIndex] = createdTask;
-					}
+					newSections[sectionIndex].customTasks.push(createdTask);
 				}
 
 				return newSections;
@@ -199,33 +171,10 @@ const Board: FC<BoardProps> = ({ project }) => {
 
 	const createSection = async (name: string) => {
 		try {
-			// Create a temporary section locally
-			const temporarySection: Section = {
-				id: `temp-section-${Date.now()}`, // Generate a temporary ID
-				name: name, // Provide a default name or let the user input it
-				project: project,
-				createdAt: new Date(),
-				sequenceNumber: sections.length, // Set sequence number based on current sections length
-				sectionType: SectionType.Doing,
-				isArchived: false,
-				customTasks: []
-			};
-
-			// Update UI with the temporary section
-			setSections(prevSections => [...prevSections, temporarySection]);
-
 			// Send request to create the section on the server
 			const createdSection = await sectionsStore.createSection({ projectId: project.id, name: name });
 
-			// If the server successfully creates the section, update the UI with the received data
-			setSections(prevSections => {
-				const newSections = [...prevSections];
-				const tempSectionIndex = newSections.findIndex(s => s.id === temporarySection.id);
-				if (tempSectionIndex !== -1) {
-					newSections[tempSectionIndex] = createdSection;
-				}
-				return newSections;
-			});
+			setSections(prevSections => [...prevSections, createdSection]);
 		} catch (error) {
 			console.error(error);
 		}
@@ -315,7 +264,28 @@ const Board: FC<BoardProps> = ({ project }) => {
 
 	const deleteTask = async (id: string) => {
 		try {
-			console.log("Delete task");
+			// Send request to delete the task from the server
+			await customTaskStore.deleteCustomTask(id);
+
+			// Remove the deleted task from all sections
+			const updatedSections = sections.map(section => {
+				// Check if the task with the given ID exists in this section
+				const taskIndex = section.customTasks.findIndex(task => task.id === id);
+				if (taskIndex !== -1) {
+					// If found, create a new array without the task
+					const updatedTasks = [
+						...section.customTasks.slice(0, taskIndex),
+						...section.customTasks.slice(taskIndex + 1)
+					];
+					// Return the section with the updated tasks
+					return { ...section, customTasks: updatedTasks };
+				}
+				// If not found, return the section as is
+				return section;
+			});
+
+			// Update the state with the updated sections
+			setSections(updatedSections);
 		} catch (error) {
 			console.error("Error deleting task:", error);
 		}

@@ -6,7 +6,7 @@ import NotificationsDashboard from "components/notificationsDashboard";
 
 const MainHeader: FC = () => {
 	return (
-		<header className="bg-primary p-4">
+		<header className="bg-indigo-500 p-4">
 			<div className="container mx-auto flex justify-between items-center">
 				<div className="flex items-center">
 					<h3 className="text-xl font-semibold text-white">

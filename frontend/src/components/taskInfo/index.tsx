@@ -137,80 +137,107 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 
 	const handleDeleteTask = () => {
 		deleteTask(customTask.id);
+		close();
 	};
 
 	return (
 		<div className="flex flex-row justify-center gap-3 min-h-full">
 			<div className="flex flex-col w-64">
-				<div>
-					<div>
+				<div className="flex flex-row items-center mb-5">
+					<div className="flex mr-3">
 						<i className="fa-light fa-list-check"></i>
 					</div>
-					<div>
+					<div className="w-full">
 						<ClickToEdit initialValue={customTask.name} onValueChange={handleTaskNameChange} />
 					</div>
 				</div>
-				<div className="flex flex-row gap-x-5 items-center">
-					<label>Assigned</label>
-					<DropDownContext
-						dropDownDirection="dropdown-start"
-						openDropDownButtonContent={
-							selectedUser ? (
-								<div className="">
-									{selectedUser.firstName} {selectedUser.lastName}{" "}
-									<i className="fa-sharp fa-light fa-chevron-down"></i>
-								</div>
-							) : (
-								<div className="">
-									Unassigned <i className="fa-sharp fa-light fa-chevron-down"></i>
-								</div>
-							)
-						}
-						openDropDownButtonStyle={"rounded-full hover:bg-gray-300 w-50 h-50 p-1  transition duration-300"}
-						dropDownContentStyle={"bg-white w-[300px]"}>
-						<SelectUsersWithFilter users={assignableUsers} onSelect={handleUserChange} current={selectedUser} />
-					</DropDownContext>
+				<div className="flex flex-row items-center mb-5 w-full">
+					<div className="mr-3">
+						<i className="fa-light fa-user"></i>
+					</div>
+					<div className="flex flex-row items-center gap-x-5 justify-between">
+						<label>Assigned</label>
+						<DropDownContext
+							dropDownDirection="dropdown-start"
+							openDropDownButtonContent={
+								selectedUser ? (
+									<div className="">
+										{selectedUser.firstName} {selectedUser.lastName}{" "}
+										<i className="fa-sharp fa-light fa-chevron-down"></i>
+									</div>
+								) : (
+									<div className="">
+										Unassigned <i className="fa-sharp fa-light fa-chevron-down"></i>
+									</div>
+								)
+							}
+							openDropDownButtonStyle={"rounded-full hover:bg-gray-300 w-50 h-50 p-1  transition duration-300"}
+							dropDownContentStyle={"bg-white w-[300px]"}>
+							<SelectUsersWithFilter
+								users={assignableUsers}
+								onSelect={handleUserChange}
+								current={selectedUser}
+							/>
+						</DropDownContext>
+					</div>
 				</div>
-				{/* <div>
-					<label>Dates</label>
-					<RangeDateTimePicker initValue={rangeDates} onChange={handleDatesChange} />
-				</div> */}
-				<div className="flex flex-row items-center">
-					<label className="w-full">Start date</label>
-					<DateTimePicker initValue={dateToIDay(startDate)} onChange={handleStartDateChange} />
+				<div className="flex flex-row">
+					<div className="mr-3">
+						<i className="fa-light fa-calendar"></i>
+					</div>
+					<div>
+						<div className="flex flex-row items-center mb-1">
+							<label className="w-full">Start date</label>
+							<DateTimePicker
+								initValue={dateToIDay(startDate)}
+								onChange={handleStartDateChange}
+								calenderModalClass={"max-w-[300px]"}
+							/>
+						</div>
+						<div className="flex flex-row items-center mb-5">
+							<label className="w-full">Due date</label>
+							<DateTimePicker initValue={dateToIDay(endDate)} onChange={handleEndDateChange} />
+						</div>
+					</div>
 				</div>
-				<div className="flex flex-row items-center ">
-					<label className="w-full">Due date</label>
-					<DateTimePicker initValue={dateToIDay(endDate)} onChange={handleEndDateChange} />
+				<div className="flex flex-row items-center mb-5 w-full">
+					<div className="mr-3">
+						<i className="fa-light fa-hundred-points"></i>
+					</div>
+					<div className="flex flex-row items-center justify-between w-full">
+						<label className="flex w-36">Story points</label>
+						<ClickToEdit
+							initialTextStyle={"bg-gray-100 hover:bg-gray-300 transition duration-300 flex justify-center px-5"}
+							inputStyle={"bg-gray-100 w-full flex justify-center items-center"}
+							initialValue={customTask.storyPoints || null}
+							onValueChange={handleStoryPointsChange}
+							checkEmptyText={false}
+							type={"number"}
+							minValue={1}
+							maxValue={100}
+							placeholder={"-"}
+						/>
+					</div>
 				</div>
-				<div className="flex flex-row items-center">
-					<label>Story points</label>
-					<ClickToEdit
-						initialTextStyle={
-							"bg-gray-100 hover:bg-gray-300 transition duration-300 w-5 flex justify-center items-center px-5"
-						}
-						inputStyle={"w-[100px] bg-gray-100 w-5 flex justify-center items-center"}
-						initialValue={customTask.storyPoints || null}
-						onValueChange={handleStoryPointsChange}
-						checkEmptyText={false}
-						type={"number"}
-						minValue={1}
-						maxValue={100}
-						placeholder={"-"}
-					/>
-				</div>
-				<div>
-					<label>Description</label>
-					<ClickToEdit
-						initialTextStyle={"bg-gray-100 hover:bg-gray-300 h-[50px] hover:bg-gray-300 transition duration-300"}
-						inputStyle={"h-[200px] w-full "}
-						initialValue={customTask.description || ""}
-						onValueChange={handleDescriptionChange}
-						checkEmptyText={false}
-						maxLength={10000}
-						isTextArea={true}
-						placeholder={"Add description..."}
-					/>
+				<div className="flex flex-row w-full">
+					<div className="mr-3">
+						<i className="fa-light fa-align-justify"></i>
+					</div>
+					<div className="w-full">
+						<label>Description</label>
+						<ClickToEdit
+							initialTextStyle={
+								"bg-gray-100 hover:bg-gray-300 h-[50px] hover:bg-gray-300 transition duration-300"
+							}
+							inputStyle={"h-[200px] w-full "}
+							initialValue={customTask.description || ""}
+							onValueChange={handleDescriptionChange}
+							checkEmptyText={false}
+							maxLength={10000}
+							isTextArea={true}
+							placeholder={"Add description..."}
+						/>
+					</div>
 				</div>
 			</div>
 			<div className="flex flex-col w-36">
@@ -219,12 +246,21 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 				</div>
 				<div>
 					<DropDownContext
-						openDropDownButtonContent={<button>Delete</button>}
-						openDropDownButtonStyle="p-1 flex items-center hover:bg-gray-300 hover:cursor-pointer transition duration-300"
+						dropDownDirection="dropdown-start"
+						openDropDownButtonContent={
+							<button className="flex border border-red-500 hover:bg-red-500 hover:text-white transition duration-300 hover:cursor-pointer px-2 py-1 w-full justify-center items-center font-bold text-red-500">
+								Delete
+							</button>
+						}
+						openDropDownButtonStyle="flex items-center transition duration-300"
 						dropDownContentStyle="bg-white">
-						<div>
-							<p>Are you sure?</p>
-							<button onClick={handleDeleteTask}>Confirm</button>
+						<div className="m-3 h-12 w-24 flex flex-col items-center">
+							<h2 className="mb-3">Are you sure?</h2>
+							<button
+								onClick={handleDeleteTask}
+								className="mb-5 flex border bg-red-500 hover:bg-red-600 rounded-full px-2 py-1 w-full justify-center items-center font-bold text-white">
+								Delete
+							</button>
 						</div>
 					</DropDownContext>
 				</div>

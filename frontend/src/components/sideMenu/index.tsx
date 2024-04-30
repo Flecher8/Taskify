@@ -14,7 +14,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
 	const { projectId } = useParams<{ projectId: string }>();
 
 	return (
-		<div className={`flex h-full relative transition-all duration-300 ${isOpen ? "w-[250px]" : "w-[15px]"}`}>
+		<div
+			className={`flex h-full relative transition-all duration-300 bg-indigo-500 border-t border-white ${
+				isOpen ? "w-[250px]" : "w-[15px]"
+			}`}>
 			<div
 				className="flex absolute bg-primary cursor-pointer rounded-full justify-center items-center -right-[12px] w-5 h-5 top-5"
 				onClick={toggleSidebar}>
@@ -24,15 +27,31 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
 					<i className="fa-light fa-angle-right text-white"></i>
 				)}
 			</div>
-			<div className={`${!isOpen && "hidden"} w-full origin-left duration-200`}>
+			<div className={`${!isOpen && "hidden"} w-full origin-left duration-200 text-white text-lg`}>
 				<div>
-					<Link to={`/project/${projectId}`}>Board</Link>
+					<Link to={`/project/${projectId}`}>
+						<h3>Board</h3>
+					</Link>
 				</div>
 				<div>
-					<Link to={`/project/${projectId}/roles`}>Roles</Link>
+					<Link to={`/project/${projectId}/members`}>
+						<h3>Members</h3>
+					</Link>
 				</div>
 				<div>
-					<Link to={`/project/${projectId}/members`}>Members</Link>
+					<Link to={`/project/${projectId}/roles`}>
+						<h3>Roles</h3>
+					</Link>
+				</div>
+				<div>
+					<Link to={`/project/${projectId}/statistics`}>
+						<h3>Statistics</h3>
+					</Link>
+				</div>
+				<div>
+					<Link to={`/project/${projectId}/settings`}>
+						<h3>Settings</h3>
+					</Link>
 				</div>
 			</div>
 		</div>

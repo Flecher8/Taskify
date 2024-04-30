@@ -6,9 +6,10 @@ import { IDay } from "react-calendar-datetime-picker/dist/types/type";
 interface DateTimePickerProps {
 	initValue?: IDay;
 	onChange: (date: IDay | null) => void;
+	calenderModalClass?: string;
 }
 
-const DateTimePicker: FC<DateTimePickerProps> = ({ initValue, onChange }) => {
+const DateTimePicker: FC<DateTimePickerProps> = ({ initValue, onChange, calenderModalClass = "" }) => {
 	return (
 		<DtPicker
 			initValue={initValue}
@@ -18,6 +19,7 @@ const DateTimePicker: FC<DateTimePickerProps> = ({ initValue, onChange }) => {
 			minDate={{ year: 2000, month: 1, day: 1 }}
 			placeholder={"Choice date"}
 			autoClose={false}
+			calenderModalClass={calenderModalClass}
 		/>
 	);
 };

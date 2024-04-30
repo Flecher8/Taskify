@@ -95,7 +95,7 @@ const ClickToEdit: React.FC<ClickToEditProps> = ({
 	return (
 		<div
 			ref={itemRef}
-			className={`relative ${
+			className={`relative w-full ${
 				isEditing ? "bg-white" : useHover ? (isHovered ? "bg-gray-300" : "") : ""
 			} duration-300 hover:cursor-pointer`}
 			onBlur={handleStopEditing}
