@@ -32,6 +32,6 @@ namespace Taskify.DAL
         public DbSet<CompanyMemberRole> CompanyMemberRoles { get; set;}
         public DbSet<CompanyMember> CompanyMembers {  get; set; }
         public DbSet<CompanyExpense> CompanyExpenses { get; set; }
-
+        public DbSet<TaskTimeTracker> TaskTimeTrackers { get; set; }
     }
 }

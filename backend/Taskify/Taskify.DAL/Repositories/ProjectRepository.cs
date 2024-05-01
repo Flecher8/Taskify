@@ -47,6 +47,11 @@ namespace Taskify.DAL.Repositories
                 query = query.Include(p => p.ProjectRoles);
             }
 
+            if (_filterBuilder.IncludeIncomes)
+            {
+                query = query.Include(p => p.ProjectIncomes);
+            }
+
             return query;
         }
     }

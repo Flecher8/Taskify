@@ -15,6 +15,7 @@ namespace Taskify.DAL.Helpers
         public bool IncludeInvitations { get; private set; }
         public bool IncludeMembers { get; private set; }
         public bool IncludeRoles { get; private set; }
+        public bool IncludeIncomes { get; private set; }
 
         public ProjectFilterBuilder IncludeUserEntity()
         {
@@ -43,6 +44,12 @@ namespace Taskify.DAL.Helpers
         public ProjectFilterBuilder IncludeRolesEntity()
         {
             IncludeRoles = true;
+            return this;
+        }
+
+        public ProjectFilterBuilder IncludeIncomesEntity()
+        {
+            IncludeIncomes = true;
             return this;
         }
     }
