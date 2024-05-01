@@ -12,7 +12,7 @@ namespace Taskify.Core.DbModels
         public CustomTask CustomTask { get; set; }
         public User User { get; set; }
         public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
+        public DateTime? EndDateTime { get; set; }
         public DateTime CreatedAt { get; set; }
         public uint DurationInSeconds { get; set; }
         public string Description { get; set; } = string.Empty;

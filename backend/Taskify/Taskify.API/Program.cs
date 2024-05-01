@@ -36,6 +36,7 @@ namespace Taskify.API
             builder.Services.AddScoped<IProjectRoleRepository, ProjectRoleRepository>();
             builder.Services.AddScoped<ISectionRepository, SectionRepository>();
             builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            builder.Services.AddScoped<ITaskTimeTrackerRepository, TaskTimeTrackerRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
 
@@ -55,6 +56,7 @@ namespace Taskify.API
             builder.Services.AddScoped<IValidator<CompanyMemberRole>, CompanyMemberRoleValidator>();
             builder.Services.AddScoped<IValidator<CompanyMember>, CompanyMemberValidator>();
             builder.Services.AddScoped<IValidator<CompanyInvitation>, CompanyInvitationValidator>();
+            builder.Services.AddScoped<IValidator<TaskTimeTracker>, TaskTimeTrackerValidator>();
 
             // Services
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
