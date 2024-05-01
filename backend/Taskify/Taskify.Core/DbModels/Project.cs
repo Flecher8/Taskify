@@ -16,5 +16,6 @@ namespace Taskify.Core.DbModels
         public List<ProjectInvitation> ProjectInvitations { get; set; }
         public List<ProjectMember> ProjectMembers { get; set; }
         public List<ProjectRole> ProjectRoles { get; set; }
+        public List<ProjectIncome> ProjectIncomes { get; set;}
     }
 }

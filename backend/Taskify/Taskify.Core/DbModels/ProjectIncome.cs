@@ -13,5 +13,6 @@ namespace Taskify.Core.DbModels
         public Project Project { get; set; }
         public double Amount { get; set; }
         public ProjectIncomeFrequency Frequency { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
