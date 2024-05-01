@@ -13,5 +13,6 @@ namespace Taskify.Core.DbModels
         public Subscription Subscription { get; set; }
         public DateTime StartDateTimeUtc { get; set; }
         public DateTime EndDateTimeUtc { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
