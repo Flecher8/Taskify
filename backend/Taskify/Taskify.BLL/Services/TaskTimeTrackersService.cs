@@ -266,5 +266,30 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<bool>("Can not create a new task time tracker.");
             }
         }
+
+        public async Task<Result<TaskTimeTracker>> GetTaskTimeTrackerByIdAsync(string id)
+        {
+            try
+            {
+                var result = (await _taskTimeTrackerRepository.GetFilteredItemsAsync(
+                    builder => builder
+                    .IncludeUserEntity()
+                    .IncludeCustomTaskEntity()
+                    .WithFilter(p => p.Id == id)
+                )).FirstOrDefault();
+
+                if (result == null)
+                {
+                    return ResultFactory.Failure<TaskTimeTracker>("Task Time Tracker with such id does not exist.");
+                }
+
+                return ResultFactory.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<TaskTimeTracker>("Can not get the Task Time Tracker by id.");
+            }
+        }
     }
 }

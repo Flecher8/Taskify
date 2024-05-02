@@ -75,6 +75,7 @@ namespace Taskify.API
             builder.Services.AddScoped<ICompanyMemberRolesService, CompanyMemberRolesService>();
             builder.Services.AddScoped<ICompanyMembersService, CompanyMembersService>();
             builder.Services.AddScoped<ICompanyInvitationsService, CompanyInvitationsService>();
+            builder.Services.AddScoped<ITaskTimeTrackersService, TaskTimeTrackersService>();
 
             // Add Identity services
             //builder.Services.AddIdentity<User, IdentityRole>()
