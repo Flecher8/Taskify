@@ -35,13 +35,13 @@ namespace Taskify.BLL.Services
         {
             try
             {
-                var userSubscriptions = await _userSubscriptionRepository.GetFilteredItemsAsync(
+                var userSubscriptions = (await _userSubscriptionRepository.GetFilteredItemsAsync(
                     builder => builder
                                     .IncludeSubscriptionEntity()
                                     .WithFilter(us => us.User.Id == userId && us.EndDateTimeUtc > DateTime.UtcNow)
-                );
+                )).OrderBy(p => p.StartDateTimeUtc);
 
-                var activeSubscription = userSubscriptions.FirstOrDefault(us => us.EndDateTimeUtc > DateTime.UtcNow);
+                var activeSubscription = userSubscriptions.FirstOrDefault();
 
                 return activeSubscription != null
                     ? ResultFactory.Success(activeSubscription.Subscription)
@@ -49,7 +49,6 @@ namespace Taskify.BLL.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching user subscription.");
                 return ResultFactory.Failure<Subscription>("An error occurred while fetching user subscription.");
             }
         }
