@@ -12,7 +12,7 @@ namespace Taskify.BLL.Interfaces
     {
         Task<Result<ProjectIncome>> CreateProjectIncomeAsync(ProjectIncome projectIncome);
         Task<Result<bool>> DeleteProjectIncomeAsync(string id);
-        Task<Result<ProjectIncome>> GetProjectIncomeByProjectIdAsync(string projectId);
+        Task<Result<List<ProjectIncome>>> GetProjectIncomesByProjectIdAsync(string projectId);
         Task<Result<bool>> UpdateProjectIncomeAsync(ProjectIncome projectIncome);
     }
 }

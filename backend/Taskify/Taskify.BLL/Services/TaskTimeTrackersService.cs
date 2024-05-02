@@ -6,6 +6,7 @@ using System.Text;
 using Taskify.BLL.Interfaces;
 using Taskify.BLL.Validation;
 using Taskify.Core.DbModels;
+using Taskify.Core.Enums;
 using Taskify.Core.Result;
 using Taskify.DAL.Interfaces;
 using Taskify.DAL.Repositories;
@@ -73,16 +74,28 @@ namespace Taskify.BLL.Services
                 taskTimeTracker.CreatedAt = DateTime.UtcNow;
                 taskTimeTracker.User = userResult;
                 taskTimeTracker.CustomTask = taskResult;
-                if (taskTimeTracker.EndDateTime != null)
+
+                if(taskTimeTracker.TrackerType == TaskTimeTrackerType.Timer)
                 {
-                    TimeSpan difference = (TimeSpan)(taskTimeTracker.EndDateTime - taskTimeTracker.StartDateTime);
-                    double differenceInSeconds = difference.TotalSeconds;
-                    taskTimeTracker.DurationInSeconds = (uint)differenceInSeconds;
-                }
-                else
-                {
+                    taskTimeTracker.EndDateTime = null;
                     taskTimeTracker.DurationInSeconds = 0;
                 }
+
+                if (taskTimeTracker.TrackerType == TaskTimeTrackerType.Range)
+                {
+                    if (taskTimeTracker.EndDateTime != null)
+                    {
+                        TimeSpan difference = (TimeSpan)(taskTimeTracker.EndDateTime - taskTimeTracker.StartDateTime);
+                        double differenceInSeconds = difference.TotalSeconds;
+                        taskTimeTracker.DurationInSeconds = (uint)differenceInSeconds;
+                    }
+                    else
+                    {
+                        taskTimeTracker.DurationInSeconds = 0;
+                    }
+                }
+
+                
 
                 var result = await _taskTimeTrackerRepository.AddAsync(taskTimeTracker);
 
@@ -127,6 +140,81 @@ namespace Taskify.BLL.Services
             {
                 _logger.LogError(ex.Message);
                 return ResultFactory.Failure<List<TaskTimeTracker>>("Can not create a new task time tracker.");
+            }
+        }
+
+        public async Task<Result<TaskTimeTracker>> StartTimerAsync(string userId, string taskId)
+        {
+            try
+            {
+                var listOfStartedTimers = await _taskTimeTrackerRepository.GetFilteredItemsAsync(
+                        builder => builder
+                            .IncludeUserEntity()
+                            .IncludeCustomTaskEntity()
+                            .WithFilter(
+                                    tracker => tracker.User.Id == userId && 
+                                    tracker.CustomTask.Id == taskId && 
+                                    tracker.TrackerType == TaskTimeTrackerType.Timer && 
+                                    tracker.EndDateTime == null
+                                )
+                    );
+
+                if (listOfStartedTimers.Count != 0)
+                {
+                    return ResultFactory.Failure<TaskTimeTracker>("Can not start new timer, stop old one.");
+                }
+
+                return ResultFactory.Success(await CreateTaskTimeTrackerAsync(CreateNewTimer(userId, taskId)));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<TaskTimeTracker>("Can not create a new timer.");
+            }
+        }
+
+        private TaskTimeTracker CreateNewTimer(string userId, string taskId)
+        {
+            TaskTimeTracker taskTimeTracker = new TaskTimeTracker();
+            taskTimeTracker.User.Id = userId;
+            taskTimeTracker.CustomTask.Id = taskId;
+            taskTimeTracker.StartDateTime = DateTime.UtcNow;
+            taskTimeTracker.EndDateTime = null;
+            taskTimeTracker.CreatedAt = DateTime.UtcNow;
+            taskTimeTracker.DurationInSeconds = 0;
+            taskTimeTracker.TrackerType = TaskTimeTrackerType.Timer;
+            return taskTimeTracker;
+        }
+
+        public async Task<Result<bool>> StopTimerAsync(string userId, string taskId)
+        {
+            try
+            {
+                var timerToStop = (await _taskTimeTrackerRepository.GetFilteredItemsAsync(
+                        builder => builder
+                            .IncludeUserEntity()
+                            .IncludeCustomTaskEntity()
+                            .WithFilter(
+                                    tracker => tracker.User.Id == userId &&
+                                    tracker.CustomTask.Id == taskId &&
+                                    tracker.TrackerType == TaskTimeTrackerType.Timer &&
+                                    tracker.EndDateTime == null
+                                )
+                    )).FirstOrDefault();
+
+                if (timerToStop == null)
+                {
+                    return ResultFactory.Failure<bool>("Can not find started timer, create new one.");
+                }
+
+                timerToStop.EndDateTime = DateTime.UtcNow;
+
+                return ResultFactory.Success(await UpdateTaskTimeTrackerAsync(timerToStop));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Can not create a new timer.");
             }
         }
 

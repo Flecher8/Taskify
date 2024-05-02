@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Taskify.Core.Dtos
 {
-    internal class UpdateTaskTimeTracker
+    public class UpdateTaskTimeTracker
     {
+        public string Id { get; set; } = string.Empty;
+        public DateTime StartDateTime { get; set; }
+        public DateTime? EndDateTime { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Taskify.Core.DbModels;
 using Taskify.Core.Enums;
 
-namespace Taskify.Core.DbModels
+namespace Taskify.Core.Dtos
 {
-    public class TaskTimeTracker
+    public class TaskTimeTrackerDto
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public CustomTask CustomTask { get; set; }
-        public User User { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public CustomTaskDto CustomTask { get; set; }
+        public UserDto User { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime? EndDateTime { get; set; }
         public DateTime CreatedAt { get; set; }

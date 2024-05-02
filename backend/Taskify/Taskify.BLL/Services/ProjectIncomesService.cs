@@ -56,19 +56,8 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<ProjectIncome>("Project with such id does not exists.");
                 }
 
-                var projectIncomesWithProject = await _projectIncomeRepository.GetFilteredItemsAsync(
-                    builder => builder
-                                    .IncludeProjectEntity()
-                                    .WithFilter(pi => pi.Project.Id == project.Id)
-                    );
-
-                if (projectIncomesWithProject.Count != 0)
-                {
-                    return ResultFactory.Failure<ProjectIncome>("Project income for this project already exists.");
-                }
-
-
                 projectIncome.Project = project;
+                projectIncome.CreatedAt = DateTime.UtcNow;
 
 
                 var result = await _projectIncomeRepository.AddAsync(projectIncome);
@@ -96,7 +85,7 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<ProjectIncome>> GetProjectIncomeByProjectIdAsync(string projectId)
+        public async Task<Result<List<ProjectIncome>>> GetProjectIncomesByProjectIdAsync(string projectId)
         {
             try
             {
@@ -106,16 +95,12 @@ namespace Taskify.BLL.Services
                                     .WithFilter(pi => pi.Project.Id == projectId)
                 );
 
-                var projectIncome = result.FirstOrDefault();
-
-                return projectIncome != null
-                    ? ResultFactory.Success(projectIncome)
-                    : ResultFactory.Failure<ProjectIncome>("Project income not found for the given project id.");
+                return ResultFactory.Success(result);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<ProjectIncome>("Can not get project income by project id.");
+                return ResultFactory.Failure<List<ProjectIncome>>("Can not get project incomes by project id.");
             }
         }
 

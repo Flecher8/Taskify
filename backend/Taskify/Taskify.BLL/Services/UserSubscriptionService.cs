@@ -116,7 +116,8 @@ namespace Taskify.BLL.Services
                 User = lastActiveSubscription.User,
                 Subscription = subscription,
                 StartDateTimeUtc = lastActiveSubscription.EndDateTimeUtc,
-                EndDateTimeUtc = lastActiveSubscription.EndDateTimeUtc.AddDays(subscription.DurationInDays)
+                EndDateTimeUtc = lastActiveSubscription.EndDateTimeUtc.AddDays(subscription.DurationInDays),
+                CreatedAt = DateTime.UtcNow
             };
 
             await _userSubscriptionRepository.AddAsync(newUserSubscription);

@@ -33,7 +33,7 @@ namespace Taskify.API.Controllers
         {
             try
             {
-                var result = await _projectIncomesService.GetProjectIncomeByProjectIdAsync(projectId);
+                var result = await _projectIncomesService.GetProjectIncomesByProjectIdAsync(projectId);
 
                 return result.IsSuccess
                     ? Ok(_mapper.Map<ProjectIncomeDto>(result.Data))

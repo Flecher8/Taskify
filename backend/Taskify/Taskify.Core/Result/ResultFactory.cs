@@ -13,6 +13,16 @@ namespace Taskify.Core.Result
             return new Result<T>(true, data, null);
         }
 
+        public static Result<T> Success<T>(Result<T> result)
+        {
+            return new Result<T>(result.IsSuccess, result.Data, result.Errors);
+        }
+
+        public static Result<T> Failure<T>(Result<T> result)
+        {
+            return new Result<T>(result.IsSuccess, result.Data, result.Errors);
+        }
+
         public static Result<T> Failure<T>(List<string> errors)
         {
             return new Result<T>(false, default(T), errors);

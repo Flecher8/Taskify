@@ -110,7 +110,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
                                                      loggerMock.Object);
 
             // Act
-            var result = await service.GetProjectIncomeByProjectIdAsync(projectId);
+            var result = await service.GetProjectIncomesByProjectIdAsync(projectId);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -238,7 +238,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
                                                      loggerMock.Object);
 
             // Act
-            var result = await service.GetProjectIncomeByProjectIdAsync(invalidProjectId);
+            var result = await service.GetProjectIncomesByProjectIdAsync(invalidProjectId);
 
             // Assert
             Assert.False(result.IsSuccess);

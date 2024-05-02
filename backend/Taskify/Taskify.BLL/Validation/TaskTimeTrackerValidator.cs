@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.Core.Enums;
 
 namespace Taskify.BLL.Validation
 {

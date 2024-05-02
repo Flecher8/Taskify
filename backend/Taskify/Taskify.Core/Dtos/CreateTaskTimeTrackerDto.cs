@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Taskify.Core.Enums;
 
 namespace Taskify.Core.Dtos
 {
@@ -13,5 +14,6 @@ namespace Taskify.Core.Dtos
         public DateTime StartDateTime { get; set; }
         public DateTime? EndDateTime { get; set; }
         public string Description { get; set; } = string.Empty;
+        public TaskTimeTrackerType TrackerType { get; set; }
     }
 }
