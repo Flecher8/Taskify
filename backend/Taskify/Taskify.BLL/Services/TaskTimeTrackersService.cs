@@ -75,7 +75,7 @@ namespace Taskify.BLL.Services
                 taskTimeTracker.User = userResult;
                 taskTimeTracker.CustomTask = taskResult;
 
-                if(taskTimeTracker.TrackerType == TaskTimeTrackerType.Timer)
+                if(taskTimeTracker.TrackerType == TaskTimeTrackerType.Stopwatch)
                 {
                     taskTimeTracker.EndDateTime = null;
                     taskTimeTracker.DurationInSeconds = 0;
@@ -123,7 +123,7 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackerByUserForTaskAsync(string userId, string taskId)
+        public async Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackersByUserForTaskAsync(string userId, string taskId)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace Taskify.BLL.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<List<TaskTimeTracker>>("Can not create a new task time tracker.");
+                return ResultFactory.Failure<List<TaskTimeTracker>>("Can not get task time trackers by user and task.");
             }
         }
 
@@ -154,7 +154,7 @@ namespace Taskify.BLL.Services
                             .WithFilter(
                                     tracker => tracker.User.Id == userId && 
                                     tracker.CustomTask.Id == taskId && 
-                                    tracker.TrackerType == TaskTimeTrackerType.Timer && 
+                                    tracker.TrackerType == TaskTimeTrackerType.Stopwatch && 
                                     tracker.EndDateTime == null
                                 )
                     );
@@ -176,13 +176,15 @@ namespace Taskify.BLL.Services
         private TaskTimeTracker CreateNewTimer(string userId, string taskId)
         {
             TaskTimeTracker taskTimeTracker = new TaskTimeTracker();
+            taskTimeTracker.User = new User();
             taskTimeTracker.User.Id = userId;
+            taskTimeTracker.CustomTask = new CustomTask();
             taskTimeTracker.CustomTask.Id = taskId;
             taskTimeTracker.StartDateTime = DateTime.UtcNow;
             taskTimeTracker.EndDateTime = null;
             taskTimeTracker.CreatedAt = DateTime.UtcNow;
             taskTimeTracker.DurationInSeconds = 0;
-            taskTimeTracker.TrackerType = TaskTimeTrackerType.Timer;
+            taskTimeTracker.TrackerType = TaskTimeTrackerType.Stopwatch;
             return taskTimeTracker;
         }
 
@@ -197,7 +199,7 @@ namespace Taskify.BLL.Services
                             .WithFilter(
                                     tracker => tracker.User.Id == userId &&
                                     tracker.CustomTask.Id == taskId &&
-                                    tracker.TrackerType == TaskTimeTrackerType.Timer &&
+                                    tracker.TrackerType == TaskTimeTrackerType.Stopwatch &&
                                     tracker.EndDateTime == null
                                 )
                     )).FirstOrDefault();
@@ -207,9 +209,11 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>("Can not find started timer, create new one.");
                 }
 
-                timerToStop.EndDateTime = DateTime.UtcNow;
+                var timerToUpdate = timerToStop;
 
-                return ResultFactory.Success(await UpdateTaskTimeTrackerAsync(timerToStop));
+                timerToUpdate.EndDateTime = DateTime.UtcNow;
+
+                return ResultFactory.Success(await UpdateTaskTimeTrackerAsync(timerToUpdate));
             }
             catch (Exception ex)
             {
@@ -256,7 +260,7 @@ namespace Taskify.BLL.Services
                     taskTimeTracker.DurationInSeconds = 0;
                 }
 
-                var result = await _taskTimeTrackerRepository.AddAsync(taskTimeTracker);
+                await _taskTimeTrackerRepository.UpdateAsync(taskTimeTracker);
 
                 return ResultFactory.Success(true);
             }
@@ -289,6 +293,81 @@ namespace Taskify.BLL.Services
             {
                 _logger.LogError(ex.Message);
                 return ResultFactory.Failure<TaskTimeTracker>("Can not get the Task Time Tracker by id.");
+            }
+        }
+
+        public async Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackersByTaskAsync(string taskId)
+        {
+            try
+            {
+                var taskTimeTrackersByTask = await _taskTimeTrackerRepository.GetFilteredItemsAsync(
+                        builder => builder
+                            .IncludeUserEntity()
+                            .IncludeCustomTaskEntity()
+                            .WithFilter(tracker => tracker.CustomTask.Id == taskId)
+                    );
+
+                return ResultFactory.Success(taskTimeTrackersByTask);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<List<TaskTimeTracker>>("Can not get task time trackers by task.");
+            }
+        }
+
+        public async Task<Result<ulong>> GetNumberOfSecondsSpendOnTask(string taskId)
+        {
+            try
+            {
+                var taskTimeTrackersByTask = await _taskTimeTrackerRepository.GetFilteredItemsAsync(
+                        builder => builder
+                            .IncludeCustomTaskEntity()
+                            .WithFilter(tracker => tracker.CustomTask.Id == taskId)
+                    );
+
+                ulong totalSecondsSpent = 0;
+
+                foreach (var tracker in taskTimeTrackersByTask)
+                {
+                    if (tracker.EndDateTime != null)
+                    {
+                        TimeSpan duration = (TimeSpan)(tracker.EndDateTime - tracker.StartDateTime);
+                        totalSecondsSpent += (ulong)duration.TotalSeconds;
+                    }
+                }
+
+                return ResultFactory.Success(totalSecondsSpent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<ulong>("Can not get number of seconds spend on task.");
+            }
+        }
+
+        public async Task<Result<TaskTimeTracker?>> IsTimerActiveAsync(string userId, string taskId)
+        {
+            try
+            {
+                var activeTimer = await _taskTimeTrackerRepository.GetFilteredItemsAsync(
+                        builder => builder
+                            .IncludeUserEntity()
+                            .IncludeCustomTaskEntity()
+                            .WithFilter(
+                                tracker => tracker.User.Id == userId &&
+                                tracker.CustomTask.Id == taskId &&
+                                tracker.TrackerType == TaskTimeTrackerType.Stopwatch &&
+                                tracker.EndDateTime == null
+                            )
+                    );
+
+                return ResultFactory.Success(activeTimer.FirstOrDefault());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<TaskTimeTracker?>("An error occurred while checking for active timer.");
             }
         }
     }

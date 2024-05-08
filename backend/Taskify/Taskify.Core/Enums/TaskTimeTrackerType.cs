@@ -8,7 +8,7 @@ namespace Taskify.Core.Enums
 {
     public enum TaskTimeTrackerType
     {
-        Timer,
+        Stopwatch,
         Range
     }
 }

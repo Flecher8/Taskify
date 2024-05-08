@@ -12,6 +12,7 @@ import { dateToIDay, iDayToDate } from "utilities/date_IDay_Converter";
 import { IDay, IRange } from "react-calendar-datetime-picker/dist/types/type";
 import { localToUTC, utcToLocal } from "utilities/timeConverter";
 import RangeDateTimePicker from "components/rangeDateTimePicker";
+import TaskTimeTrackerComponent from "components/taskTimeTrackerComponent";
 
 interface TaskInfoProps {
 	customTask: CustomTask;
@@ -31,8 +32,6 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 	);
 
 	const [assignableUsers, setAssignableUsers] = useState<User[]>([]);
-
-	useEffect(() => {}, []);
 
 	useEffect(() => {
 		loadProjectMembers();
@@ -181,11 +180,22 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 						</DropDownContext>
 					</div>
 				</div>
-				<div className="flex flex-row">
+				<div className="flex flex-row mb-5">
+					<div className="mr-2">
+						<i className="fa-light fa-timer"></i>
+					</div>
+					<div>
+						<div className="flex flex-row justify-between mb-1">
+							<label className="w-full mr-2">Time tracker</label>
+							<TaskTimeTrackerComponent customTaskId={customTask.id} />
+						</div>
+					</div>
+				</div>
+				<div className="flex flex-row mb-5">
 					<div className="mr-3">
 						<i className="fa-light fa-calendar"></i>
 					</div>
-					<div>
+					<div className="">
 						<div className="flex flex-row items-center mb-1">
 							<label className="w-full">Start date</label>
 							<DateTimePicker
@@ -194,7 +204,7 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 								calenderModalClass={"max-w-[300px]"}
 							/>
 						</div>
-						<div className="flex flex-row items-center mb-5">
+						<div className="flex flex-row items-center">
 							<label className="w-full">Due date</label>
 							<DateTimePicker initValue={dateToIDay(endDate)} onChange={handleEndDateChange} />
 						</div>

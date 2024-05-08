@@ -13,9 +13,12 @@ namespace Taskify.BLL.Interfaces
         Task<Result<TaskTimeTracker>> CreateTaskTimeTrackerAsync(TaskTimeTracker taskTimeTracker);
         Task<Result<bool>> UpdateTaskTimeTrackerAsync(TaskTimeTracker taskTimeTracker);
         Task<Result<bool>> DeleteTaskTimeTrackerAsync(string id);
-        Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackerByUserForTaskAsync(string userId, string taskId);
+        Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackersByUserForTaskAsync(string userId, string taskId);
+        Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackersByTaskAsync(string taskId);
         Task<Result<TaskTimeTracker>> StartTimerAsync(string userId, string taskId);
         Task<Result<bool>> StopTimerAsync(string userId, string taskId);
         Task<Result<TaskTimeTracker>> GetTaskTimeTrackerByIdAsync(string id);
+        Task<Result<ulong>> GetNumberOfSecondsSpendOnTask(string taskId);
+        Task<Result<TaskTimeTracker?>> IsTimerActiveAsync(string userId, string taskId);
     }
 }

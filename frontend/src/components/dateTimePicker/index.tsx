@@ -6,20 +6,31 @@ import { IDay } from "react-calendar-datetime-picker/dist/types/type";
 interface DateTimePickerProps {
 	initValue?: IDay;
 	onChange: (date: IDay | null) => void;
+	withTime?: boolean;
 	calenderModalClass?: string;
+	placeholder?: string;
+	inputClass?: string;
 }
 
-const DateTimePicker: FC<DateTimePickerProps> = ({ initValue, onChange, calenderModalClass = "" }) => {
+const DateTimePicker: FC<DateTimePickerProps> = ({
+	initValue,
+	onChange,
+	withTime = true,
+	calenderModalClass = "",
+	placeholder = "Choice date",
+	inputClass = ""
+}) => {
 	return (
 		<DtPicker
 			initValue={initValue}
 			onChange={onChange}
-			withTime={true}
+			withTime={withTime}
 			showTimeInput={true}
 			minDate={{ year: 2000, month: 1, day: 1 }}
-			placeholder={"Choice date"}
+			placeholder={placeholder}
 			autoClose={false}
 			calenderModalClass={calenderModalClass}
+			inputClass={inputClass}
 		/>
 	);
 };

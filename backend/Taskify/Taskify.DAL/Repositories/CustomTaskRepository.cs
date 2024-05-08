@@ -32,6 +32,11 @@ namespace Taskify.DAL.Repositories
                 query = query.Include(c => c.ResponsibleUser);
             }
 
+            if (_filterBuilder.IncludeTaskTimeTrackers)
+            {
+                query = query.Include(c => c.TaskTimeTrackers);
+            }
+
             return query;
         }
     }

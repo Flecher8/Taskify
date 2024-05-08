@@ -12,6 +12,7 @@ namespace Taskify.DAL.Helpers
     {
         public bool IncludeSection { get; private set; }
         public bool IncludeResponsibleUser { get; private set; }
+        public bool IncludeTaskTimeTrackers { get; private set; }
 
         public CustomTaskFilterBuilder IncludeSectionEntity()
         {
@@ -22,6 +23,12 @@ namespace Taskify.DAL.Helpers
         public CustomTaskFilterBuilder IncludeResponsibleUserEntity()
         {
             IncludeResponsibleUser = true;
+            return this;
+        }
+
+        public CustomTaskFilterBuilder IncludeTaskTimeTrackersEntity()
+        {
+            IncludeTaskTimeTrackers = true;
             return this;
         }
     }

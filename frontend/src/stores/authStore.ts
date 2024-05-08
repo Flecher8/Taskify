@@ -116,6 +116,10 @@ class AuthStore {
 
 		return true;
 	}
+
+	get userId() {
+		return localStorage.getItem("userId");
+	}
 }
 
 export default new AuthStore();

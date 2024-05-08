@@ -21,7 +21,7 @@ const DropDownContext: FC<DropDownContextProps> = ({
 			<div tabIndex={0} role="button" className={openDropDownButtonStyle}>
 				{openDropDownButtonContent}
 			</div>
-			<div tabIndex={0} className={`dropdown-content z-[1] p-2 shadow rounded-box ${dropDownContentStyle}`}>
+			<div tabIndex={0} className={`dropdown-content z-[1] shadow ${dropDownContentStyle}`}>
 				{React.cloneElement(children as React.ReactElement<any>)}
 			</div>
 		</div>

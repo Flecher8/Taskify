@@ -20,5 +20,6 @@ namespace Taskify.Core.Dtos
         public bool IsArchived { get; set; }
         public DateTime CreatedAt { get; set; }
         public int SequenceNumber { get; set; }
+        public List<TaskTimeTrackerDto> TaskTimeTrackers { get; set; }
     }
 }

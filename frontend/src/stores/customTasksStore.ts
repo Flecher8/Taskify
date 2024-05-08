@@ -31,7 +31,6 @@ class CustomTasksStore {
 
 	async updateCustomTask(id: string, customTask: CustomTask): Promise<void> {
 		try {
-			console.log("Update task", customTask);
 			const updateCustomTask: UpdateCustomTask = {
 				id: customTask.id,
 				responsibleUserId: customTask.responsibleUser !== null ? customTask.responsibleUser.id : null,

@@ -1,0 +1,12 @@
+.scrollable::-webkit-scrollbar {
+	width: 5px; /* Ширина полосы прокрутки */
+	height: 15px;
+}
+.scrollable::-webkit-scrollbar-thumb {
+	background-color: #888; /* Цвет ползунка */
+	border-radius: 20px; /* Скругление углов ползунка */
+}
+
+.scrollable::-webkit-scrollbar-track {
+	background-color: #eee; /* Цвет фона полосы прокрутки */
+}

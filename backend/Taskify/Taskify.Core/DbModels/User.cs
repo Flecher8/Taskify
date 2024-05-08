@@ -16,5 +16,6 @@ namespace Taskify.Core.DbModels
         public List<Notification> Notifications { get; set; }
         public List<CustomTask> CustomTasks { get; set; }
         public List<UserSubscription> UserSubscriptions { get; set; }
+        public List<TaskTimeTracker> TaskTimeTrackers { get; set; }
     }
 }

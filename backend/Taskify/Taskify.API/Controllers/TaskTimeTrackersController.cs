@@ -23,7 +23,7 @@ namespace Taskify.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTaskTimeTracker([FromBody] TaskTimeTrackerDto taskTimeTrackerDto)
+        public async Task<IActionResult> CreateTaskTimeTracker([FromBody] CreateTaskTimeTrackerDto taskTimeTrackerDto)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Taskify.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTaskTimeTracker(string id, [FromBody] TaskTimeTrackerDto taskTimeTrackerDto)
+        public async Task<IActionResult> UpdateTaskTimeTracker(string id, [FromBody] UpdateTaskTimeTracker taskTimeTrackerDto)
         {
             try
             {
@@ -139,11 +139,11 @@ namespace Taskify.API.Controllers
         }
 
         [HttpGet("user/{userId}/task/{taskId}")]
-        public async Task<IActionResult> GetTaskTimeTrackerByUserForTask(string userId, string taskId)
+        public async Task<IActionResult> GetTaskTimeTrackersByUserForTask(string userId, string taskId)
         {
             try
             {
-                var result = await _taskTimeTrackersService.GetTaskTimeTrackerByUserForTaskAsync(userId, taskId);
+                var result = await _taskTimeTrackersService.GetTaskTimeTrackersByUserForTaskAsync(userId, taskId);
 
                 return result.IsSuccess
                     ? Ok(_mapper.Map<List<TaskTimeTrackerDto>>(result.Data))
@@ -152,6 +152,60 @@ namespace Taskify.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in GetTaskTimeTrackerByUserForTask method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("task/{taskId}")]
+        public async Task<IActionResult> GetTaskTimeTrackersByTask(string taskId)
+        {
+            try
+            {
+                var result = await _taskTimeTrackersService.GetTaskTimeTrackersByTaskAsync(taskId);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<List<TaskTimeTrackerDto>>(result.Data))
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetTaskTimeTrackerByUserForTask method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("task/{taskId}/total-seconds")]
+        public async Task<IActionResult> GetTotalSecondsSpentOnTask(string taskId)
+        {
+            try
+            {
+                var result = await _taskTimeTrackersService.GetNumberOfSecondsSpendOnTask(taskId);
+
+                return result.IsSuccess
+                    ? Ok(result.Data)
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetTotalSecondsSpentOnTask method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("user/{userId}/task/{taskId}/active-timer")]
+        public async Task<IActionResult> IsTimerActive(string userId, string taskId)
+        {
+            try
+            {
+                var result = await _taskTimeTrackersService.IsTimerActiveAsync(userId, taskId);
+
+                return result.IsSuccess 
+                    ? (result.Data == null ? Ok(null) : Ok(_mapper.Map<TaskTimeTrackerDto>(result.Data)))
+                    : BadRequest(result.Errors); // Return NotFound if no active timer found
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in IsTimerActive method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
