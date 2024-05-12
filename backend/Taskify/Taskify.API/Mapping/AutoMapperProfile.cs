@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Taskify.BLL.Helpers;
 using Taskify.Core.DbModels;
 using Taskify.Core.Dtos;
+using Taskify.Core.Dtos.Statistics;
 
 namespace Taskify.API.Mapping
 {
@@ -103,6 +105,14 @@ namespace Taskify.API.Mapping
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new User { Id = src.UserId }))
                 .ForMember(dest => dest.CustomTask, opt => opt.MapFrom(src => new CustomTask { Id = src.CustomTaskId }));
             CreateMap<UpdateTaskTimeTracker, TaskTimeTracker>();
+
+            // Statistics
+            // SectionTypeTaskCountStatistics
+            CreateMap<SectionTypeTaskCountStatistics, SectionTypeTaskCountStatisticsDto>();
+            // SectionTaskCountStatistics
+            CreateMap<SectionTaskCountStatistics, SectionTaskCountStatisticsDto>();
+            // UserTaskCountStatistics
+            CreateMap<UserTaskCountStatistics, UserTaskCountStatisticsDto>();
         }
     }
 }

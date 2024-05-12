@@ -20,5 +20,6 @@ namespace Taskify.BLL.Interfaces
         Task<Result<TaskTimeTracker>> GetTaskTimeTrackerByIdAsync(string id);
         Task<Result<ulong>> GetNumberOfSecondsSpendOnTask(string taskId);
         Task<Result<TaskTimeTracker?>> IsTimerActiveAsync(string userId, string taskId);
+        Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackersByUserAndDateInProjectAsync(string projectId, string userId, DateTime date);
     }
 }

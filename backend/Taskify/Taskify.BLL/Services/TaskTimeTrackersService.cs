@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Taskify.BLL.Interfaces;
 using Taskify.BLL.Validation;
 using Taskify.Core.DbModels;
@@ -19,6 +20,7 @@ namespace Taskify.BLL.Services
         private readonly IValidator<TaskTimeTracker> _validator;
         private readonly IUserRepository _userRepository;
         private readonly ICustomTaskRepository _customTaskRepository;
+        private readonly ISectionRepository _sectionRepository;
         private readonly ITaskTimeTrackerRepository _taskTimeTrackerRepository;
 
         public TaskTimeTrackersService(IProjectRepository projectRepository,
@@ -26,6 +28,7 @@ namespace Taskify.BLL.Services
             ILogger<TaskTimeTrackersService> logger,
             IUserRepository userRepository,
             ICustomTaskRepository customTaskRepository,
+            ISectionRepository sectionRepository,
             ITaskTimeTrackerRepository taskTimeTrackerRepository
         )
         {
@@ -33,6 +36,7 @@ namespace Taskify.BLL.Services
             _logger = logger;
             _userRepository = userRepository;
             _customTaskRepository = customTaskRepository;
+            _sectionRepository = sectionRepository;
             _taskTimeTrackerRepository = taskTimeTrackerRepository;
         }
 
@@ -368,6 +372,87 @@ namespace Taskify.BLL.Services
             {
                 _logger.LogError(ex.Message);
                 return ResultFactory.Failure<TaskTimeTracker?>("An error occurred while checking for active timer.");
+            }
+        }
+
+        public async Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackersByUserAndDateInProjectAsync
+            (string projectId, 
+             string userId,
+             DateTime date
+            )
+        {
+            try
+            {
+                var sections = await _sectionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .WithFilter(s => s.Project.Id == projectId)
+                );
+
+                var tasks = new List<CustomTask>();
+                // Asynchronously retrieve custom tasks for each section
+                var sectionTasks = sections.Select(section => GetCustomTasksBySectionIdAsync(section.Id));
+
+                // Wait for all tasks to complete
+                await Task.WhenAll(sectionTasks);
+
+                // Add custom tasks from each section to the result list
+                foreach (var sectionTask in sectionTasks)
+                {
+                    var customTaskResult = await sectionTask;
+                    if (!customTaskResult.IsSuccess)
+                    {
+                        return ResultFactory.Failure<List<TaskTimeTracker>>(customTaskResult.Errors);
+                    }
+                    tasks.AddRange(customTaskResult.Data);
+                }
+
+                // Get task time trackers by user ID and custom task IDs
+                var taskTimeTrackers = await _taskTimeTrackerRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeUserEntity()
+                        .IncludeCustomTaskEntity()
+                        .WithFilter(tracker =>
+                            tracker.User.Id == userId &&
+                            tasks.Select(t => t.Id).Contains(tracker.CustomTask.Id) &&
+                            // StartDateTime should be less than or equal to the given date
+                            tracker.StartDateTime.Date <= date.Date &&
+                            // Either EndDateTime is null or it should be greater than or equal to the given date
+                            (tracker.EndDateTime == null || date.Date <= tracker.EndDateTime.Value.Date) 
+                           
+                        )
+                );
+
+
+                return ResultFactory.Success(taskTimeTrackers);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<List<TaskTimeTracker>>("Can not get task time trackers by user and date in project.");
+            }
+        }
+
+        private async Task<Result<List<CustomTask>>> GetCustomTasksBySectionIdAsync(string sectionId)
+        {
+            try
+            {
+                var result = await _customTaskRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeSectionEntity()
+                        .IncludeResponsibleUserEntity()
+                        .IncludeTaskTimeTrackersEntity()
+                        .WithFilter(c => c.Section != null && c.Section.Id == sectionId)
+                );
+
+                result = result.OrderBy(c => c.SequenceNumber).ToList();
+
+                return ResultFactory.Success(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<List<CustomTask>>("Can not get custom tasks by section id.");
             }
         }
     }
