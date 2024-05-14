@@ -109,18 +109,25 @@ namespace Taskify.API.Mapping
             // Statistics
             // ProjectRoleTaskCountStatistics
             CreateMap<ProjectRoleTaskCountStatistics, ProjectRoleTaskCountStatisticsDto>();
+            CreateMap<ProjectRoleTaskCountStatisticsDto, ProjectRoleTaskCountStatistics>();
             // SectionTaskCountStatistics
             CreateMap<SectionTaskCountStatistics, SectionTaskCountStatisticsDto>();
+            CreateMap<SectionTaskCountStatisticsDto, SectionTaskCountStatistics>();
             // SectionTypeTaskCountStatistics
             CreateMap<SectionTypeTaskCountStatistics, SectionTypeTaskCountStatisticsDto>();
+            CreateMap<SectionTypeTaskCountStatisticsDto, SectionTypeTaskCountStatistics>();
             // UserStoryPointsCountStatistics
             CreateMap<UserStoryPointsCountStatistics, UserStoryPointsCountStatisticsDto>();
+            CreateMap<UserStoryPointsCountStatisticsDto, UserStoryPointsCountStatistics>();
             // UserTaskCountStatistics
             CreateMap<UserTaskCountStatistics, UserTaskCountStatisticsDto>();
+            CreateMap<UserTaskCountStatisticsDto, UserTaskCountStatistics>();
             // UserTimeSpendOnDateRequest
             CreateMap<UserTimeSpendOnDateRequest, UserTimeSpendOnDateRequestDto>();
+            CreateMap<UserTimeSpendOnDateRequestDto, UserTimeSpendOnDateRequest>();
             // UserTimeSpendOnDateStatistic
             CreateMap<UserTimeSpendOnDateStatistic, UserTimeSpendOnDateStatisticDto>();
+            CreateMap<UserTimeSpendOnDateStatisticDto, UserTimeSpendOnDateStatistic>();
         }
     }
 }
