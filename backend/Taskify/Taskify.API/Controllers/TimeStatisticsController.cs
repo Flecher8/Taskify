@@ -26,8 +26,8 @@ namespace Taskify.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("user-project-time-statistics")]
-        public async Task<IActionResult> GetUserProjectTimeStatistics([FromQuery] UserTimeSpendOnDateRequestDto requestDto)
+        [HttpPost("user-project-time-statistics")]
+        public async Task<IActionResult> GetUserProjectTimeStatistics(UserTimeSpendOnDateRequestDto requestDto)
         {
             try
             {
