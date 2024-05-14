@@ -75,5 +75,41 @@ namespace Taskify.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet("project/{projectId}/user-story-points-count")]
+        public async Task<IActionResult> GetUserStoryPointsCountForProjectStatistics(string projectId)
+        {
+            try
+            {
+                var result = await _taskStatisticsService.GetUserStoryPointsCountForProjectStatisticsAsync(projectId);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<List<UserStoryPointsCountStatisticsDto>>(result.Data))
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetUserStoryPointsCountForProjectStatistics method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("project/{projectId}/task-count-by-roles")]
+        public async Task<IActionResult> GetTaskCountByRolesAsync(string projectId)
+        {
+            try
+            {
+                var result = await _taskStatisticsService.GetTaskCountByRolesAsync(projectId);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<List<ProjectRoleTaskCountStatisticsDto>>(result.Data))
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetTaskCountByRolesAsync method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

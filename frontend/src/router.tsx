@@ -15,6 +15,7 @@ import BoardPage from "pages/board";
 import ProfilePage from "pages/profile";
 import ProjectRolesPage from "pages/projectRoles";
 import ProjectMembersPage from "pages/projectMembers";
+import ProjectStatisticsPage from "pages/projectStatistics";
 
 const Router = () => {
 	return (
@@ -44,6 +45,7 @@ const Router = () => {
 					<Route index element={<BoardPage />} />
 					<Route path="roles" element={<ProjectRolesPage />} />
 					<Route path="members" element={<ProjectMembersPage />} />
+					<Route path="statistics" element={<ProjectStatisticsPage />} />
 				</Route>
 
 				<Route path="/profile" element={<MainLayout showHeader={true} showMenu={false} />}>
