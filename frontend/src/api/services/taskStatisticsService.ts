@@ -13,9 +13,10 @@ export default class TaskStatisticsService {
 		projectId: string
 	): Promise<SectionTypeTaskCountStatistics[] | undefined> {
 		try {
-			const response: AxiosResponse<SectionTypeTaskCountStatistics[]> = await api.post(
+			const response: AxiosResponse<SectionTypeTaskCountStatistics[]> = await api.get(
 				`${TaskStatisticsService.baseUrl}/project/${projectId}/section-type-task-count`
 			);
+
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {
@@ -29,7 +30,7 @@ export default class TaskStatisticsService {
 
 	static async getTaskCountForSections(projectId: string): Promise<SectionTaskCountStatistics[] | undefined> {
 		try {
-			const response: AxiosResponse<SectionTaskCountStatistics[]> = await api.post(
+			const response: AxiosResponse<SectionTaskCountStatistics[]> = await api.get(
 				`${TaskStatisticsService.baseUrl}/project/${projectId}/section-task-count`
 			);
 			return response.data;
@@ -47,7 +48,7 @@ export default class TaskStatisticsService {
 		projectId: string
 	): Promise<UserTaskCountStatistics[] | undefined> {
 		try {
-			const response: AxiosResponse<UserTaskCountStatistics[]> = await api.post(
+			const response: AxiosResponse<UserTaskCountStatistics[]> = await api.get(
 				`${TaskStatisticsService.baseUrl}/project/${projectId}/user-task-count`
 			);
 			return response.data;
@@ -65,7 +66,7 @@ export default class TaskStatisticsService {
 		projectId: string
 	): Promise<UserStoryPointsCountStatistics[] | undefined> {
 		try {
-			const response: AxiosResponse<UserStoryPointsCountStatistics[]> = await api.post(
+			const response: AxiosResponse<UserStoryPointsCountStatistics[]> = await api.get(
 				`${TaskStatisticsService.baseUrl}/project/${projectId}/user-story-points-count`
 			);
 			return response.data;
@@ -81,7 +82,7 @@ export default class TaskStatisticsService {
 
 	static async getTaskCountByRolesAsync(projectId: string): Promise<ProjectRoleTaskCountStatistics[] | undefined> {
 		try {
-			const response: AxiosResponse<ProjectRoleTaskCountStatistics[]> = await api.post(
+			const response: AxiosResponse<ProjectRoleTaskCountStatistics[]> = await api.get(
 				`${TaskStatisticsService.baseUrl}/project/${projectId}/task-count-by-roles`
 			);
 			return response.data;

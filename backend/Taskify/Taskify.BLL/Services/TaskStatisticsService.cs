@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -140,7 +141,9 @@ namespace Taskify.BLL.Services
                 var tasks = tasksResult.Data;
 
                 // Initialize a dictionary to store task counts for each user
-                var userTaskCounts = new Dictionary<User?, int>();
+                var userTaskCounts = new Dictionary<User, int>();
+
+                var placeholderUser = new User { Id = "placeholder" };
 
                 // Loop through each task to count tasks for each user
                 foreach (var task in tasks)
@@ -161,13 +164,13 @@ namespace Taskify.BLL.Services
                     else
                     {
                         // Increment the count for null user
-                        if (userTaskCounts.ContainsKey(null))
+                        if (userTaskCounts.ContainsKey(placeholderUser))
                         {
-                            userTaskCounts[null] += storyPoints;
+                            userTaskCounts[placeholderUser]++;
                         }
                         else
                         {
-                            userTaskCounts[null] = storyPoints;
+                            userTaskCounts[placeholderUser] = 1;
                         }
                     }
                 }
@@ -180,7 +183,7 @@ namespace Taskify.BLL.Services
                 {
                     var userStoryPointsCountStat = new UserStoryPointsCountStatistics
                     {
-                        User = kvp.Key,
+                        User = kvp.Key.Id != placeholderUser.Id ? kvp.Key : null,
                         Count = kvp.Value
                     };
                     userStoryPointsCountStatistics.Add(userStoryPointsCountStat);
@@ -209,7 +212,9 @@ namespace Taskify.BLL.Services
                 var tasks = tasksResult.Data;
 
                 // Initialize a dictionary to store task counts for each user
-                var userTaskCounts = new Dictionary<User?, int>();
+                var userTaskCounts = new Dictionary<User, int>();
+
+                var placeholderUser = new User { Id = "placeholder" };
 
                 // Loop through each task to count tasks for each user
                 foreach (var task in tasks)
@@ -228,14 +233,14 @@ namespace Taskify.BLL.Services
                     }
                     else
                     {
-                        // Increment the count for null user
-                        if (userTaskCounts.ContainsKey(null))
+                        
+                        if (userTaskCounts.ContainsKey(placeholderUser))
                         {
-                            userTaskCounts[null]++;
+                            userTaskCounts[placeholderUser]++;
                         }
                         else
                         {
-                            userTaskCounts[null] = 1;
+                            userTaskCounts[placeholderUser] = 1;
                         }
                     }
                 }
@@ -248,7 +253,7 @@ namespace Taskify.BLL.Services
                 {
                     var userTaskCountStat = new UserTaskCountStatistics
                     {
-                        User = kvp.Key,
+                        User = kvp.Key.Id != placeholderUser.Id ? kvp.Key : null,
                         Count = kvp.Value
                     };
                     userTaskCountStatistics.Add(userTaskCountStat);
@@ -262,6 +267,7 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<List<UserTaskCountStatistics>>("An error occurred while retrieving task counts for each user in the project.");
             }
         }
+
 
         public async Task<Result<List<ProjectRoleTaskCountStatistics>>> GetTaskCountByRolesAsync(string projectId)
         {
@@ -285,12 +291,19 @@ namespace Taskify.BLL.Services
                 var projectRoles = projectRolesResult.Data;
 
                 // Initialize a dictionary to store task counts for each role
-                var roleTaskCounts = new Dictionary<ProjectRole?, int>();
+                var roleTaskCounts = new Dictionary<ProjectRole, int>();
+
+                var placeholderRole = new ProjectRole { Id = "placeholder" };
 
                 // Loop through each project member to count tasks for each role
                 foreach (var member in projectMembers)
                 {
                     var role = member.ProjectRole;
+                    if (role == null)
+                    {
+                        role = placeholderRole;
+                    }
+
                     if (!roleTaskCounts.ContainsKey(role))
                     {
                         roleTaskCounts[role] = 0;
@@ -317,7 +330,16 @@ namespace Taskify.BLL.Services
                 // Calculate tasks not assigned to any roles
                 var tasksAssignedToRoles = roleTaskCounts.Values.Sum();
                 var tasksNotAssignedToRoles = totalTaskCount - tasksAssignedToRoles;
-                roleTaskCounts[null] = tasksNotAssignedToRoles;
+
+                if (roleTaskCounts.ContainsKey(placeholderRole))
+                {
+                    roleTaskCounts[placeholderRole] += tasksNotAssignedToRoles;
+                }
+                else
+                {
+                    roleTaskCounts[placeholderRole] = tasksNotAssignedToRoles;
+                }
+                
 
                 // Create a list to store role task count statistics
                 var roleTaskCountStatistics = new List<ProjectRoleTaskCountStatistics>();
@@ -327,7 +349,7 @@ namespace Taskify.BLL.Services
                 {
                     var roleTaskCountStat = new ProjectRoleTaskCountStatistics
                     {
-                        ProjectRole = kvp.Key,
+                        ProjectRole = kvp.Key.Id != placeholderRole.Id ? kvp.Key : null,
                         Count = kvp.Value
                     };
                     roleTaskCountStatistics.Add(roleTaskCountStat);
@@ -341,5 +363,6 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<List<ProjectRoleTaskCountStatistics>>("An error occurred while retrieving task counts for each role in the project.");
             }
         }
+
     }
 }
