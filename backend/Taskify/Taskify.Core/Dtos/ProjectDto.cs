@@ -12,6 +12,7 @@ namespace Taskify.Core.Dtos
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; }
         public UserDto User { get; set; }
+        public int NormalWorkingHoursPerDay { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<SectionDto>? Sections { get; set; }
         public List<ProjectMemberDto>? ProjectMembers { get; set; }

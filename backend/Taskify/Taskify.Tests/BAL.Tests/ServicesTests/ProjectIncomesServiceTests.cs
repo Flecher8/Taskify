@@ -115,7 +115,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             // Assert
             Assert.True(result.IsSuccess);
             Assert.NotNull(result.Data);
-            Assert.Equal(projectIncome, result.Data);
+            Assert.Equal(projectIncome, result.Data.FirstOrDefault());
         }
 
         [Fact]

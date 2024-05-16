@@ -31,6 +31,11 @@ namespace Taskify.BLL.Validation
                 errorMessages.Add("Project name cannot be null or empty.");
             }
 
+            if (entity.NormalWorkingHoursPerDay < 0 || entity.NormalWorkingHoursPerDay > 24)
+            {
+                errorMessages.Add("Project normal working hours per day can not be smaller than 0 hours or bigger than 24 hours.");
+            }
+
             return (errorMessages.Count == 0, errorMessages);
         }
     }

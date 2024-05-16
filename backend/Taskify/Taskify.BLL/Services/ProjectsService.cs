@@ -24,6 +24,7 @@ namespace Taskify.BLL.Services
         private readonly IProjectRoleRepository _projectRoleRepository;
         private readonly IValidator<Project> _validator;
         private readonly ILogger<ProjectsService> _logger;
+        private const int defaultNormalWorkingHoursPerDay = 8;
 
         public ProjectsService(IProjectRepository projectRepository,
             IUsersService userService,
@@ -70,6 +71,7 @@ namespace Taskify.BLL.Services
 
                 project.User = userResult.Data;
                 project.CreatedAt = DateTime.UtcNow;
+                project.NormalWorkingHoursPerDay = defaultNormalWorkingHoursPerDay;
 
                 var result = await _projectRepository.AddAsync(project);
 
@@ -201,6 +203,7 @@ namespace Taskify.BLL.Services
                 }
 
                 projectToUpdate.Name = project.Name;
+                projectToUpdate.NormalWorkingHoursPerDay = project.NormalWorkingHoursPerDay;
 
                 await _projectRepository.UpdateAsync(projectToUpdate);
                 return ResultFactory.Success(true);
