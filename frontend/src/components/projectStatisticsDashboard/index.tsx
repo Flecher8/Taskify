@@ -12,7 +12,7 @@ interface ProjectStatisticsDashboardProps {
 
 const ProjectStatisticsDashboard: FC<ProjectStatisticsDashboardProps> = ({ projectId }) => {
 	return (
-		<div className="w-full h-full flex flex-wrap">
+		<div className="w-full h-full flex flex-wrap flex-row overflow-y-auto">
 			<div className="flex min-w-64 h-64">
 				<StatisticsContainer>
 					<SectionTypeTaskCountForProjectStatisticsComponent projectId={projectId} />

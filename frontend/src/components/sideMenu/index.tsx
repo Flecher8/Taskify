@@ -82,6 +82,18 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, toggleSidebar }) => {
 						</Link>
 					</div>
 					<div>
+						<Link to={`/project/${projectId}/workload`} className="link">
+							<div className="flex flex-row">
+								<div className="mr-2 text-sm flex items-center">
+									<i className="fa-light fa-timer"></i>
+								</div>
+								<div>
+									<h3>Workload</h3>
+								</div>
+							</div>
+						</Link>
+					</div>
+					<div>
 						<Link to={`/project/${projectId}/settings`} className="link">
 							<div className="flex flex-row">
 								<div className="mr-2 text-sm flex items-center">

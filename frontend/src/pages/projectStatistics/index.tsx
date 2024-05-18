@@ -18,7 +18,7 @@ const ProjectStatisticsPage: FC<ProjectStatisticsPageProps> = () => {
 			<div className="flex px-4 w-full">
 				<ProjectStatisticsMenu />
 			</div>
-			<div className="flex container mx-auto px-4 w-full h-full">
+			<div className="flex container mx-auto px-4 w-full h-full overflow-y-auto">
 				<ProjectStatisticsDashboard projectId={projectId} />
 			</div>
 		</div>

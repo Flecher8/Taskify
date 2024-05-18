@@ -13,10 +13,10 @@ namespace Taskify.BLL.Services
 {
     public class TimeStatisticsService : ITimeStatisticsService
     {
-        private readonly TaskTimeTrackersService _taskTimeTrackersService;
+        private readonly ITaskTimeTrackersService _taskTimeTrackersService;
         private readonly ILogger<TimeStatisticsService> _logger;
 
-        public TimeStatisticsService(TaskTimeTrackersService taskTimeTrackersService, ILogger<TimeStatisticsService> logger)
+        public TimeStatisticsService(ITaskTimeTrackersService taskTimeTrackersService, ILogger<TimeStatisticsService> logger)
         {
             _taskTimeTrackersService = taskTimeTrackersService;
             _logger = logger;

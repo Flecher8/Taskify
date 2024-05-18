@@ -375,11 +375,7 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackersByUserAndDateInProjectAsync
-            (string projectId, 
-             string userId,
-             DateTime date
-            )
+        public async Task<Result<List<TaskTimeTracker>>> GetTaskTimeTrackersByUserAndDateInProjectAsync(string projectId, string userId, DateTime date)
         {
             try
             {
@@ -390,16 +386,10 @@ namespace Taskify.BLL.Services
                 );
 
                 var tasks = new List<CustomTask>();
-                // Asynchronously retrieve custom tasks for each section
-                var sectionTasks = sections.Select(section => GetCustomTasksBySectionIdAsync(section.Id));
 
-                // Wait for all tasks to complete
-                await Task.WhenAll(sectionTasks);
-
-                // Add custom tasks from each section to the result list
-                foreach (var sectionTask in sectionTasks)
+                foreach (var section in sections)
                 {
-                    var customTaskResult = await sectionTask;
+                    var customTaskResult = await GetCustomTasksBySectionIdAsync(section.Id);
                     if (!customTaskResult.IsSuccess)
                     {
                         return ResultFactory.Failure<List<TaskTimeTracker>>(customTaskResult.Errors);
@@ -407,7 +397,6 @@ namespace Taskify.BLL.Services
                     tasks.AddRange(customTaskResult.Data);
                 }
 
-                // Get task time trackers by user ID and custom task IDs
                 var taskTimeTrackers = await _taskTimeTrackerRepository.GetFilteredItemsAsync(
                     builder => builder
                         .IncludeUserEntity()
@@ -415,14 +404,10 @@ namespace Taskify.BLL.Services
                         .WithFilter(tracker =>
                             tracker.User.Id == userId &&
                             tasks.Select(t => t.Id).Contains(tracker.CustomTask.Id) &&
-                            // StartDateTime should be less than or equal to the given date
                             tracker.StartDateTime.Date <= date.Date &&
-                            // Either EndDateTime is null or it should be greater than or equal to the given date
-                            (tracker.EndDateTime == null || date.Date <= tracker.EndDateTime.Value.Date) 
-                           
+                            (tracker.EndDateTime == null || date.Date <= tracker.EndDateTime.Value.Date)
                         )
                 );
-
 
                 return ResultFactory.Success(taskTimeTrackers);
             }

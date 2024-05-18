@@ -6,4 +6,5 @@ export interface Project {
 	user: User;
 	name: string;
 	createdAt: Date;
+	normalWorkingHoursPerDay: number;
 }
