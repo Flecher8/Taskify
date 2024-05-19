@@ -170,7 +170,7 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 									</div>
 								)
 							}
-							openDropDownButtonStyle={"rounded-full hover:bg-gray-300 w-50 h-50 p-1  transition duration-300"}
+							openDropDownButtonStyle={"rounded-full hover:bg-gray-300 w-50 h-50 p-1 transition duration-300"}
 							dropDownContentStyle={"bg-white w-[300px]"}>
 							<SelectUsersWithFilter
 								users={assignableUsers}
