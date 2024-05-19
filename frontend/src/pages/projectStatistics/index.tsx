@@ -15,10 +15,10 @@ const ProjectStatisticsPage: FC<ProjectStatisticsPageProps> = () => {
 
 	return (
 		<div className="flex flex-col w-full h-full">
-			<div className="flex px-4 w-full">
+			<div className="flex w-full">
 				<ProjectStatisticsMenu />
 			</div>
-			<div className="flex container mx-auto px-4 w-full h-full overflow-y-auto">
+			<div className="flex w-full h-full overflow-hidden">
 				<ProjectStatisticsDashboard projectId={projectId} />
 			</div>
 		</div>

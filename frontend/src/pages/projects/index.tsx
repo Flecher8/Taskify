@@ -8,6 +8,7 @@ import projectsStore from "stores/projectsStore";
 import authStore from "stores/authStore";
 import { Project } from "entities/project";
 import DropDownContext from "components/dropDownContext";
+import { Link } from "react-router-dom";
 
 interface ProjectsPageProps {}
 
@@ -82,32 +83,50 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 	}, []);
 
 	return (
-		<div className="projectsPage flex flex-col w-full m-10">
-			<div className="flex flex-row justify-normal mb-10 items-center">
-				<h1 className="projectsPage-header mr-5">Projects</h1>
-				<div className="dropdown">
-					<div
-						tabIndex={0}
-						role="button"
-						className="buttonToOpenCreateProject p-2"
-						onClick={toggleCreateFormVisibility}>
-						New
-					</div>
-					<CreateProjectForm
-						onCreate={handleCreateProject}
-						isVisible={showCreateForm}
-						closeComponent={toggleCreateFormVisibility}
-					/>
+		<div className="flex flex-col items-center w-full h-full">
+			<div className="flex flex-row md:w-3/4 lg:w-3/4 w-full h-full">
+				<div className="flex flex-col w-1/4 pr-1 gap-1 border-r border-gray-200 pt-10">
+					<Link
+						to="/projects"
+						className="flex items-center px-2 py-1 rounded-lg hover:bg-gray-300 transition duration-300 bg-indigo-100">
+						<i className="fa-regular fa-square-kanban mr-2"></i>
+						<span>Projects</span>
+					</Link>
+					<Link
+						to="/company"
+						className="flex items-center px-2 py-1 rounded-lg hover:bg-gray-300 transition duration-300">
+						<i className="fa-light fa-building mr-2"></i>
+						<span>Company</span>
+					</Link>
 				</div>
-			</div>
-			<div className="w-full">
-				<ProjectsList projects={projects} isLoading={isLoading} />
-			</div>
-			<div className="flex flex-row justify-normal mb-10 items-center">
-				<h1 className="projectsPage-header mr-5">Projects membership</h1>
-			</div>
-			<div className="w-full">
-				<ProjectsList projects={projectsMembership} isLoading={isLoading} />
+				<div className="flex flex-col w-3/4 p-4 overflow-y-auto">
+					<div className="flex flex-row items-center mb-10">
+						<h1 className="text-2xl font-bold mr-5">Projects</h1>
+						<div className="relative">
+							<button className="p-2 bg-indigo-500 text-white rounded-lg" onClick={toggleCreateFormVisibility}>
+								New
+							</button>
+							{showCreateForm && (
+								<div className="absolute mt-2">
+									<CreateProjectForm
+										onCreate={handleCreateProject}
+										isVisible={showCreateForm}
+										closeComponent={toggleCreateFormVisibility}
+									/>
+								</div>
+							)}
+						</div>
+					</div>
+					<div className="w-full">
+						<ProjectsList projects={projects} isLoading={isLoading} />
+					</div>
+					<div className="flex flex-row items-center mb-10">
+						<h1 className="text-2xl font-bold mr-5">Projects Membership</h1>
+					</div>
+					<div className="w-full">
+						<ProjectsList projects={projectsMembership} isLoading={isLoading} />
+					</div>
+				</div>
 			</div>
 		</div>
 	);

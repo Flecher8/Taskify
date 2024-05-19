@@ -17,6 +17,7 @@ import ProjectRolesPage from "pages/projectRoles";
 import ProjectMembersPage from "pages/projectMembers";
 import ProjectStatisticsPage from "pages/projectStatistics";
 import ProjectWorkloadPage from "pages/projectWorkload";
+import SubscriptionPage from "pages/subscription";
 
 const Router = () => {
 	return (
@@ -52,6 +53,9 @@ const Router = () => {
 
 				<Route path="/profile" element={<MainLayout showHeader={true} showMenu={false} />}>
 					<Route index element={<ProfilePage />} />
+				</Route>
+				<Route path="/subscription" element={<MainLayout showHeader={true} showMenu={false} />}>
+					<Route index element={<SubscriptionPage />} />
 				</Route>
 
 				<Route path="*" element={<NotFound />} />

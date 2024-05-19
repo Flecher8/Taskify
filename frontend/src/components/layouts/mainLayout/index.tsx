@@ -28,9 +28,9 @@ const MainLayout: FC<MainLayoutProps> = observer(({ showHeader = true, showMenu 
 		<React.Fragment>
 			<div className="flex flex-col h-full">
 				{showHeader && <MainHeader />}
-				<div className="flex h-full">
+				<div className="flex h-full overflow-hidden">
 					{showMenu && <SideMenu isOpen={isOpen} toggleSidebar={toggleSidebar} />}
-					<main className="w-3/4 flex flex-grow">
+					<main className={`flex-grow ${showMenu ? "w-3/4" : "w-full"} h-full`}>
 						<Outlet />
 					</main>
 				</div>
