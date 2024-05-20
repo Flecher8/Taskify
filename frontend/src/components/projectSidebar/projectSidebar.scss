@@ -1,0 +1,42 @@
+.sidebar {
+	top: 4rem; // Adjust this according to your header's height
+	left: 0;
+	height: calc(100vh - 4rem); // Full height minus the header height
+	transition: transform 0.3s ease-in-out;
+
+	&.open {
+		transform: translateX(0); // Sidebar is fully visible
+	}
+
+	&.closed {
+		transform: translateX(-100%); // Sidebar is completely hidden
+	}
+}
+
+.link {
+	position: relative;
+	text-decoration: none;
+	color: inherit;
+
+	h3 {
+		position: relative; /* Ensure pseudo-element is positioned relative to the text */
+		display: inline-block; /* Allow for proper width calculation */
+
+		&:after {
+			content: "";
+			position: absolute;
+			left: 0;
+			bottom: -2px; /* Position the underline below the text */
+			width: 0; /* Initially set the width to 0 */
+			height: 2px;
+			background-color: white;
+			transition: width 0.5s ease-in-out; /* Smooth transition */
+		}
+	}
+
+	&:hover {
+		h3::after {
+			width: 100%; /* Expand the width to create the underline effect */
+		}
+	}
+}

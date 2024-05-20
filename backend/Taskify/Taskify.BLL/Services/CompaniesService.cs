@@ -148,21 +148,21 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<List<Company>>> GetCompaniesByUserIdAsync(string userId)
+        public async Task<Result<Company>> GetCompaniesByUserIdAsync(string userId)
         {
             try
             {
-                var result = await _companyRepository.GetFilteredItemsAsync(
+                var result = (await _companyRepository.GetFilteredItemsAsync(
                     builder => builder
                         .IncludeUserEntity()
                         .WithFilter(c => c.User.Id == userId)
-                );
+                )).FirstOrDefault();
                 return ResultFactory.Success(result);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<List<Company>>("Can not get companies by user id.");
+                return ResultFactory.Failure<Company>("Can not get company by user id.");
             }
         }
     }

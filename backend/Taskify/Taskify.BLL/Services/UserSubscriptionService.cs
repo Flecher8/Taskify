@@ -61,6 +61,7 @@ namespace Taskify.BLL.Services
             subscription.ProjectsLimit = 10;
             subscription.ProjectTasksLimit = 100;
             subscription.ProjectSectionsLimit = 100;
+            subscription.CanCreateCompany = false;
             return subscription;
         }
 

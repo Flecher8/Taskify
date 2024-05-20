@@ -18,6 +18,11 @@ import ProjectMembersPage from "pages/projectMembers";
 import ProjectStatisticsPage from "pages/projectStatistics";
 import ProjectWorkloadPage from "pages/projectWorkload";
 import SubscriptionPage from "pages/subscription";
+import CompanyLayout from "components/layouts/companyLayout";
+import CompanyPage from "pages/company";
+import CreateCompanyPage from "pages/createCompany";
+import CompanyRolesPage from "pages/companyRoles";
+import CompanyMembersPage from "pages/companyMembers";
 
 const Router = () => {
 	return (
@@ -49,6 +54,16 @@ const Router = () => {
 					<Route path="members" element={<ProjectMembersPage />} />
 					<Route path="statistics" element={<ProjectStatisticsPage />} />
 					<Route path="workload" element={<ProjectWorkloadPage />} />
+				</Route>
+
+				<Route path="/controlCompany" element={<MainLayout showHeader={true} showMenu={false} />}>
+					<Route index element={<CreateCompanyPage />} />
+				</Route>
+
+				<Route path="/company/:companyId" element={<CompanyLayout showHeader={true} showMenu={true} />}>
+					<Route index element={<CompanyPage />} />
+					<Route path="roles" element={<CompanyRolesPage />} />
+					<Route path="members" element={<CompanyMembersPage />} />
 				</Route>
 
 				<Route path="/profile" element={<MainLayout showHeader={true} showMenu={false} />}>

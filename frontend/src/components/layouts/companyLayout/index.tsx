@@ -1,22 +1,22 @@
 import React, { FC, MouseEventHandler, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import MainHeader from "components/headers/mainHeader";
-import ProjectSidebar from "components/projectSidebar";
 import { observer } from "mobx-react-lite";
 import AuthStore from "../../../stores/authStore";
+import CompanySidebar from "components/companySidebar";
 
-interface MainLayoutProps {
+interface CompanyLayoutProps {
 	showHeader?: boolean;
 	showMenu?: boolean;
 }
 
-const MainLayout: FC<MainLayoutProps> = observer(({ showHeader = true, showMenu = true }) => {
+const CompanyLayout: FC<CompanyLayoutProps> = observer(({ showHeader = true, showMenu = true }) => {
 	const [isOpen, setIsOpen] = useState(true);
 
 	const toggleSidebar = () => {
 		setIsOpen(!isOpen);
 	};
-
+	// TODO Add check for subscription, add for company
 	useEffect(() => {
 		console.log(AuthStore.isAuth);
 		if (!AuthStore.isAuth) {
@@ -29,7 +29,7 @@ const MainLayout: FC<MainLayoutProps> = observer(({ showHeader = true, showMenu 
 			<div className="flex flex-col h-full">
 				{showHeader && <MainHeader />}
 				<div className="flex h-full overflow-hidden">
-					{showMenu && <ProjectSidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />}
+					{showMenu && <CompanySidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />}
 					<main className={`flex-grow ${showMenu ? "w-3/4" : "w-full"} h-full`}>
 						<Outlet />
 					</main>
@@ -39,4 +39,4 @@ const MainLayout: FC<MainLayoutProps> = observer(({ showHeader = true, showMenu 
 	);
 });
 
-export default MainLayout;
+export default CompanyLayout;

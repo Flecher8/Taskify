@@ -93,7 +93,7 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 						<span>Projects</span>
 					</Link>
 					<Link
-						to="/company"
+						to="/controlCompany"
 						className="flex items-center px-2 py-1 rounded-lg hover:bg-gray-300 transition duration-300">
 						<i className="fa-light fa-building mr-2"></i>
 						<span>Company</span>
@@ -120,12 +120,18 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 					<div className="w-full">
 						<ProjectsList projects={projects} isLoading={isLoading} />
 					</div>
-					<div className="flex flex-row items-center mb-10">
-						<h1 className="text-2xl font-bold mr-5">Projects Membership</h1>
-					</div>
-					<div className="w-full">
-						<ProjectsList projects={projectsMembership} isLoading={isLoading} />
-					</div>
+					{projectsMembership.length === 0 ? (
+						<div></div>
+					) : (
+						<>
+							<div className="flex flex-row items-center mb-10">
+								<h1 className="text-2xl font-bold mr-5">Projects Membership</h1>
+							</div>
+							<div className="w-full">
+								<ProjectsList projects={projectsMembership} isLoading={isLoading} />
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

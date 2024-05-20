@@ -1,7 +1,7 @@
 import React, { FC, MouseEventHandler, useState } from "react";
 import { Outlet } from "react-router-dom";
 import MainHeader from "components/headers/mainHeader";
-import SideMenu from "components/sideMenu";
+import ProjectSidebar from "components/projectSidebar";
 import { SIDEBAR_WIDTH } from "./constants";
 
 interface LayoutProps {
