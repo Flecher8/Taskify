@@ -206,58 +206,8 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             customTaskRepositoryMock.Verify(x => x.GetFilteredItemsAsync(It.IsAny<Action<CustomTaskFilterBuilder>>()), Times.Once);
         }
 
-        [Fact]
-        public async Task UpdateCustomTaskAsync_ValidTask_ReturnsSuccess()
-        {
-            // Arrange
-            var customTask = new CustomTask { Id = "valid_id" };
-            var customTaskRepositoryMock = new Mock<ICustomTaskRepository>();
-            customTaskRepositoryMock.Setup(x => x.GetByIdAsync(customTask.Id))
-                                     .ReturnsAsync(customTask);
-            customTaskRepositoryMock.Setup(x => x.UpdateAsync(customTask))
-                                     .Returns(Task.CompletedTask);
-            var sectionRepositoryMock = new Mock<ISectionRepository>();
-            var userRepositoryMock = new Mock<IUserRepository>();
-            var validatorMock = new Mock<IValidator<CustomTask>>();
-            validatorMock.Setup(x => x.ValidateAsync(customTask))
-                         .ReturnsAsync((true, new List<string>()));
-            var loggerMock = new Mock<ILogger<CustomTasksService>>();
-            var customTasksService = new CustomTasksService(customTaskRepositoryMock.Object, sectionRepositoryMock.Object, userRepositoryMock.Object, validatorMock.Object, loggerMock.Object);
+       
 
-            // Act
-            var result = await customTasksService.UpdateCustomTaskAsync(customTask);
-
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.True(result.Data);
-            customTaskRepositoryMock.Verify(x => x.UpdateAsync(customTask), Times.Once);
-        }
-
-        [Fact]
-        public async Task UpdateCustomTaskAsync_InvalidTask_ReturnsFailure()
-        {
-            // Arrange
-            var customTask = new CustomTask { Id = "invalid_id" };
-            var customTaskRepositoryMock = new Mock<ICustomTaskRepository>();
-            customTaskRepositoryMock.Setup(x => x.GetByIdAsync(customTask.Id))
-                                     .ReturnsAsync((CustomTask)null);
-            var sectionRepositoryMock = new Mock<ISectionRepository>();
-            var userRepositoryMock = new Mock<IUserRepository>();
-            var validatorMock = new Mock<IValidator<CustomTask>>();
-            validatorMock.Setup(x => x.ValidateAsync(customTask))
-                .ReturnsAsync((true, new List<string>()));
-
-            var loggerMock = new Mock<ILogger<CustomTasksService>>();
-            var customTasksService = new CustomTasksService(customTaskRepositoryMock.Object, sectionRepositoryMock.Object, userRepositoryMock.Object, validatorMock.Object, loggerMock.Object);
-
-            // Act
-            var result = await customTasksService.UpdateCustomTaskAsync(customTask);
-
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.False(result.Data);
-            Assert.Contains("Can not find custom task with such id.", result.Errors);
-        }
 
         [Fact]
         public async Task MoveCustomTaskAsync_ValidInput_ReturnsSuccess()

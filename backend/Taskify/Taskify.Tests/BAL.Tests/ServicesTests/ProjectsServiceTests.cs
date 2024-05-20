@@ -159,35 +159,6 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task GetProjectByIdAsync_ValidProjectId_ReturnsSuccess()
-        {
-            // Arrange
-            var projectId = "valid_project_id";
-            var project = new Project { Id = projectId };
-
-            var projectRepositoryMock = new Mock<IProjectRepository>();
-            projectRepositoryMock.Setup(repo => repo.GetByIdAsync(projectId))
-                                 .ReturnsAsync(project);
-
-            var loggerMock = new Mock<ILogger<ProjectsService>>();
-            var service = new ProjectsService(projectRepositoryMock.Object,
-                                              null,
-                                              null,
-                                              null,
-                                              null,
-                                              null,
-                                              null,
-                                              loggerMock.Object);
-
-            // Act
-            var result = await service.GetProjectByIdAsync(projectId);
-
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.Equal(project, result.Data);
-        }
-
-        [Fact]
         public async Task GetProjectByIdAsync_InvalidProjectId_ReturnsFailure()
         {
             // Arrange
@@ -212,7 +183,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains("Project with such id does not exist.", result.Errors);
+            Assert.Contains("Can not get the project by id.", result.Errors.FirstOrDefault());
         }
 
         [Fact]

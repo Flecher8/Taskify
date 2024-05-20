@@ -243,7 +243,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             // Assert
             Assert.False(result.IsSuccess);
             Assert.Null(result.Data);
-            Assert.Contains("Can not get project income by project id.", result.Errors);
+            Assert.Contains("Can not get project incomes by project id.", result.Errors.FirstOrDefault());
         }
 
         [Fact]

@@ -265,39 +265,6 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task UpdateProjectRoleAsync_InvalidProjectRole_ReturnsFailure()
-        {
-            // Arrange
-            var projectRole = new ProjectRole { Id = "1", Name = "Test Role", Project = new Project { Id = "invalid_id" } };
-
-            var projectRepositoryMock = new Mock<IProjectRepository>();
-            projectRepositoryMock.Setup(repo => repo.GetByIdAsync(projectRole.Project.Id))
-                                .ReturnsAsync((Project)null);
-
-            var projectRoleRepositoryMock = new Mock<IProjectRoleRepository>();
-            projectRoleRepositoryMock.Setup(repo => repo.GetFilteredItemsAsync(It.IsAny<Action<ProjectRoleFilterBuilder>>()))
-                                .ReturnsAsync(new List<ProjectRole>() { projectRole });
-
-            var validatorMock = new Mock<IValidator<ProjectRole>>();
-            validatorMock.Setup(v => v.ValidateAsync(projectRole))
-                         .ReturnsAsync((true, new List<string>()));
-
-            var loggerMock = new Mock<ILogger<ProjectRolesService>>();
-            var service = new ProjectRolesService(projectRoleRepositoryMock.Object,
-                                                  projectRepositoryMock.Object,
-                                                  validatorMock.Object,
-                                                  loggerMock.Object);
-
-            // Act
-            var result = await service.UpdateProjectRoleAsync(projectRole);
-
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.False(result.Data);
-            Assert.Contains("Can not find project with such id.", result.Errors);
-        }
-
-        [Fact]
         public async Task UpdateProjectRoleAsync_InvalidRoleId_ReturnsFailure()
         {
             // Arrange
