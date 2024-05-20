@@ -13,7 +13,7 @@ namespace Taskify.Core.DbModels
         public string Name { get; set; }
         public List<CompanyExpense> CompanyExpenses { get; set; }
         public List<CompanyMember> CompanyMembers { get; set; }
-        public List<CompanyMemberRole> CompanyMemberRoles { get; set; }
+        public List<CompanyRole> CompanyMemberRoles { get; set; }
         public List<CompanyInvitation> CompanyInvitations { get; set; }
     }
 }

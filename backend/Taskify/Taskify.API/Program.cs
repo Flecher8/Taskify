@@ -25,7 +25,7 @@ namespace Taskify.API
             builder.Services.AddScoped<ICompanyExpenseRepository, CompanyExpenseRepository>();
             builder.Services.AddScoped<ICompanyInvitationRepository, CompanyInvitationRepository>();
             builder.Services.AddScoped<ICompanyMemberRepository, CompanyMemberRepository>();
-            builder.Services.AddScoped<ICompanyMemberRoleRepository, CompanyMemberRoleRepository>();
+            builder.Services.AddScoped<ICompanyRoleRepository, CompanyRoleRepository>();
             builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
             builder.Services.AddScoped<ICustomTaskRepository, CustomTaskRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
@@ -53,7 +53,7 @@ namespace Taskify.API
             builder.Services.AddScoped<IValidator<ProjectInvitation>, ProjectInvitationValidator>();
             builder.Services.AddScoped<IValidator<Company>, CompanyValidator>();
             builder.Services.AddScoped<IValidator<CompanyExpense>, CompanyExpenseValidator>();
-            builder.Services.AddScoped<IValidator<CompanyMemberRole>, CompanyMemberRoleValidator>();
+            builder.Services.AddScoped<IValidator<CompanyRole>, CompanyRoleValidator>();
             builder.Services.AddScoped<IValidator<CompanyMember>, CompanyMemberValidator>();
             builder.Services.AddScoped<IValidator<CompanyInvitation>, CompanyInvitationValidator>();
             builder.Services.AddScoped<IValidator<TaskTimeTracker>, TaskTimeTrackerValidator>();
@@ -72,7 +72,7 @@ namespace Taskify.API
             builder.Services.AddScoped<IProjectInvitationsService, ProjectInvitationsService>();
             builder.Services.AddScoped<ICompaniesService, CompaniesService>();
             builder.Services.AddScoped<ICompanyExpensesService, CompanyExpensesService>();
-            builder.Services.AddScoped<ICompanyMemberRolesService, CompanyMemberRolesService>();
+            builder.Services.AddScoped<ICompanyRolesService, CompanyRolesService>();
             builder.Services.AddScoped<ICompanyMembersService, CompanyMembersService>();
             builder.Services.AddScoped<ICompanyInvitationsService, CompanyInvitationsService>();
             builder.Services.AddScoped<ITaskStatisticsService, TaskStatisticsService>();

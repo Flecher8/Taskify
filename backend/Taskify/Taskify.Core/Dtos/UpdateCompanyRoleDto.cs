@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Taskify.Core.Dtos
 {
-    public class CreateCompanyMemberRoleDto
+    public class UpdateCompanyRoleDto
     {
-        public string CompanyId { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
     }
 }

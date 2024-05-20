@@ -17,7 +17,7 @@ namespace Taskify.BLL.Services
         private readonly ICompanyMemberRepository _companyMemberRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICompanyRepository _companyRepository;
-        private readonly ICompanyMemberRoleRepository _companyMemberRoleRepository;
+        private readonly ICompanyRoleRepository _companyMemberRoleRepository;
         private readonly IValidator<CompanyMember> _validator;
         private readonly ILogger<CompanyMembersService> _logger;
 
@@ -25,7 +25,7 @@ namespace Taskify.BLL.Services
             ICompanyMemberRepository companyMemberRepository,
             IUserRepository userRepository,
             ICompanyRepository companyRepository,
-            ICompanyMemberRoleRepository companyMemberRoleRepository,
+            ICompanyRoleRepository companyMemberRoleRepository,
             IValidator<CompanyMember> validator,
             ILogger<CompanyMembersService> logger
         )
@@ -147,7 +147,7 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>("Can not find company member with such id.");
                 }
 
-                CompanyMemberRole? companyMemberRole = null;
+                CompanyRole? companyMemberRole = null;
 
                 if (companyMember.Role != null && !string.IsNullOrEmpty(companyMember.Role.Id))
                 {

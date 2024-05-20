@@ -11,7 +11,7 @@ namespace Taskify.Core.DbModels
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public User User { get; set; }
         public Company Company { get; set; }
-        public CompanyMemberRole? Role { get; set; }
+        public CompanyRole? Role { get; set; }
         public double Salary { get; set; }
     }
 }

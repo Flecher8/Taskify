@@ -12,7 +12,7 @@ namespace Taskify.Core.Dtos
         public string Id { get; set; } = string.Empty;
         public UserDto User { get; set; }
         public CompanyDto Company { get; set; }
-        public CompanyMemberRoleDto? Role { get; set; }
+        public CompanyRoleDto? Role { get; set; }
         public double Salary { get; set; }
     }
 }

@@ -8,9 +8,9 @@ using Taskify.Core.Enums;
 
 namespace Taskify.BLL.Validation
 {
-    public class CompanyMemberRoleValidator : BaseValidator<CompanyMemberRole>
+    public class CompanyRoleValidator : BaseValidator<CompanyRole>
     {
-        public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(CompanyMemberRole entity)
+        public override async Task<(bool IsValid, List<string> ErrorMessages)> ValidateAsync(CompanyRole entity)
         {
             var baseResult = await base.ValidateAsync(entity);
 

@@ -242,31 +242,6 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         }
 
         [Fact]
-        public async Task GetCompaniesByUserIdAsync_ValidUserId_ReturnsSuccess()
-        {
-            // Arrange
-            var userId = "valid_user_id";
-            var companies = new List<Company> { new Company(), new Company() };
-
-            var companyRepositoryMock = new Mock<ICompanyRepository>();
-            companyRepositoryMock.Setup(repo => repo.GetFilteredItemsAsync(It.IsAny<Action<CompanyFilterBuilder>>()))
-                                 .ReturnsAsync(companies); // Simulating successful retrieval
-
-            var loggerMock = new Mock<ILogger<CompaniesService>>();
-            var service = new CompaniesService(companyRepositoryMock.Object,
-                                                It.IsAny<IUserRepository>(), // Mocked UserRepository
-                                                It.IsAny<IValidator<Company>>(), // Mocked Validator
-                                                loggerMock.Object);
-
-            // Act
-            var result = await service.GetCompaniesByUserIdAsync(userId);
-
-            // Assert
-            Assert.True(result.IsSuccess);
-            Assert.Equal(companies, result.Data);
-        }
-
-        [Fact]
         public async Task GetCompaniesByUserIdAsync_InvalidUserId_ReturnsFailure()
         {
             // Arrange

@@ -36,7 +36,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
                                 .ReturnsAsync(new List<Company>() { new Company { Id = "1" } });
 
             var companyMemberRepositoryMock = new Mock<ICompanyMemberRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             validatorMock.Setup(x => x.ValidateAsync(companyMember))
                          .ReturnsAsync((true, new List<string>()));
@@ -73,7 +73,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -106,7 +106,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -153,7 +153,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             validatorMock.Setup(x => x.ValidateAsync(companyMember))
                          .ReturnsAsync((true, new List<string>()));
@@ -193,7 +193,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             validatorMock.Setup(x => x.ValidateAsync(companyMember))
                         .ReturnsAsync((true, new List<string>()));
@@ -235,7 +235,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -273,7 +273,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -310,7 +310,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -343,7 +343,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -378,7 +378,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -411,7 +411,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -451,7 +451,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -485,7 +485,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 
@@ -519,7 +519,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
 
             var userRepositoryMock = new Mock<IUserRepository>();
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             var validatorMock = new Mock<IValidator<CompanyMember>>();
             var loggerMock = new Mock<ILogger<CompanyMembersService>>();
 

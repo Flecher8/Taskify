@@ -81,11 +81,11 @@ namespace Taskify.API.Mapping
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => new Company { Id = src.CompanyId }));
             CreateMap<UpdateCompanyExpenseDto, CompanyExpense>();
             // Company Member Roles
-            CreateMap<CompanyMemberRole, CompanyMemberRoleDto>();
-            CreateMap<CompanyMemberRoleDto, CompanyMemberRole>();
-            CreateMap<CreateCompanyMemberRoleDto, CompanyMemberRole>()
+            CreateMap<CompanyRole, CompanyRoleDto>();
+            CreateMap<CompanyRoleDto, CompanyRole>();
+            CreateMap<CreateCompanyRoleDto, CompanyRole>()
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => new Company { Id = src.CompanyId }));
-            CreateMap<UpdateCompanyMemberRoleDto, CompanyMemberRole>();
+            CreateMap<UpdateCompanyRoleDto, CompanyRole>();
             // Company Members
             CreateMap<CompanyMember, CompanyMemberDto>();
             CreateMap<CompanyMemberDto, CompanyMember>();
@@ -93,7 +93,7 @@ namespace Taskify.API.Mapping
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => new Company { Id = src.CompanyId }))
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new User { Id = src.UserId }));
             CreateMap<UpdateCompanyMemberDto, CompanyMember>()
-                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => new CompanyMemberRole { Id = src.RoleId }));
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => new CompanyRole { Id = src.RoleId }));
             // Company Invitations
             CreateMap<CompanyInvitation, CompanyInvitationDto>();
             CreateMap<CompanyInvitationDto, CompanyInvitation>();

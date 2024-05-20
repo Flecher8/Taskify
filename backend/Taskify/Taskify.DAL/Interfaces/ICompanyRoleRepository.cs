@@ -8,7 +8,7 @@ using Taskify.DAL.Helpers;
 
 namespace Taskify.DAL.Interfaces
 {
-    public interface ICompanyMemberRoleRepository : IFilterableRepository<CompanyMemberRole, CompanyMemberRoleFilterBuilder>
+    public interface ICompanyRoleRepository : IFilterableRepository<CompanyRole, CompanyRoleFilterBuilder>
     {
     }
 }

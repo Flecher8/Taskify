@@ -20,7 +20,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         public async Task CreateCompanyMemberRoleAsync_ValidCompanyMemberRole_ReturnsSuccess()
         {
             // Arrange
-            var companyMemberRole = new CompanyMemberRole
+            var companyMemberRole = new CompanyRole
             {
                 Id = "valid_role_id",
                 Name = "Test Role",
@@ -31,17 +31,17 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             companyRepositoryMock.Setup(x => x.GetByIdAsync(companyMemberRole.Company.Id))
                                  .ReturnsAsync(new Company { Id = "valid_company_id" });
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             companyMemberRoleRepositoryMock.Setup(x => x.AddAsync(companyMemberRole))
                                           .ReturnsAsync(companyMemberRole);
 
-            var validatorMock = new Mock<IValidator<CompanyMemberRole>>();
+            var validatorMock = new Mock<IValidator<CompanyRole>>();
             validatorMock.Setup(x => x.ValidateAsync(companyMemberRole))
                          .ReturnsAsync((true, new List<string>()));
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 It.IsAny<ICompanyMemberRepository>(), // Mocked CompanyMemberRepository
                 companyRepositoryMock.Object,
@@ -50,7 +50,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             );
 
             // Act
-            var result = await companyMemberRolesService.CreateCompanyMemberRoleAsync(companyMemberRole);
+            var result = await companyMemberRolesService.CreateCompanyRoleAsync(companyMemberRole);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -62,17 +62,17 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         public async Task CreateCompanyAsync_InvalidCompany_ReturnsFailure()
         {
             // Arrange
-            var invalidCompany = new CompanyMemberRole(); // No properties set
+            var invalidCompany = new CompanyRole(); // No properties set
 
             var companyRepositoryMock = new Mock<ICompanyRepository>();
-            var validatorMock = new Mock<IValidator<CompanyMemberRole>>();
+            var validatorMock = new Mock<IValidator<CompanyRole>>();
             validatorMock.Setup(x => x.ValidateAsync(invalidCompany))
                          .ReturnsAsync((false, new List<string> { "Validation error" }));
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
-                It.IsAny<ICompanyMemberRoleRepository>(), 
+            var companyMemberRolesService = new CompanyRolesService(
+                It.IsAny<ICompanyRoleRepository>(), 
                 It.IsAny<ICompanyMemberRepository>(), 
                 companyRepositoryMock.Object,
                 validatorMock.Object,
@@ -80,7 +80,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             );
 
             // Act
-            var result = await companyMemberRolesService.CreateCompanyMemberRoleAsync(invalidCompany);
+            var result = await companyMemberRolesService.CreateCompanyRoleAsync(invalidCompany);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -93,24 +93,24 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         public async Task CreateCompanyMemberRoleAsync_CompanyRepositoryThrowsException_ReturnsFailure()
         {
             // Arrange
-            var validCompanyMemberRole = new CompanyMemberRole {Company = new Company { Id = "1" }, Name = "Test Role" };
+            var validCompanyMemberRole = new CompanyRole {Company = new Company { Id = "1" }, Name = "Test Role" };
 
             var companyRepositoryMock = new Mock<ICompanyRepository>();
             companyRepositoryMock.Setup(x => x.GetByIdAsync(validCompanyMemberRole.Company.Id))
                                 .ReturnsAsync(new Company { Id = "1" });
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
 
             companyMemberRoleRepositoryMock.Setup(x => x.AddAsync(validCompanyMemberRole))
                                            .ThrowsAsync(new Exception("Simulated error"));
 
-            var validatorMock = new Mock<IValidator<CompanyMemberRole>>();
+            var validatorMock = new Mock<IValidator<CompanyRole>>();
             validatorMock.Setup(x => x.ValidateAsync(validCompanyMemberRole))
                          .ReturnsAsync((true, new List<string>()));
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 It.IsAny<ICompanyMemberRepository>(),
                 companyRepositoryMock.Object,
@@ -119,7 +119,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             );
 
             // Act
-            var result = await companyMemberRolesService.CreateCompanyMemberRoleAsync(validCompanyMemberRole);
+            var result = await companyMemberRolesService.CreateCompanyRoleAsync(validCompanyMemberRole);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -133,24 +133,24 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             // Arrange
             var companyMemberRoleId = "invalid_id";
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             companyMemberRoleRepositoryMock.Setup(x => x.GetByIdAsync(companyMemberRoleId))
-                                           .ReturnsAsync((CompanyMemberRole)null);
+                                           .ReturnsAsync((CompanyRole)null);
 
             var companyMemberRepositoryMock = new Mock<ICompanyMemberRepository>();
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 companyMemberRepositoryMock.Object,
                 It.IsAny<ICompanyRepository>(),
-                It.IsAny<IValidator<CompanyMemberRole>>(),
+                It.IsAny<IValidator<CompanyRole>>(),
                 loggerMock.Object
             );
 
             // Act
-            var result = await companyMemberRolesService.DeleteCompanyMemberRoleAsync(companyMemberRoleId);
+            var result = await companyMemberRolesService.DeleteCompanyRoleAsync(companyMemberRoleId);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -163,26 +163,26 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             // Arrange
             var companyMemberRoleId = "valid_id";
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             companyMemberRoleRepositoryMock.Setup(x => x.GetByIdAsync(companyMemberRoleId))
-                                           .ReturnsAsync(new CompanyMemberRole());
+                                           .ReturnsAsync(new CompanyRole());
 
             var companyMemberRepositoryMock = new Mock<ICompanyMemberRepository>();
             companyMemberRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyMemberFilterBuilder>>()))
                                        .ThrowsAsync(new Exception("Simulated error"));
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 companyMemberRepositoryMock.Object,
                 It.IsAny<ICompanyRepository>(),
-                It.IsAny<IValidator<CompanyMemberRole>>(),
+                It.IsAny<IValidator<CompanyRole>>(),
                 loggerMock.Object
             );
 
             // Act
-            var result = await companyMemberRolesService.DeleteCompanyMemberRoleAsync(companyMemberRoleId);
+            var result = await companyMemberRolesService.DeleteCompanyRoleAsync(companyMemberRoleId);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -195,22 +195,22 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             // Arrange
             var companyMemberRoleId = "invalid_id";
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             companyMemberRoleRepositoryMock.Setup(x => x.GetByIdAsync(companyMemberRoleId))
-                                           .ReturnsAsync((CompanyMemberRole)null);
+                                           .ReturnsAsync((CompanyRole)null);
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 It.IsAny<ICompanyMemberRepository>(),
                 It.IsAny<ICompanyRepository>(),
-                It.IsAny<IValidator<CompanyMemberRole>>(),
+                It.IsAny<IValidator<CompanyRole>>(),
                 loggerMock.Object
             );
 
             // Act
-            var result = await companyMemberRolesService.GetCompanyMemberRoleByIdAsync(companyMemberRoleId);
+            var result = await companyMemberRolesService.GetCompanyRoleByIdAsync(companyMemberRoleId);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -224,22 +224,22 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             // Arrange
             var companyMemberRoleId = "valid_id";
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
             companyMemberRoleRepositoryMock.Setup(x => x.GetByIdAsync(companyMemberRoleId))
                                            .ThrowsAsync(new Exception("Simulated error"));
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 It.IsAny<ICompanyMemberRepository>(),
                 It.IsAny<ICompanyRepository>(),
-                It.IsAny<IValidator<CompanyMemberRole>>(),
+                It.IsAny<IValidator<CompanyRole>>(),
                 loggerMock.Object
             );
 
             // Act
-            var result = await companyMemberRolesService.GetCompanyMemberRoleByIdAsync(companyMemberRoleId);
+            var result = await companyMemberRolesService.GetCompanyRoleByIdAsync(companyMemberRoleId);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -251,20 +251,20 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         public async Task UpdateCompanyMemberRoleAsync_CompanyMemberRoleNotFound_ReturnsFailure()
         {
             // Arrange
-            var companyMemberRole = new CompanyMemberRole { Id = "invalid_id" };
+            var companyMemberRole = new CompanyRole { Id = "invalid_id" };
 
             // Mocking the validation to return failure
-            var validatorMock = new Mock<IValidator<CompanyMemberRole>>();
+            var validatorMock = new Mock<IValidator<CompanyRole>>();
             validatorMock.Setup(x => x.ValidateAsync(companyMemberRole))
                          .ReturnsAsync((false, new List<string> { "Validation error" }));
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
-            companyMemberRoleRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyMemberRoleFilterBuilder>>()))
-                                           .ReturnsAsync(new List<CompanyMemberRole>());
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
+            companyMemberRoleRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyRoleFilterBuilder>>()))
+                                           .ReturnsAsync(new List<CompanyRole>());
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 It.IsAny<ICompanyMemberRepository>(),
                 It.IsAny<ICompanyRepository>(),
@@ -273,7 +273,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             );
 
             // Act
-            var result = await companyMemberRolesService.UpdateCompanyMemberRoleAsync(companyMemberRole);
+            var result = await companyMemberRolesService.UpdateCompanyRoleAsync(companyMemberRole);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -284,24 +284,24 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         public async Task UpdateCompanyMemberRoleAsync_ExceptionThrown_ReturnsFailure()
         {
             // Arrange
-            var companyMemberRole = new CompanyMemberRole { Id = "valid_id", Name = "New Name" };
+            var companyMemberRole = new CompanyRole { Id = "valid_id", Name = "New Name" };
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
-            companyMemberRoleRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyMemberRoleFilterBuilder>>()))
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
+            companyMemberRoleRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyRoleFilterBuilder>>()))
                                            .ThrowsAsync(new Exception("Simulated error"));
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 It.IsAny<ICompanyMemberRepository>(),
                 It.IsAny<ICompanyRepository>(),
-                It.IsAny<IValidator<CompanyMemberRole>>(),
+                It.IsAny<IValidator<CompanyRole>>(),
                 loggerMock.Object
             );
 
             // Act
-            var result = await companyMemberRolesService.UpdateCompanyMemberRoleAsync(companyMemberRole);
+            var result = await companyMemberRolesService.UpdateCompanyRoleAsync(companyMemberRole);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -313,24 +313,24 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
         {
             // Arrange
             var companyId = "valid_company_id";
-            var companyMemberRoles = new List<CompanyMemberRole> { new CompanyMemberRole(), new CompanyMemberRole() };
+            var companyMemberRoles = new List<CompanyRole> { new CompanyRole(), new CompanyRole() };
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
-            companyMemberRoleRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyMemberRoleFilterBuilder>>()))
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
+            companyMemberRoleRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyRoleFilterBuilder>>()))
                                            .ReturnsAsync(companyMemberRoles);
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 It.IsAny<ICompanyMemberRepository>(),
                 It.IsAny<ICompanyRepository>(),
-                It.IsAny<IValidator<CompanyMemberRole>>(),
+                It.IsAny<IValidator<CompanyRole>>(),
                 loggerMock.Object
             );
 
             // Act
-            var result = await companyMemberRolesService.GetCompanyMemberRolesByCompanyIdAsync(companyId);
+            var result = await companyMemberRolesService.GetCompanyRolesByCompanyIdAsync(companyId);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -343,22 +343,22 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
             // Arrange
             var companyId = "valid_company_id";
 
-            var companyMemberRoleRepositoryMock = new Mock<ICompanyMemberRoleRepository>();
-            companyMemberRoleRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyMemberRoleFilterBuilder>>()))
+            var companyMemberRoleRepositoryMock = new Mock<ICompanyRoleRepository>();
+            companyMemberRoleRepositoryMock.Setup(x => x.GetFilteredItemsAsync(It.IsAny<Action<CompanyRoleFilterBuilder>>()))
                                            .ThrowsAsync(new Exception("Simulated error"));
 
-            var loggerMock = new Mock<ILogger<CompanyMemberRolesService>>();
+            var loggerMock = new Mock<ILogger<CompanyRolesService>>();
 
-            var companyMemberRolesService = new CompanyMemberRolesService(
+            var companyMemberRolesService = new CompanyRolesService(
                 companyMemberRoleRepositoryMock.Object,
                 It.IsAny<ICompanyMemberRepository>(),
                 It.IsAny<ICompanyRepository>(),
-                It.IsAny<IValidator<CompanyMemberRole>>(),
+                It.IsAny<IValidator<CompanyRole>>(),
                 loggerMock.Object
             );
 
             // Act
-            var result = await companyMemberRolesService.GetCompanyMemberRolesByCompanyIdAsync(companyId);
+            var result = await companyMemberRolesService.GetCompanyRolesByCompanyIdAsync(companyId);
 
             // Assert
             Assert.False(result.IsSuccess);

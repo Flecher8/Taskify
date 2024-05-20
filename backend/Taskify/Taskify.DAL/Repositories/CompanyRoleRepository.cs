@@ -11,16 +11,16 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class CompanyMemberRoleRepository : BaseFilterableRepository<CompanyMemberRole, CompanyMemberRoleFilterBuilder>, ICompanyMemberRoleRepository
+    public class CompanyRoleRepository : BaseFilterableRepository<CompanyRole, CompanyRoleFilterBuilder>, ICompanyRoleRepository
     {
-        public CompanyMemberRoleRepository(DataContext dbContext) : base(dbContext) { }
+        public CompanyRoleRepository(DataContext dbContext) : base(dbContext) { }
 
-        public override async Task<List<CompanyMemberRole>> GetFilteredItemsAsync(Action<CompanyMemberRoleFilterBuilder> buildFilter)
+        public override async Task<List<CompanyRole>> GetFilteredItemsAsync(Action<CompanyRoleFilterBuilder> buildFilter)
         {
             return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        protected override IQueryable<CompanyMemberRole> IncludeEntities(IQueryable<CompanyMemberRole> query)
+        protected override IQueryable<CompanyRole> IncludeEntities(IQueryable<CompanyRole> query)
         {
             if (_filterBuilder.IncludeCompany)
             {

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Taskify.Core.DbModels;
 
 namespace Taskify.Core.Dtos
 {
-    public class CompanyMemberRoleDto
+    public class CreateCompanyRoleDto
     {
-        public string Id { get; set; } = string.Empty;
-        public CompanyDto Company { get; set; }
+        public string CompanyId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
     }
 }

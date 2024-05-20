@@ -13,70 +13,70 @@ using Taskify.DAL.Repositories;
 
 namespace Taskify.BLL.Services
 {
-    public class CompanyMemberRolesService : ICompanyMemberRolesService
+    public class CompanyRolesService : ICompanyRolesService
     {
-        private readonly ICompanyMemberRoleRepository _companyMemberRoleRepository;
+        private readonly ICompanyRoleRepository _companyRoleRepository;
         private readonly ICompanyMemberRepository _companyMemberRepository;
         private readonly ICompanyRepository _companyRepository;
-        private readonly IValidator<CompanyMemberRole> _validator;
-        private readonly ILogger<CompanyMemberRolesService> _logger;
+        private readonly IValidator<CompanyRole> _validator;
+        private readonly ILogger<CompanyRolesService> _logger;
 
-        public CompanyMemberRolesService(ICompanyMemberRoleRepository companyMemberRoleRepository,
+        public CompanyRolesService(ICompanyRoleRepository companyRoleRepository,
             ICompanyMemberRepository companyMemberRepository,
             ICompanyRepository companyRepository,
-            IValidator<CompanyMemberRole> validator,
-            ILogger<CompanyMemberRolesService> logger)
+            IValidator<CompanyRole> validator,
+            ILogger<CompanyRolesService> logger)
         {
-            _companyMemberRoleRepository = companyMemberRoleRepository;
+            _companyRoleRepository = companyRoleRepository;
             _companyMemberRepository = companyMemberRepository;
             _companyRepository = companyRepository;
             _validator = validator;
             _logger = logger;
         }
 
-        public async Task<Result<CompanyMemberRole>> CreateCompanyMemberRoleAsync(CompanyMemberRole companyMemberRole)
+        public async Task<Result<CompanyRole>> CreateCompanyRoleAsync(CompanyRole companyRole)
         {
             try
             {
                 // Validation
-                var validation = await _validator.ValidateAsync(companyMemberRole);
+                var validation = await _validator.ValidateAsync(companyRole);
                 if (!validation.IsValid)
                 {
-                    return ResultFactory.Failure<CompanyMemberRole>(validation.ErrorMessages);
+                    return ResultFactory.Failure<CompanyRole>(validation.ErrorMessages);
                 }
 
-                if (companyMemberRole.Company == null || string.IsNullOrEmpty(companyMemberRole.Company.Id))
+                if (companyRole.Company == null || string.IsNullOrEmpty(companyRole.Company.Id))
                 {
-                    return ResultFactory.Failure<CompanyMemberRole>("Invalid company specified.");
+                    return ResultFactory.Failure<CompanyRole>("Invalid company specified.");
                 }
 
-                var company = await _companyRepository.GetByIdAsync(companyMemberRole.Company.Id);
+                var company = await _companyRepository.GetByIdAsync(companyRole.Company.Id);
 
                 if (company == null)
                 {
-                    return ResultFactory.Failure<CompanyMemberRole>("Can not find company by such id.");
+                    return ResultFactory.Failure<CompanyRole>("Can not find company by such id.");
                 }
 
-                companyMemberRole.Company = company;
+                companyRole.Company = company;
 
-                var result = await _companyMemberRoleRepository.AddAsync(companyMemberRole);
+                var result = await _companyRoleRepository.AddAsync(companyRole);
 
                 return ResultFactory.Success(result);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<CompanyMemberRole>("Can not create a new company member role.");
+                return ResultFactory.Failure<CompanyRole>("Can not create a new company member role.");
             }
         }
 
-        public async Task<Result<bool>> DeleteCompanyMemberRoleAsync(string id)
+        public async Task<Result<bool>> DeleteCompanyRoleAsync(string id)
         {
             try
             {
-                var companyMemberRole = await _companyMemberRoleRepository.GetByIdAsync(id);
+                var companyRole = await _companyRoleRepository.GetByIdAsync(id);
 
-                if (companyMemberRole == null)
+                if (companyRole == null)
                 {
                     return ResultFactory.Failure<bool>("Company member role with such id does not exist.");
                 }
@@ -96,7 +96,7 @@ namespace Taskify.BLL.Services
                 }
 
                 // Now, delete the company member role
-                await _companyMemberRoleRepository.DeleteAsync(id);
+                await _companyRoleRepository.DeleteAsync(id);
 
                 return ResultFactory.Success(true);
             }
@@ -107,15 +107,15 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<CompanyMemberRole>> GetCompanyMemberRoleByIdAsync(string id)
+        public async Task<Result<CompanyRole>> GetCompanyRoleByIdAsync(string id)
         {
             try
             {
-                var result = await _companyMemberRoleRepository.GetByIdAsync(id);
+                var result = await _companyRoleRepository.GetByIdAsync(id);
 
                 if (result == null)
                 {
-                    return ResultFactory.Failure<CompanyMemberRole>("Company member role with such id does not exist.");
+                    return ResultFactory.Failure<CompanyRole>("Company member role with such id does not exist.");
                 }
 
                 return ResultFactory.Success(result);
@@ -123,11 +123,11 @@ namespace Taskify.BLL.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<CompanyMemberRole>("Can not get the company member role by id.");
+                return ResultFactory.Failure<CompanyRole>("Can not get the company member role by id.");
             }
         }
 
-        public async Task<Result<bool>> UpdateCompanyMemberRoleAsync(CompanyMemberRole companyMemberRole)
+        public async Task<Result<bool>> UpdateCompanyRoleAsync(CompanyRole companyMemberRole)
         {
             try
             {
@@ -138,20 +138,20 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>(validation.ErrorMessages);
                 }
 
-                var companyMemberRoleToUpdate = (await _companyMemberRoleRepository.GetFilteredItemsAsync(
+                var companyRoleToUpdate = (await _companyRoleRepository.GetFilteredItemsAsync(
                         builder => builder
                             .IncludeCompanyEntity()
                             .WithFilter(cmr => cmr.Id == companyMemberRole.Id)
                     )).FirstOrDefault();
 
-                if (companyMemberRoleToUpdate == null)
+                if (companyRoleToUpdate == null)
                 {
                     return ResultFactory.Failure<bool>("Can not find company member role with such id.");
                 }
 
-                companyMemberRoleToUpdate.Name = companyMemberRole.Name;
+                companyRoleToUpdate.Name = companyMemberRole.Name;
 
-                await _companyMemberRoleRepository.UpdateAsync(companyMemberRoleToUpdate);
+                await _companyRoleRepository.UpdateAsync(companyRoleToUpdate);
 
                 return ResultFactory.Success(true);
             }
@@ -162,11 +162,11 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<List<CompanyMemberRole>>> GetCompanyMemberRolesByCompanyIdAsync(string companyId)
+        public async Task<Result<List<CompanyRole>>> GetCompanyRolesByCompanyIdAsync(string companyId)
         {
             try
             {
-                var result = await _companyMemberRoleRepository.GetFilteredItemsAsync(
+                var result = await _companyRoleRepository.GetFilteredItemsAsync(
                     builder => builder
                         .IncludeCompanyEntity()
                         .WithFilter(cmr => cmr.Company.Id == companyId)
@@ -176,7 +176,7 @@ namespace Taskify.BLL.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return ResultFactory.Failure<List<CompanyMemberRole>>("Can not get company member roles by company id.");
+                return ResultFactory.Failure<List<CompanyRole>>("Can not get company member roles by company id.");
             }
         }
     }
