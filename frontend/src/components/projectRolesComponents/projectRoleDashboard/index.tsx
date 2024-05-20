@@ -1,5 +1,5 @@
 import Modal from "components/modal";
-import ProjectRoleList from "components/projectRolesComponents/projectRoleList";
+import ProjectRoleList from "components/projectRolesComponents/projectRoleDashboard/projectRoleList";
 import { ProjectRole, ProjectRoleType } from "entities/projectRole";
 import { FC, useEffect, useState } from "react";
 import projectRolesStore from "stores/projectRolesStore";
@@ -12,7 +12,7 @@ interface ProjectRoleDashboardProps {
 const idModal = "createRole";
 
 const ProjectRoleDashboard: FC<ProjectRoleDashboardProps> = ({ projectId }) => {
-	const [projectRoles, setProjectRoles] = useState<ProjectRole[]>([]);
+	const [roles, setRoles] = useState<ProjectRole[]>([]);
 	const [filterByName, setFilterByName] = useState("");
 
 	useEffect(() => {
@@ -27,7 +27,7 @@ const ProjectRoleDashboard: FC<ProjectRoleDashboardProps> = ({ projectId }) => {
 				return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
 			});
 
-			setProjectRoles(sortedProjectRoles);
+			setRoles(sortedProjectRoles);
 		} catch (error) {
 			console.error("Error loading project roles:", error);
 		}
@@ -96,15 +96,10 @@ const ProjectRoleDashboard: FC<ProjectRoleDashboardProps> = ({ projectId }) => {
 				</Modal>
 			</div>
 			<div className="mt-5 h-full">
-				{projectRoles.length === 0 ? (
+				{roles.length === 0 ? (
 					<p className="flex text-xl italic justify-center overflow-auto">There are no roles in this project.</p>
 				) : (
-					<ProjectRoleList
-						projectRoles={projectRoles}
-						filterName={filterByName}
-						editRole={editRole}
-						deleteRole={deleteRole}
-					/>
+					<ProjectRoleList roles={roles} filterName={filterByName} editRole={editRole} deleteRole={deleteRole} />
 				)}
 			</div>
 		</div>

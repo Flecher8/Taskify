@@ -5,7 +5,7 @@ import EditProjectRoleForm from "./editProjectRoleForm";
 import DeleteProjectRoleForm from "./deleteProjectRoleForm";
 
 interface ProjectRoleListItemProps {
-	projectRole: ProjectRole;
+	role: ProjectRole;
 	editRole: (role: ProjectRole) => void;
 	deleteRole: (id: string) => void;
 }
@@ -13,40 +13,40 @@ interface ProjectRoleListItemProps {
 const idEditRoleModal = "editProjectRole";
 const idDeleteRoleModal = "deleteProjectRole";
 
-const ProjectRoleListItem: FC<ProjectRoleListItemProps> = ({ projectRole, editRole, deleteRole }) => {
+const ProjectRoleListItem: FC<ProjectRoleListItemProps> = ({ role, editRole, deleteRole }) => {
 	const closeEditModal = () => {
-		const modal = document.getElementById(projectRole.id + idEditRoleModal) as HTMLDialogElement;
+		const modal = document.getElementById(role.id + idEditRoleModal) as HTMLDialogElement;
 		modal.close();
 	};
 
 	const closeDeleteModal = () => {
-		const modal = document.getElementById(projectRole.id + idDeleteRoleModal) as HTMLDialogElement;
+		const modal = document.getElementById(role.id + idDeleteRoleModal) as HTMLDialogElement;
 		modal.close();
 	};
 
 	return (
 		<div className="flex flex-row justify-around border-t p-3">
 			<div className="flex flex-row justify-between items-center w-[90%] mr-5">
-				<div className="">{projectRole.name}</div>
-				<div className="">{getRoleTypeName(projectRole.projectRoleType)}</div>
+				<div className="">{role.name}</div>
+				<div className="">{getRoleTypeName(role.projectRoleType)}</div>
 			</div>
 			<div className="flex flex-row justify-around">
 				<div className="flex mr-5 items-center justify-center">
 					<Modal
-						id={projectRole.id + idEditRoleModal}
+						id={role.id + idEditRoleModal}
 						openButtonText={
 							<i className="fa-light fa-pen-to-square rounded rounded-full hover:bg-gray-200 p-1 w-10"></i>
 						}
 						openButtonStyle={""}>
-						<EditProjectRoleForm role={projectRole} edit={editRole} close={closeEditModal} />
+						<EditProjectRoleForm role={role} edit={editRole} close={closeEditModal} />
 					</Modal>
 				</div>
 				<div className="flex">
 					<Modal
-						id={projectRole.id + idDeleteRoleModal}
+						id={role.id + idDeleteRoleModal}
 						openButtonText={<i className="fa-light fa-trash rounded rounded-full hover:bg-gray-200 p-1 w-10"></i>}
 						openButtonStyle={""}>
-						<DeleteProjectRoleForm role={projectRole} deleteRole={deleteRole} close={closeDeleteModal} />
+						<DeleteProjectRoleForm role={role} deleteRole={deleteRole} close={closeDeleteModal} />
 					</Modal>
 				</div>
 			</div>

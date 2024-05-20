@@ -1,7 +1,8 @@
 import { Company } from "entities/company";
 
-export interface CompanyMemberRole {
+export interface CompanyRole {
 	id: string;
 	company: Company;
 	name: string;
+	createdAt: Date;
 }

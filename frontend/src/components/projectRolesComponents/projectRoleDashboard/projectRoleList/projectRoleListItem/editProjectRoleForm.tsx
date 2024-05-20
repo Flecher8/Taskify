@@ -19,7 +19,7 @@ const EditProjectRoleForm: FC<EditProjectRoleFormProps> = ({ role, edit, close }
 		setRoleType(parseInt(event.target.value) as ProjectRoleType);
 	};
 
-	const handleEditProjectRole = () => {
+	const handleEditRole = () => {
 		const editedRole = role;
 		editedRole.name = name;
 		editedRole.projectRoleType = roleType;
@@ -58,7 +58,7 @@ const EditProjectRoleForm: FC<EditProjectRoleFormProps> = ({ role, edit, close }
 					<option value={ProjectRoleType.Guest}>Guest</option>
 				</select>
 			</div>
-			<button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleEditProjectRole}>
+			<button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleEditRole}>
 				Edit
 			</button>
 		</div>
