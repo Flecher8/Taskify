@@ -44,7 +44,7 @@ export default class CompanyService {
 			if (response.status === 204) {
 				return null;
 			}
-
+			console.log("Axios response: ", response);
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {

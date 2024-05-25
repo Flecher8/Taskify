@@ -97,7 +97,15 @@ namespace Taskify.BLL.Services
         {
             try
             {
-                var result = await _companyRepository.GetByIdAsync(id);
+                var result = (await _companyRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeUserEntity()
+                        .IncludeExpensesEntity()
+                        .IncludeInvitationsEntity()
+                        .IncludeMemberRolesEntity()
+                        .IncludeMembersEntity()
+                        .WithFilter(c => c.Id == id)
+                )).FirstOrDefault();
 
                 if (result == null)
                 {
@@ -148,15 +156,25 @@ namespace Taskify.BLL.Services
             }
         }
 
-        public async Task<Result<Company>> GetCompaniesByUserIdAsync(string userId)
+        public async Task<Result<Company>> GetCompanyByUserIdAsync(string userId)
         {
             try
             {
                 var result = (await _companyRepository.GetFilteredItemsAsync(
                     builder => builder
                         .IncludeUserEntity()
+                        .IncludeExpensesEntity()
+                        .IncludeInvitationsEntity()
+                        .IncludeMemberRolesEntity()
+                        .IncludeMembersEntity()
                         .WithFilter(c => c.User.Id == userId)
                 )).FirstOrDefault();
+
+                if (result == null)
+                {
+                    return ResultFactory.Failure<Company>("Company with such user id does not exist.");
+                }
+
                 return ResultFactory.Success(result);
             }
             catch (Exception ex)

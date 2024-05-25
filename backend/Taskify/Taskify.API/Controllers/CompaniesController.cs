@@ -109,7 +109,7 @@ namespace Taskify.API.Controllers
         {
             try
             {
-                var result = await _companiesService.GetCompaniesByUserIdAsync(userId);
+                var result = await _companiesService.GetCompanyByUserIdAsync(userId);
 
                 return result.IsSuccess
                     ? Ok(_mapper.Map<CompanyDto>(result.Data))

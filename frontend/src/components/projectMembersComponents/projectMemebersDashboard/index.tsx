@@ -103,7 +103,7 @@ const ProjectMembersDashboard: FC<ProjectMembersDashboardProps> = ({ projectId }
 					<p className="flex text-xl italic justify-center overflow-auto">There are no members in this project.</p>
 				) : (
 					<ProjectMemebersList
-						projectMembers={projectMembers}
+						members={projectMembers}
 						filterName={filterByName}
 						editMember={editMember}
 						deleteMember={deleteMember}

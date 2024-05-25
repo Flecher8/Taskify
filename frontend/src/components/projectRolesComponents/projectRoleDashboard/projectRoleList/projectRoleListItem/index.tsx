@@ -25,26 +25,22 @@ const ProjectRoleListItem: FC<ProjectRoleListItemProps> = ({ role, editRole, del
 	};
 
 	return (
-		<div className="flex flex-row justify-around border-t p-3">
-			<div className="flex flex-row justify-between items-center w-[90%] mr-5">
-				<div className="">{role.name}</div>
-				<div className="">{getRoleTypeName(role.projectRoleType)}</div>
-			</div>
-			<div className="flex flex-row justify-around">
-				<div className="flex mr-5 items-center justify-center">
+		<div className="grid grid-cols-7 gap-4 border-t p-3 items-center">
+			<div className="truncate col-span-5">{role.name}</div>
+			<div className="truncate col-span-1">{getRoleTypeName(role.projectRoleType)}</div>
+			<div className="flex justify-around col-span-1">
+				<div className="mr-5">
 					<Modal
 						id={role.id + idEditRoleModal}
-						openButtonText={
-							<i className="fa-light fa-pen-to-square rounded rounded-full hover:bg-gray-200 p-1 w-10"></i>
-						}
+						openButtonText={<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10"></i>}
 						openButtonStyle={""}>
 						<EditProjectRoleForm role={role} edit={editRole} close={closeEditModal} />
 					</Modal>
 				</div>
-				<div className="flex">
+				<div>
 					<Modal
 						id={role.id + idDeleteRoleModal}
-						openButtonText={<i className="fa-light fa-trash rounded rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10"></i>}
 						openButtonStyle={""}>
 						<DeleteProjectRoleForm role={role} deleteRole={deleteRole} close={closeDeleteModal} />
 					</Modal>

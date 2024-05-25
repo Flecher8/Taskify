@@ -25,7 +25,7 @@ namespace Taskify.BLL.Validation
                 errorMessages.Add("Invalid company member Id format.");
             }
 
-            if (entity.Salary <= 0)
+            if (entity.Salary < 0)
             {
                 errorMessages.Add("Salary can not be less than 0.");
             }

@@ -12,5 +12,9 @@ namespace Taskify.Core.Dtos
         public string Id { get; set; } = string.Empty;
         public UserDto User { get; set; }
         public string Name { get; set; } = string.Empty;
+        public List<CompanyExpenseDto> CompanyExpenses { get; set; }
+        public List<CompanyMemberDto> CompanyMembers { get; set; }
+        public List<CompanyRoleDto> CompanyRoles { get; set; }
+        public List<CompanyInvitationDto> CompanyInvitations { get; set; }
     }
 }

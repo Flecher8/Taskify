@@ -97,7 +97,8 @@ namespace Taskify.API.Mapping
             // Company Invitations
             CreateMap<CompanyInvitation, CompanyInvitationDto>();
             CreateMap<CompanyInvitationDto, CompanyInvitation>();
-            CreateMap<CreateCompanyInvitationDto, CompanyInvitation>();
+            CreateMap<CreateCompanyInvitationDto, CompanyInvitation>()
+                .ForMember(dest => dest.Company, opt => opt.MapFrom(src => new Company { Id = src.CompanyId }));
             // Task Time Tracker
             CreateMap<TaskTimeTracker, TaskTimeTrackerDto>();
             CreateMap<TaskTimeTrackerDto, TaskTimeTracker>();

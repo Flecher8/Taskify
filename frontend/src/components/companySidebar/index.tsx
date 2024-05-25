@@ -36,10 +36,22 @@ const CompanySidebar: React.FC<CompanySidebarProps> = ({ isOpen, toggleSidebar }
 						<Link to={`/company/${companyId}`} className="link">
 							<div className="flex flex-row">
 								<div className="mr-2 text-sm flex items-center">
-									<i className="fa-solid fa-square-kanban"></i>
+									<i className="fa-light fa-money-bill-trend-up"></i>
 								</div>
 								<div>
-									<h3>Company</h3>
+									<h3>Incomes</h3>
+								</div>
+							</div>
+						</Link>
+					</div>
+					<div>
+						<Link to={`/company/${companyId}/expenses`} className="link">
+							<div className="flex flex-row">
+								<div className="mr-2 text-sm flex items-center">
+									<i className="fa-light fa-chart-line-down"></i>
+								</div>
+								<div>
+									<h3>Expenses</h3>
 								</div>
 							</div>
 						</Link>

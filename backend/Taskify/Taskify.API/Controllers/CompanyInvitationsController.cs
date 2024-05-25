@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Taskify.BLL.Interfaces;
 using Taskify.Core.DbModels;
 using Taskify.Core.Dtos;
@@ -147,6 +148,24 @@ namespace Taskify.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in GetCompanyInvitationById method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("notification/{notificationId}")]
+        public async Task<IActionResult> GetCompanyInvitationByNotificationId(string notificationId)
+        {
+            try
+            {
+                var result = await _companyInvitationService.GetCompanyInvitationByNotificationIdAsync(notificationId);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<CompanyInvitationDto>(result.Data))
+                    : NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetCompanyInvitationByNotificationId method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

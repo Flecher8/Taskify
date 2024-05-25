@@ -26,7 +26,7 @@ const CreateCompanyPage: FC<CreateCompanyPageProps> = () => {
 				return;
 			}
 
-			const company = await companiesStore.getCompaniesByUserId(authStore.userId);
+			const company = await companiesStore.getCompanyByUserId(authStore.userId);
 			if (company) {
 				navigate(`/company/${company.id}`);
 			} else {

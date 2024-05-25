@@ -8,7 +8,6 @@ export interface CreateProjectInvitationData {
 export default class ProjectInvitationService {
 	static async create(userId: string, data: CreateProjectInvitationData): Promise<ProjectInvitation | undefined> {
 		try {
-			console.log(123);
 			const response = await api.post(`/api/ProjectInvitations/${userId}`, data);
 
 			return response.data;

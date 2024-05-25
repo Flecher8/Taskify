@@ -258,7 +258,7 @@ namespace Taskify.Tests.BAL.Tests.ServicesTests
                                                 loggerMock.Object);
 
             // Act
-            var result = await service.GetCompaniesByUserIdAsync(userId);
+            var result = await service.GetCompanyByUserIdAsync(userId);
 
             // Assert
             Assert.False(result.IsSuccess);

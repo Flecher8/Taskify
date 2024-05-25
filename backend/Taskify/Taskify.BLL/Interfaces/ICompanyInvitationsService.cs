@@ -17,5 +17,6 @@ namespace Taskify.BLL.Interfaces
         Task<Result<bool>> MarkCompanyInvitationAsReadAsync(string companyInvitationId);
         Task<Result<bool>> DeleteCompanyInvitationAsync(string companyInvitationId);
         Task<Result<CompanyInvitation>> GetCompanyInvitationByIdAsync(string companyInvitationId);
+        Task<Result<CompanyInvitation>> GetCompanyInvitationByNotificationIdAsync(string notificationId);
     }
 }

@@ -39,7 +39,7 @@ namespace Taskify.DAL.Repositories
 
             if (_filterBuilder.IncludeMemberRoles)
             {
-                query = query.Include(c => c.CompanyMemberRoles);
+                query = query.Include(c => c.CompanyRoles);
             }
 
             if (_filterBuilder.IncludeInvitations)

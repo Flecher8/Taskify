@@ -25,7 +25,7 @@ class CompaniesStore {
 		}
 	}
 
-	async getCompaniesByUserId(userId: string): Promise<Company | null | undefined> {
+	async getCompanyByUserId(userId: string): Promise<Company | null | undefined> {
 		try {
 			const result = await CompanyService.getCompanyByUserId(userId);
 			return result;

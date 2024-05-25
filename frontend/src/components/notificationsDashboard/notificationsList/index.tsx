@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import notificationsStore from "stores/notificationsStore";
 import userStore from "stores/userStore";
 import NotificationsItem from "./notificationsItem";
+import Loading from "components/loading";
 
 interface NotificationsListProps {
 	showOnlyUnreadNotifications: boolean;
@@ -57,7 +58,9 @@ const NotificationsList: FC<NotificationsListProps> = ({ showOnlyUnreadNotificat
 	return (
 		<div className="notificationsList overflow-auto">
 			{loading ? (
-				<div>Loading...</div>
+				<div className="w-full h-full">
+					<Loading />
+				</div>
 			) : showOnlyUnreadNotifications ? (
 				filteredNotifications.length === 0 ? (
 					<div className="flex justify-center items-center">No unread notifications</div>

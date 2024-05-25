@@ -14,6 +14,6 @@ namespace Taskify.BLL.Interfaces
         Task<Result<bool>> DeleteCompanyAsync(string id);
         Task<Result<Company>> GetCompanyByIdAsync(string id);
         Task<Result<bool>> UpdateCompanyAsync(Company company);
-        Task<Result<Company>> GetCompaniesByUserIdAsync(string userId);
+        Task<Result<Company>> GetCompanyByUserIdAsync(string userId);
     }
 }

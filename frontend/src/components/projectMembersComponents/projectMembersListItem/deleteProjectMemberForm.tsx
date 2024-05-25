@@ -8,7 +8,7 @@ interface DeleteProjectMemberFormProps {
 }
 
 const DeleteProjectMemberForm: FC<DeleteProjectMemberFormProps> = ({ member, deleteMember, close }) => {
-	const handleDeleteProjectMember = () => {
+	const handleDeleteMember = () => {
 		deleteMember(member.id);
 		close();
 	};
@@ -28,7 +28,7 @@ const DeleteProjectMemberForm: FC<DeleteProjectMemberFormProps> = ({ member, del
 			<div className="flex flex-row mt-5">
 				<button
 					className="border border-red-600 text-red-600 hover:bg-red-800 hover:text-white transition duration-300 ease-out py-2 px-4 rounded mr-3"
-					onClick={handleDeleteProjectMember}>
+					onClick={handleDeleteMember}>
 					Delete
 				</button>
 				<button

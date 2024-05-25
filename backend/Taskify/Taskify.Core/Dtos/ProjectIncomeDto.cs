@@ -11,6 +11,7 @@ namespace Taskify.Core.Dtos
     {
         public string Id { get; set; } = string.Empty;
         public double Amount { get; set; }
+        public string Name { get; set; }
         public ProjectIncomeFrequency Frequency { get; set; }
     }
 }

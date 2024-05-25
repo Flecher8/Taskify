@@ -123,6 +123,7 @@ namespace Taskify.BLL.Services
                 }
 
                 projectIncomeToUpdate.Amount = projectIncome.Amount;
+                projectIncomeToUpdate.Name = projectIncome.Name;
                 projectIncomeToUpdate.Frequency = projectIncome.Frequency;
 
                 await _projectIncomeRepository.UpdateAsync(projectIncomeToUpdate);

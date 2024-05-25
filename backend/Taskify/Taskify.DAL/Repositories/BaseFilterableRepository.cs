@@ -30,10 +30,9 @@ namespace Taskify.DAL.Repositories
             var filterProperty = _filterBuilder.GetType().GetProperty("Filter");
             var filter = filterProperty.GetValue(_filterBuilder) as Expression<Func<T, bool>>;
 
-            // Ensure that the Filter property is initialized
             if (filter == null)
             {
-                filter = _ => true; // Default filter if not set
+                filter = _ => true;
                 filterProperty.SetValue(_filterBuilder, filter);
             }
 
@@ -44,7 +43,6 @@ namespace Taskify.DAL.Repositories
 
         protected virtual IQueryable<T> IncludeEntities(IQueryable<T> query)
         {
-            // Override this method in derived classes to include specific entities
             return query;
         }
     }

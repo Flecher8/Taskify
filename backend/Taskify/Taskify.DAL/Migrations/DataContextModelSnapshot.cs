@@ -388,6 +388,10 @@ namespace Taskify.DAL.Migrations
                     b.Property<int>("Frequency")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProjectId")
                         .HasColumnType("nvarchar(450)");
 
@@ -802,7 +806,7 @@ namespace Taskify.DAL.Migrations
             modelBuilder.Entity("Taskify.Core.DbModels.CompanyRole", b =>
                 {
                     b.HasOne("Taskify.Core.DbModels.Company", "Company")
-                        .WithMany("CompanyMemberRoles")
+                        .WithMany("CompanyRoles")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -952,9 +956,9 @@ namespace Taskify.DAL.Migrations
 
                     b.Navigation("CompanyInvitations");
 
-                    b.Navigation("CompanyMemberRoles");
-
                     b.Navigation("CompanyMembers");
+
+                    b.Navigation("CompanyRoles");
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.CompanyRole", b =>

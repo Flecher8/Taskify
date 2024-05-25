@@ -6,6 +6,6 @@ export interface CompanyMember {
 	id: string;
 	user: User;
 	company: Company;
-	companyMemberRole: CompanyRole;
+	role: CompanyRole | null;
 	salary: number;
 }

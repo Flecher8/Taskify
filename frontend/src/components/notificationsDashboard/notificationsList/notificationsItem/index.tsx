@@ -20,7 +20,7 @@ const NotificationsItem: FC<NotificationsItemProps> = ({ notification, markAsRea
 	};
 
 	return (
-		<div className={`flex flex-row w-full h-40 mb-2 ${!isRead ? "bg-violet-100" : "bg-white"}`}>
+		<div className={`flex flex-row w-full h-40 mb-1 ${!isRead ? "bg-gray-100" : "bg-white"}`}>
 			<div className="flex bg-white z-[1] rounded-lg my-3 ml-3 p-1 shadow-lg min-w-60">
 				{(() => {
 					switch (notificationType) {
@@ -34,7 +34,7 @@ const NotificationsItem: FC<NotificationsItemProps> = ({ notification, markAsRea
 				})()}
 			</div>
 			<div className="ml-3 mt-3">
-				<div className="hover:bg-blue-300 p-1 transition duration-300">
+				<div className="hover:bg-blue-200 p-1 transition duration-300 rounded-full">
 					<div
 						onClick={handleClick}
 						className={`${

@@ -11,6 +11,7 @@ namespace Taskify.Core.Dtos
     public class CreateProjectIncomeDto
     {
         public string ProjectId { get; set; } = string.Empty;
+        public string Name {  get; set; } = string.Empty;
         public double Amount { get; set; }
         public ProjectIncomeFrequency Frequency { get; set; }
     }

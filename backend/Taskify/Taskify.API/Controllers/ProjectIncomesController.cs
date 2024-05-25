@@ -29,14 +29,14 @@ namespace Taskify.API.Controllers
         }
 
         [HttpGet("project/{projectId}")]
-        public async Task<IActionResult> GetProjectIncomeByProjectId(string projectId)
+        public async Task<IActionResult> GetProjectIncomesByProjectId(string projectId)
         {
             try
             {
                 var result = await _projectIncomesService.GetProjectIncomesByProjectIdAsync(projectId);
 
                 return result.IsSuccess
-                    ? Ok(_mapper.Map<ProjectIncomeDto>(result.Data))
+                    ? Ok(_mapper.Map<List<ProjectIncomeDto>>(result.Data))
                     : NotFound();
             }
             catch (Exception ex)
@@ -56,7 +56,7 @@ namespace Taskify.API.Controllers
 
                 return result.IsSuccess
                     ? CreatedAtAction(
-                        nameof(GetProjectIncomeByProjectId), 
+                        nameof(GetProjectIncomesByProjectId), 
                         new { projectId = result.Data.Project.Id }, 
                         _mapper.Map<ProjectIncomeDto>(result.Data)
                     )

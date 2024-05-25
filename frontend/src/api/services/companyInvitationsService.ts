@@ -21,6 +21,7 @@ export default class CompanyInvitationService {
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {
+				console.log(error);
 				if (error.response) {
 					return error.response.data;
 				}
@@ -112,6 +113,22 @@ export default class CompanyInvitationService {
 	static async getCompanyInvitationById(id: string): Promise<CompanyInvitation | undefined> {
 		try {
 			const response: AxiosResponse<CompanyInvitation> = await api.get(`${CompanyInvitationService.baseUrl}/${id}`);
+			return response.data;
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				if (error.response) {
+					return error.response.data;
+				}
+			}
+			throw error;
+		}
+	}
+
+	static async getCompanyInvitationByNotificationId(notificationId: string): Promise<CompanyInvitation | undefined> {
+		try {
+			const response: AxiosResponse<CompanyInvitation> = await api.get(
+				`${CompanyInvitationService.baseUrl}/notification/${notificationId}`
+			);
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {

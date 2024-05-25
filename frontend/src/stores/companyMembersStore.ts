@@ -54,9 +54,17 @@ class CompanyMembersStore {
 		}
 	}
 
-	async getMembersByCompanyId(companyId: string): Promise<CompanyMember[] | undefined> {
+	async getMembersByCompanyId(companyId: string | undefined): Promise<CompanyMember[]> {
 		try {
+			if (companyId === undefined) {
+				throw new Error("Invalid company ID.");
+			}
+
 			const result = await CompanyMembersService.getMembersByCompanyId(companyId);
+			if (result === undefined) {
+				throw new Error("Project members not found.");
+			}
+
 			this.companyMembers = result ?? [];
 			return result;
 		} catch (error) {

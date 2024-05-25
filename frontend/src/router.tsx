@@ -23,6 +23,8 @@ import CompanyPage from "pages/company";
 import CreateCompanyPage from "pages/createCompany";
 import CompanyRolesPage from "pages/companyRoles";
 import CompanyMembersPage from "pages/companyMembers";
+import ProjectIncomesPage from "pages/projectIncomes";
+import CompanyExpensesPage from "pages/companyExpenses";
 
 const Router = () => {
 	return (
@@ -64,6 +66,13 @@ const Router = () => {
 					<Route index element={<CompanyPage />} />
 					<Route path="roles" element={<CompanyRolesPage />} />
 					<Route path="members" element={<CompanyMembersPage />} />
+					<Route path="expenses" element={<CompanyExpensesPage />} />
+				</Route>
+
+				<Route
+					path="/company/:companyId/projectIncome/:projectId"
+					element={<CompanyLayout showHeader={true} showMenu={true} />}>
+					<Route index element={<ProjectIncomesPage />} />
 				</Route>
 
 				<Route path="/profile" element={<MainLayout showHeader={true} showMenu={false} />}>
