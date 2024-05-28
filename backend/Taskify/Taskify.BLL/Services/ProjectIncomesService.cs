@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Taskify.BLL.Helpers;
 using Taskify.BLL.Interfaces;
 using Taskify.BLL.Validation;
 using Taskify.Core.DbModels;
 using Taskify.Core.Result;
 using Taskify.DAL.Interfaces;
+using Taskify.DAL.Repositories;
 
 namespace Taskify.BLL.Services
 {
@@ -135,5 +137,31 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<bool>("Can not update the project income.");
             }
         }
+
+        public async Task<Result<List<ProjectIncome>>> GetProjectIncomesByUserIdAsync(string userId)
+        {
+            try
+            {
+                var userProjects = await _projectsRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeIncomesEntity()
+                        .WithFilter(p => p.User.Id == userId)
+                );
+
+                var projectIncomes = new List<ProjectIncome>();
+                foreach (var project in userProjects)
+                {
+                    projectIncomes.AddRange(project.ProjectIncomes);
+                }
+
+                return ResultFactory.Success(projectIncomes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<List<ProjectIncome>>("Cannot get project incomes by user id.");
+            }
+        }
+
     }
 }
