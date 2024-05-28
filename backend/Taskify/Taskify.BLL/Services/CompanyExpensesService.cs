@@ -55,6 +55,7 @@ namespace Taskify.BLL.Services
                 }
 
                 companyExpense.Company = company;
+                companyExpense.CreatedAt = DateTime.UtcNow;
 
                 var result = await _companyExpenseRepository.AddAsync(companyExpense);
 

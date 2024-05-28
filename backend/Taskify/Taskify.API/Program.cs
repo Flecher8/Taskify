@@ -59,6 +59,7 @@ namespace Taskify.API
             builder.Services.AddScoped<IValidator<TaskTimeTracker>, TaskTimeTrackerValidator>();
 
             // Services
+            builder.Services.AddScoped<IBudgetService, BudgetService>();
             builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
             builder.Services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             builder.Services.AddScoped<IUsersService, UsersService>();

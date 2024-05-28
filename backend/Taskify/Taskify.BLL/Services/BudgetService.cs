@@ -98,6 +98,9 @@ namespace Taskify.BLL.Services
                     Name = "Monthly Expense",
                     Value = monthlyExpenses
                 };
+
+                _logger.LogInformation(monthlyExpenses.ToString());
+
                 return ResultFactory.Success(statistic);
             }
             catch (Exception ex)

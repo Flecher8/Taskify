@@ -1,5 +1,5 @@
 import BarChart from "components/charts/bar";
-import { UserStoryPointsCountStatistics } from "entities/statistics/taskStatistics/userStoryPointsCountStatistics";
+import { UserStoryPointsCountStatistics } from "entities/statistics/task/userStoryPointsCountStatistics";
 import { FC, useEffect, useState } from "react";
 import TaskStatisticsStore from "stores/taskStatisticsStore";
 

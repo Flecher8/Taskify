@@ -1,10 +1,10 @@
 import { api } from "api/axious/api";
 import { AxiosError, AxiosResponse } from "axios";
-import { ProjectRoleTaskCountStatistics } from "entities/statistics/taskStatistics/projectRoleTaskCountStatistics";
-import { SectionTaskCountStatistics } from "entities/statistics/taskStatistics/sectionTaskCountStatistics";
-import { SectionTypeTaskCountStatistics } from "entities/statistics/taskStatistics/sectionTypeTaskCountStatistics";
-import { UserStoryPointsCountStatistics } from "entities/statistics/taskStatistics/userStoryPointsCountStatistics";
-import { UserTaskCountStatistics } from "entities/statistics/taskStatistics/userTaskCountStatistics";
+import { ProjectRoleTaskCountStatistics } from "entities/statistics/task/projectRoleTaskCountStatistics";
+import { SectionTaskCountStatistics } from "entities/statistics/task/sectionTaskCountStatistics";
+import { SectionTypeTaskCountStatistics } from "entities/statistics/task/sectionTypeTaskCountStatistics";
+import { UserStoryPointsCountStatistics } from "entities/statistics/task/userStoryPointsCountStatistics";
+import { UserTaskCountStatistics } from "entities/statistics/task/userTaskCountStatistics";
 
 export default class TaskStatisticsService {
 	private static baseUrl = "api/TaskStatistics";

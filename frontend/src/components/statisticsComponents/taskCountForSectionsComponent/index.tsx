@@ -1,5 +1,5 @@
 import PieChart from "components/charts/pie";
-import { SectionTaskCountStatistics } from "entities/statistics/taskStatistics/sectionTaskCountStatistics";
+import { SectionTaskCountStatistics } from "entities/statistics/task/sectionTaskCountStatistics";
 import { FC, useEffect, useState } from "react";
 import TaskStatisticsStore from "stores/taskStatisticsStore";
 
@@ -30,7 +30,7 @@ const TaskCountForSectionsStatisticsComponent: FC<TaskCountForSectionsStatistics
 			if (taskStatistics) {
 				const labels = taskStatistics.map(section => section.section.name);
 				const data = taskStatistics.map(section => section.count);
-				const { colors, borderColors } = generateRandomColors(taskStatistics.length);
+				const { colors, borderColors } = generateRandomRgbColors(taskStatistics.length);
 				setSectionTaskCount({ labels, data, colors, borderColors });
 			}
 		} catch (error) {
@@ -39,7 +39,7 @@ const TaskCountForSectionsStatisticsComponent: FC<TaskCountForSectionsStatistics
 	};
 
 	// Generate an array of random colors and border colors
-	const generateRandomColors = (count: number) => {
+	const generateRandomRgbColors = (count: number) => {
 		const colors = [];
 		const borderColors = [];
 		for (let i = 0; i < count; i++) {

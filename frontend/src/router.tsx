@@ -25,6 +25,7 @@ import CompanyRolesPage from "pages/companyRoles";
 import CompanyMembersPage from "pages/companyMembers";
 import ProjectIncomesPage from "pages/projectIncomes";
 import CompanyExpensesPage from "pages/companyExpenses";
+import CompanyStatisticsPage from "pages/companyStatistics";
 
 const Router = () => {
 	return (
@@ -67,6 +68,7 @@ const Router = () => {
 					<Route path="roles" element={<CompanyRolesPage />} />
 					<Route path="members" element={<CompanyMembersPage />} />
 					<Route path="expenses" element={<CompanyExpensesPage />} />
+					<Route path="statistics" element={<CompanyStatisticsPage />} />
 				</Route>
 
 				<Route

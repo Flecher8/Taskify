@@ -1,5 +1,5 @@
 import { SectionType } from "entities/section";
-import { SectionTypeTaskCountStatistics } from "entities/statistics/taskStatistics/sectionTypeTaskCountStatistics";
+import { SectionTypeTaskCountStatistics } from "entities/statistics/task/sectionTypeTaskCountStatistics";
 import { FC, useEffect, useState } from "react";
 import taskStatisticsStore from "stores/taskStatisticsStore";
 
