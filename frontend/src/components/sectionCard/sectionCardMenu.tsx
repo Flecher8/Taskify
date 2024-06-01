@@ -26,17 +26,17 @@ const SectionCardMenu: FC<SectionCardMenuProps> = ({ section, editSection, delet
 	};
 
 	return (
-		<div className="flex flex-col w-32">
+		<div className="flex flex-col w-32 m-1">
 			<Modal
 				id={modalEditId}
 				openButtonText={"Edit"}
-				openButtonStyle={"flex hover:bg-gray-300 transition duration-300 hover:cursor-pointer pl-3 rounded"}>
+				openButtonStyle={"flex hover:bg-gray-200 transition duration-200 hover:cursor-pointer pl-3 rounded"}>
 				<EditSectionForm section={section} editSection={editSection} close={closeEditModal} />
 			</Modal>
 			<Modal
 				id={modalDeleteId}
 				openButtonText={"Delete"}
-				openButtonStyle={"flex hover:bg-gray-300 transition duration-300 hover:cursor-pointer pl-3 rounded"}>
+				openButtonStyle={"flex hover:bg-gray-200 transition duration-200 hover:cursor-pointer pl-3 rounded"}>
 				<DeleteSectionForm
 					section={section}
 					deleteSection={deleteSection}

@@ -34,6 +34,9 @@ export default class ProjectMembersService {
 	static async delete(id: string): Promise<boolean | undefined> {
 		try {
 			const response = await api.delete(`/api/ProjectMembers/${id}`);
+			if (response.status === 204) {
+				return true;
+			}
 			return response.data;
 		} catch (error) {
 			throw error;
@@ -61,6 +64,18 @@ export default class ProjectMembersService {
 	static async getProjectsByMember(userId: string): Promise<Project[] | undefined> {
 		try {
 			const response = await api.get(`/api/ProjectMembers/user/${userId}/projects`);
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async leaveProject(userId: string, projectId: string): Promise<boolean | undefined> {
+		try {
+			const response = await api.delete(`/api/ProjectMembers/leave/user/${userId}/project/${projectId}`);
+			if (response.status === 204) {
+				return true;
+			}
 			return response.data;
 		} catch (error) {
 			throw error;

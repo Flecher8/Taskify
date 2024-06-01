@@ -17,5 +17,7 @@ namespace Taskify.BLL.Interfaces
         Task<Result<List<CompanyMember>>> GetMembersByRoleIdAsync(string roleId);
         Task<Result<CompanyMember>> GetCompanyMemberByIdAsync(string id);
         Task<Result<bool>> IsUserAlreadyMemberAsync(string userId, string companyId);
+        Task<Result<bool>> LeaveCompanyByUserIdAsync(string userId, string companyId);
+        Task<Result<List<Company>>> GetCompaniesByUserIdAsync(string userId);
     }
 }

@@ -175,5 +175,23 @@ namespace Taskify.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpDelete("leave/user/{userId}/project/{projectId}")]
+        public async Task<IActionResult> LeaveProject(string userId, string projectId)
+        {
+            try
+            {
+                var result = await _projectMembersService.LeaveProjectByUserIdAsync(userId, projectId);
+
+                return result.IsSuccess
+                    ? NoContent()
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in LeaveProject method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

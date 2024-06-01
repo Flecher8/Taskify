@@ -93,18 +93,6 @@ const ProjectSidebar: React.FC<ProjectSidebarProps> = ({ isOpen, toggleSidebar }
 							</div>
 						</Link>
 					</div>
-					<div>
-						<Link to={`/project/${projectId}/settings`} className="link">
-							<div className="flex flex-row">
-								<div className="mr-2 text-sm flex items-center">
-									<i className="fa-solid fa-gear"></i>
-								</div>
-								<div>
-									<h3>Settings</h3>
-								</div>
-							</div>
-						</Link>
-					</div>
 				</div>
 				<div className="">
 					<Link to={`/subscription`}>

@@ -20,4 +20,13 @@ export default class UserService {
 			throw error;
 		}
 	}
+
+	static async getUserById(id: string): Promise<User | undefined> {
+		try {
+			const response = await api.get<User>(`/api/Users/${id}`);
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	}
 }

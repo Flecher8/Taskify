@@ -265,5 +265,54 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<bool>("Error checking if user is already a member.");
             }
         }
+
+        public async Task<Result<bool>> LeaveCompanyByUserIdAsync(string userId, string companyId)
+        {
+            try
+            {
+                var companyMember = (await _companyMemberRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeUserEntity()
+                        .IncludeCompanyEntity()
+                        .WithFilter(cm => cm.User.Id == userId && cm.Company.Id == companyId)
+                )).FirstOrDefault();
+
+                if (companyMember == null)
+                {
+                    return ResultFactory.Failure<bool>("Company member not found.");
+                }
+
+                await _companyMemberRepository.DeleteAsync(companyMember.Id);
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error occurred while trying to leave the company.");
+            }
+        }
+
+        public async Task<Result<List<Company>>> GetCompaniesByUserIdAsync(string userId)
+        {
+            try
+            {
+                var result = await _companyMemberRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeCompanyEntity()
+                        .IncludeUserEntity()
+                        .WithFilter(cm => cm.User.Id == userId)
+                );
+
+                var companies = result.Select(cm => cm.Company).ToList();
+
+                return ResultFactory.Success(companies);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<List<Company>>("Can not get companies by user id.");
+            }
+        }
+
     }
 }

@@ -8,12 +8,13 @@ import sectionsStore from "stores/sectionsStore";
 import { Section, SectionType } from "entities/section";
 import { CustomTask } from "entities/customTask";
 import Board from "components/board";
+import Loading from "components/loading";
 
 interface BoardPageProps {}
 
 const BoardPage: FC<BoardPageProps> = () => {
 	const { projectId } = useParams<{ projectId: string }>();
-	const [project, setProject] = useState<Project | null>(null);
+	const [project, setProject] = useState<Project>();
 
 	const laodProject = async () => {
 		const newProject = await projectsStore.getProjectById(projectId);
@@ -27,6 +28,14 @@ const BoardPage: FC<BoardPageProps> = () => {
 	useEffect(() => {
 		laodProject();
 	}, [projectId]);
+
+	if (!project) {
+		return (
+			<div className="w-full h-full">
+				<Loading />
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex flex-col w-full h-full">

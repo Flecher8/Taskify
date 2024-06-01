@@ -317,5 +317,34 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<bool>("Error checking if user is already a member.");
             }
         }
+
+        public async Task<Result<bool>> LeaveProjectByUserIdAsync(string userId, string projectId)
+        {
+            try
+            {
+                var projectMembers = await _projectMemberRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .IncludeUserEntity()
+                        .WithFilter(pm => pm.User.Id == userId && pm.Project.Id == projectId)
+                );
+
+                var projectMember = projectMembers.FirstOrDefault();
+
+                if (projectMember == null)
+                {
+                    return ResultFactory.Failure<bool>("Project member with the specified user ID and project ID does not exist.");
+                }
+
+                await _projectMemberRepository.DeleteAsync(projectMember.Id);
+                return ResultFactory.Success(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return ResultFactory.Failure<bool>("Error occurred while trying to leave the project.");
+            }
+        }
+
     }
 }

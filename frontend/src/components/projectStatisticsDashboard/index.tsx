@@ -12,7 +12,7 @@ interface ProjectStatisticsDashboardProps {
 
 const ProjectStatisticsDashboard: FC<ProjectStatisticsDashboardProps> = ({ projectId }) => {
 	return (
-		<div className="w-full h-full flex flex-nowrap flex-col overflow-y-auto">
+		<div className="w-full h-full flex flex-nowrap flex-col overflow-y-auto custom-scroll-sm">
 			<div className="flex flex-row w-full justify-around">
 				<div className="flex min-w-64 h-64">
 					<StatisticsContainer>

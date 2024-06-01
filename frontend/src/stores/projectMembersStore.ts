@@ -75,6 +75,14 @@ class ProjectMembersStore {
 			throw new Error(`Error fetching project members.`);
 		}
 	}
+
+	async leaveProject(userId: string, projectId: string): Promise<void> {
+		try {
+			await ProjectMembersService.leaveProject(userId, projectId);
+		} catch (error) {
+			throw new Error(`Error leaving project.`);
+		}
+	}
 }
 
 export default new ProjectMembersStore();

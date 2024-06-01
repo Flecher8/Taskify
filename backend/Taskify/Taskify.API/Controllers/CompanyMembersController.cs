@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.Design;
 using Taskify.BLL.Interfaces;
 using Taskify.Core.DbModels;
 using Taskify.Core.Dtos;
@@ -136,6 +137,42 @@ namespace Taskify.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in GetCompanyMemberById method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete("leave/user/{userId}/company/{companyId}")]
+        public async Task<IActionResult> LeaveCompany(string userId, string companyId)
+        {
+            try
+            {
+                var result = await _companyMembersService.LeaveCompanyByUserIdAsync(userId, companyId);
+
+                return result.IsSuccess
+                    ? NoContent()
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in LeaveCompany method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("user/{userId}/companies")]
+        public async Task<IActionResult> GetCompaniesByUserId(string userId)
+        {
+            try
+            {
+                var result = await _companyMembersService.GetCompaniesByUserIdAsync(userId);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<List<CompanyDto>>(result.Data))
+                    : BadRequest(result.Errors);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in LeaveCompany method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

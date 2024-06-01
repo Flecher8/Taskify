@@ -4,6 +4,7 @@ import CompanyMembersService, {
 	CreateCompanyMemberDto,
 	UpdateCompanyMemberDto
 } from "api/services/companyMemberService";
+import { Company } from "entities/company";
 
 class CompanyMembersStore {
 	companyMembers: CompanyMember[] = [];
@@ -15,9 +16,6 @@ class CompanyMembersStore {
 	async createCompanyMember(data: CreateCompanyMemberDto): Promise<CompanyMember | undefined> {
 		try {
 			const result = await CompanyMembersService.createCompanyMember(data);
-			if (result) {
-				this.companyMembers.push(result);
-			}
 			return result;
 		} catch (error) {
 			throw new Error(`Error creating company member: ${error}`);
@@ -36,9 +34,6 @@ class CompanyMembersStore {
 	async updateCompanyMember(id: string, data: UpdateCompanyMemberDto): Promise<CompanyMember | undefined> {
 		try {
 			const result = await CompanyMembersService.updateCompanyMember(id, data);
-			if (result) {
-				this.companyMembers = this.companyMembers.map(member => (member.id === id ? result : member));
-			}
 			return result;
 		} catch (error) {
 			throw new Error(`Error updating company member: ${error}`);
@@ -48,7 +43,6 @@ class CompanyMembersStore {
 	async deleteCompanyMember(id: string): Promise<void> {
 		try {
 			await CompanyMembersService.deleteCompanyMember(id);
-			this.companyMembers = this.companyMembers.filter(member => member.id !== id);
 		} catch (error) {
 			throw new Error(`Error deleting company member: ${error}`);
 		}
@@ -64,8 +58,6 @@ class CompanyMembersStore {
 			if (result === undefined) {
 				throw new Error("Project members not found.");
 			}
-
-			this.companyMembers = result ?? [];
 			return result;
 		} catch (error) {
 			throw new Error(`Error fetching members by company ID: ${error}`);
@@ -78,6 +70,23 @@ class CompanyMembersStore {
 			return result;
 		} catch (error) {
 			throw new Error(`Error fetching members by role ID: ${error}`);
+		}
+	}
+
+	async leaveCompany(userId: string, companyId: string): Promise<void> {
+		try {
+			await CompanyMembersService.leaveCompany(userId, companyId);
+		} catch (error) {
+			throw new Error(`Error deleting company member: ${error}`);
+		}
+	}
+
+	async getCompaniesByUserId(userId: string): Promise<Company[]> {
+		try {
+			const result = await CompanyMembersService.getCompaniesByUserId(userId);
+			return result;
+		} catch (error) {
+			throw new Error(`Error deleting company member: ${error}`);
 		}
 	}
 }

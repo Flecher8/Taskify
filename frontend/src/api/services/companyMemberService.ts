@@ -1,5 +1,6 @@
 import { api } from "api/axious/api";
 import { AxiosError, AxiosResponse } from "axios";
+import { Company } from "entities/company";
 import { CompanyMember } from "entities/companyMember";
 
 export interface CreateCompanyMemberDto {
@@ -109,6 +110,34 @@ export default class CompanyMembersService {
 			if (error instanceof AxiosError) {
 				if (error.response) {
 					return error.response.data;
+				}
+			}
+			throw error;
+		}
+	}
+
+	static async leaveCompany(userId: string, companyId: string): Promise<void> {
+		try {
+			await api.delete(`${CompanyMembersService.baseUrl}/leave/user/${userId}/company/${companyId}`);
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				if (error.response) {
+					throw new Error(error.response.data);
+				}
+			}
+			throw error;
+		}
+	}
+
+	static async getCompaniesByUserId(userId: string): Promise<Company[]> {
+		try {
+			const response = await api.get(`${CompanyMembersService.baseUrl}/user/${userId}/companies`);
+
+			return response.data;
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				if (error.response) {
+					throw new Error(error.response.data);
 				}
 			}
 			throw error;

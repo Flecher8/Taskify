@@ -125,7 +125,7 @@ const SectionCard: FC<SectionCardProps> = ({
 								openDropDownButtonStyle={
 									"p-1 flex items-center hover:bg-gray-200 hover:cursor-pointer transition duration-300"
 								}
-								dropDownContentStyle={"bg-white"}>
+								dropDownContentStyle={"bg-white rounded-md"}>
 								<SectionCardMenu
 									section={section}
 									editSection={editSection}

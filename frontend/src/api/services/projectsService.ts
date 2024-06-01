@@ -50,4 +50,14 @@ export default class ProjectsService {
 			throw error;
 		}
 	}
+
+	static async delete(id: string): Promise<boolean | undefined> {
+		try {
+			const response = await api.delete(`/api/Projects/${id}`);
+
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	}
 }

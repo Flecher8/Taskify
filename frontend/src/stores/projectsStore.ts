@@ -50,6 +50,14 @@ class ProjectsStore {
 		}
 	}
 
+	async deleteProject(id: string): Promise<void> {
+		try {
+			await ProjectsService.delete(id);
+		} catch (error) {
+			throw new Error(`Can not delete this project: ${error}`);
+		}
+	}
+
 	async getProjectById(id: string | undefined): Promise<Project> {
 		try {
 			if (id === undefined) {
