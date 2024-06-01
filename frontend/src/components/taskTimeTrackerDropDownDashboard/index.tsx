@@ -6,7 +6,6 @@ import { TaskTimeTracker, TaskTimeTrackerType } from "entities/taskTimeTracker";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { IDay } from "react-calendar-datetime-picker/dist/types/type";
 import { dateToIDay, iDayToDate } from "utilities/date_IDay_Converter";
-import "./taskTimeTrackerDashboard.scss";
 
 interface TaskTimeTrackerDropDownDashboardProps {
 	customTaskId: string;
@@ -157,7 +156,7 @@ const TaskTimeTrackerDropDownDashboard: FC<TaskTimeTrackerDropDownDashboardProps
 					<Time time={numberOfSecondsSpentOnTask} />
 				</div>
 			</div>
-			<div className="flex flex-col flex-nowrap overflow-y-auto max-h-[200px] scrollable">
+			<div className="flex flex-col flex-nowrap overflow-auto max-h-[200px] scrollable custom-scroll-xs">
 				<div className="flex flex-col">
 					{Object.entries(sortedGroupTimersByUser)
 						.filter(([, userTimers]) => userTimers.some(timer => timer.endDateTime !== null))

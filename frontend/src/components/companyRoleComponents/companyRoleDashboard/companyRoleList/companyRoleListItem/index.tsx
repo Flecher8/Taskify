@@ -31,7 +31,9 @@ const CompanyRoleListItem: FC<CompanyRoleListItemProps> = ({ role, editRole, del
 				<div className="mr-5">
 					<Modal
 						id={role.id + idEditRoleModal}
-						openButtonText={<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={
+							<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10 transition duration-200"></i>
+						}
 						openButtonStyle={""}>
 						<EditCompanyRoleForm role={role} edit={editRole} close={closeEditModal} />
 					</Modal>
@@ -39,7 +41,9 @@ const CompanyRoleListItem: FC<CompanyRoleListItemProps> = ({ role, editRole, del
 				<div>
 					<Modal
 						id={role.id + idDeleteRoleModal}
-						openButtonText={<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={
+							<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10 transition duration-200"></i>
+						}
 						openButtonStyle={""}>
 						<DeleteCompanyRoleForm role={role} deleteRole={deleteRole} close={closeDeleteModal} />
 					</Modal>

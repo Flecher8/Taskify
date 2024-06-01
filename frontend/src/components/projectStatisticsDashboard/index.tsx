@@ -12,8 +12,8 @@ interface ProjectStatisticsDashboardProps {
 
 const ProjectStatisticsDashboard: FC<ProjectStatisticsDashboardProps> = ({ projectId }) => {
 	return (
-		<div className="w-full h-full flex flex-nowrap flex-col overflow-y-auto custom-scroll-sm">
-			<div className="flex flex-row w-full justify-around">
+		<div className="w-full h-full flex flex-nowrap flex-col overflow-auto custom-scroll-sm">
+			<div className="flex flex-row w-full justify-around flex-wrap mb-5 gap-3">
 				<div className="flex min-w-64 h-64">
 					<StatisticsContainer>
 						<SectionTypeTaskCountForProjectStatisticsComponent projectId={projectId} />
@@ -30,12 +30,12 @@ const ProjectStatisticsDashboard: FC<ProjectStatisticsDashboardProps> = ({ proje
 					</StatisticsContainer>
 				</div>
 			</div>
-			<div className="flex h-64">
+			<div className="flex h-64 mb-5">
 				<StatisticsContainer>
 					<UserTaskCountForProjectStatisticsComponent projectId={projectId} />
 				</StatisticsContainer>
 			</div>
-			<div className="flex h-64">
+			<div className="flex h-64 mb-5">
 				<StatisticsContainer>
 					<UserStoryPointsCountForProjectStatisticsComponent projectId={projectId} />
 				</StatisticsContainer>

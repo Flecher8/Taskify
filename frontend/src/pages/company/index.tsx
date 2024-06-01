@@ -36,8 +36,8 @@ const CompanyPage: FC<CompanyPageProps> = () => {
 	}, [companyId]);
 
 	return (
-		<div className="flex flex-col m-5">
-			<div className="text-2xl font-bold m-5">Incomes for each project</div>
+		<div className="flex flex-col pl-5 pt-5 w-full h-full overflow-auto custom-scroll-sm">
+			<div className="text-2xl font-bold m-5 ">Incomes for each project</div>
 			<ProjectIncomesList projects={projects} isLoading={isLoading} />
 		</div>
 	);

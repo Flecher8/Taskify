@@ -12,8 +12,8 @@ interface CompanyStatisticsDashboardProps {
 
 const CompanyStatisticsDashboard: FC<CompanyStatisticsDashboardProps> = ({ companyId }) => {
 	return (
-		<div className="w-full h-full flex flex-nowrap flex-col overflow-y-auto">
-			<div className="flex flex-row w-full justify-around">
+		<div className="w-full h-full flex flex-nowrap flex-col overflow-auto custom-scroll-sm">
+			<div className="flex flex-row w-full justify-around flex-wrap mb-5 gap-3">
 				<div className="flex min-w-64 h-64">
 					<StatisticsContainer>
 						<MonthlyIncomeExpenseComparison companyId={companyId} />

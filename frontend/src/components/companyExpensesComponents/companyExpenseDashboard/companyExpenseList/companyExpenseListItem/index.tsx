@@ -28,7 +28,9 @@ const CompanyExpenseListItem: FC<CompanyExpenseListItemProps> = ({ expense, edit
 				<div className="mr-5">
 					<Modal
 						id={idModalEdit}
-						openButtonText={<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={
+							<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10 transition duration-200"></i>
+						}
 						openButtonStyle={""}>
 						<EditCompanyExpenseForm
 							expense={expense}
@@ -40,7 +42,9 @@ const CompanyExpenseListItem: FC<CompanyExpenseListItemProps> = ({ expense, edit
 				<div>
 					<Modal
 						id={idModalDelete}
-						openButtonText={<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={
+							<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10 transition duration-200"></i>
+						}
 						openButtonStyle={""}>
 						<DeleteCompanyExpenseForm
 							expenseId={expense.id}

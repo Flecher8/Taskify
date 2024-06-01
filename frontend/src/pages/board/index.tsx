@@ -4,9 +4,6 @@ import { useParams } from "react-router-dom";
 import projectsStore from "stores/projectsStore";
 import "./boardPage.scss";
 import { Project } from "entities/project";
-import sectionsStore from "stores/sectionsStore";
-import { Section, SectionType } from "entities/section";
-import { CustomTask } from "entities/customTask";
 import Board from "components/board";
 import Loading from "components/loading";
 
@@ -31,7 +28,7 @@ const BoardPage: FC<BoardPageProps> = () => {
 
 	if (!project) {
 		return (
-			<div className="w-full h-full">
+			<div className="w-full h-full flex justify-center items-center">
 				<Loading />
 			</div>
 		);
@@ -40,7 +37,13 @@ const BoardPage: FC<BoardPageProps> = () => {
 	return (
 		<div className="flex flex-col w-full h-full">
 			<BoardMenu project={project} />
-			{project === null ? <div>Loading...</div> : <Board project={project} />}
+			{project === null ? (
+				<div>
+					<Loading />
+				</div>
+			) : (
+				<Board project={project} />
+			)}
 		</div>
 	);
 };

@@ -13,7 +13,7 @@ interface BoardMenuProps {
 
 const BoardMenu: FC<BoardMenuProps> = ({ project }) => {
 	const [projectName, setProjectName] = useState("");
-	const navigate = useNavigate(); // Use the useNavigate hook
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (project !== null) {
@@ -42,12 +42,12 @@ const BoardMenu: FC<BoardMenuProps> = ({ project }) => {
 			<div className="m-5 p-1 flex flex-row justify-start">
 				<ClickToEdit initialValue={projectName} onValueChange={handleProjectNameChange} />
 			</div>
-			<div className="p-1 m-5 flex flex-row justify-end hover:bg-gray-300 duration-300">
+			<div className="p-1 m-5 flex flex-row justify-end">
 				<DropDownContext
 					dropDownDirection={"dropdown-end"}
 					openDropDownButtonContent={<i className="fa-light fa-ellipsis"></i>}
 					openDropDownButtonStyle={
-						"p-1 flex items-center hover:bg-gray-200 hover:cursor-pointer transition duration-300"
+						"p-1 flex items-center hover:bg-gray-100 hover:cursor-pointer transition duration-300"
 					}
 					dropDownContentStyle={"bg-white rounded-md"}>
 					<BoardMoreMenu project={project} deleteProject={deleteProject} />

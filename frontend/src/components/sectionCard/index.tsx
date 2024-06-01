@@ -2,7 +2,6 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import TaskCard from "components/taskCard";
 import { Section, SectionType } from "entities/section";
 import { FC, useEffect, useRef, useState } from "react";
-import "./section.scss";
 import ClickToEdit from "components/clickToEditText";
 import sectionsStore from "stores/sectionsStore";
 import DropDownContext from "components/dropDownContext";
@@ -139,7 +138,7 @@ const SectionCard: FC<SectionCardProps> = ({
 						{providedDroppable => {
 							return (
 								<div
-									className="section p-[8px] min-h-[5px] text-sm max-h-96 overflow-y-auto"
+									className="section p-[8px] min-h-[5px] text-sm max-h-96 overflow-y-auto custom-scroll-sm"
 									{...providedDroppable.droppableProps}
 									ref={providedDroppable.innerRef}>
 									{section.customTasks.map((customTask, index) => (

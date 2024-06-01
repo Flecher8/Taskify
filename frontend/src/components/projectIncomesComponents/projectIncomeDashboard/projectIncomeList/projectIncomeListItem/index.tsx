@@ -33,7 +33,9 @@ const ProjectIncomeListItem: FC<ProjectIncomeListItemProps> = ({ income, editInc
 				<div className="mr-5">
 					<Modal
 						id={income.id + idEditIncomeModal}
-						openButtonText={<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={
+							<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10 transition duration-200"></i>
+						}
 						openButtonStyle={""}>
 						<EditProjectIncomeForm income={income} edit={editIncome} close={closeEditModal} />
 					</Modal>
@@ -41,7 +43,9 @@ const ProjectIncomeListItem: FC<ProjectIncomeListItemProps> = ({ income, editInc
 				<div>
 					<Modal
 						id={income.id + idDeleteIncomeModal}
-						openButtonText={<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={
+							<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10 transition duration-200"></i>
+						}
 						openButtonStyle={""}>
 						<DeleteProjectIncomeForm income={income} deleteIncome={deleteIncome} close={closeDeleteModal} />
 					</Modal>

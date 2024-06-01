@@ -12,7 +12,7 @@ interface ProjectRoleListProps {
 const ProjectRoleList: FC<ProjectRoleListProps> = ({ roles, filterName, editRole, deleteRole }) => {
 	return (
 		<div className="flex flex-col flex-between h-full">
-			<div className="flex flex-col border-b max-h-96 overflow-auto">
+			<div className="flex flex-col border-b max-h-96 overflow-auto custom-scroll-sm">
 				{roles
 					.filter(role => role.name.toLowerCase().includes(filterName.toLowerCase()))
 					.map(role => (

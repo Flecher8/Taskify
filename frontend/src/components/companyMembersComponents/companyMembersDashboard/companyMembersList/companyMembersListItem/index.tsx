@@ -33,7 +33,9 @@ const CompanyMembersListItem: FC<CompanyMembersListItemProps> = ({ member, editM
 				<div className="mr-5">
 					<Modal
 						id={member.id + idEditMemberModal}
-						openButtonText={<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={
+							<i className="fa-light fa-pen-to-square rounded-full hover:bg-gray-200 p-1 w-10 transition duration-200"></i>
+						}
 						openButtonStyle={""}>
 						<EditCompanyMemberForm member={member} edit={editMember} close={closeEditModal} />
 					</Modal>
@@ -41,7 +43,9 @@ const CompanyMembersListItem: FC<CompanyMembersListItemProps> = ({ member, editM
 				<div>
 					<Modal
 						id={member.id + idDeleteMemberModal}
-						openButtonText={<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10"></i>}
+						openButtonText={
+							<i className="fa-light fa-trash rounded-full hover:bg-gray-200 p-1 w-10 transition duration-200"></i>
+						}
 						openButtonStyle={""}>
 						<DeleteCompanyMemberForm member={member} deleteMember={deleteMember} close={closeDeleteModal} />
 					</Modal>

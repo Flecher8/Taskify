@@ -19,7 +19,12 @@ const BoardMoreMenu: FC<BoardMoreMenuProps> = ({ project, deleteProject }) => {
 		<div className="flex flex-col w-32 m-1">
 			<Modal
 				id={modalDeleteId}
-				openButtonText={"Delete"}
+				openButtonText={
+					<div className="flex flex-row gap-2">
+						<i className="fa-light fa-trash rounded-full p-1"></i>
+						<div>Delete</div>
+					</div>
+				}
 				openButtonStyle={"flex hover:bg-gray-200 transition duration-200 hover:cursor-pointer pl-3 rounded"}>
 				<DeleteProjectForm deleteProject={deleteProject} close={closeDeleteModal} />
 			</Modal>

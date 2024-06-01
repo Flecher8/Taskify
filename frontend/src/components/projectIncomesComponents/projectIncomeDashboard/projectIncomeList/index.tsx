@@ -12,7 +12,7 @@ interface ProjectIncomeListProps {
 const ProjectIncomeList: FC<ProjectIncomeListProps> = ({ incomes, filterName, editIncome, deleteIncome }) => {
 	return (
 		<div className="flex flex-col h-full">
-			<div className="flex flex-col border-b max-h-96 overflow-auto">
+			<div className="flex flex-col border-b max-h-96 overflow-auto custom-scroll-sm">
 				{incomes
 					.filter(income => income.name.toLowerCase().includes(filterName.toLowerCase()))
 					.map(income => (

@@ -140,8 +140,8 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 	};
 
 	return (
-		<div className="flex flex-row justify-center gap-3 min-h-full">
-			<div className="flex flex-col w-64">
+		<div className="flex flex-row justify-center min-h-full">
+			<div className="flex flex-col w-3/4">
 				<div className="flex flex-row items-center mb-5">
 					<div className="flex mr-3">
 						<i className="fa-light fa-list-check"></i>
@@ -171,7 +171,7 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 								)
 							}
 							openDropDownButtonStyle={"rounded-full hover:bg-gray-300 w-50 h-50 p-1 transition duration-300"}
-							dropDownContentStyle={"bg-white w-[300px]"}>
+							dropDownContentStyle={"bg-white w-[300px] p-1"}>
 							<SelectUsersWithFilter
 								users={assignableUsers}
 								onSelect={handleUserChange}
@@ -214,19 +214,23 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 					<div className="mr-3">
 						<i className="fa-light fa-hundred-points"></i>
 					</div>
-					<div className="flex flex-row items-center justify-between w-full">
-						<label className="flex w-36">Story points</label>
-						<ClickToEdit
-							initialTextStyle={"bg-gray-100 hover:bg-gray-300 transition duration-300 flex justify-center px-5"}
-							inputStyle={"bg-gray-100 w-full flex justify-center items-center"}
-							initialValue={customTask.storyPoints || null}
-							onValueChange={handleStoryPointsChange}
-							checkEmptyText={false}
-							type={"number"}
-							minValue={1}
-							maxValue={100}
-							placeholder={"-"}
-						/>
+					<div className="flex flex-row items-center w-full">
+						<label className="flex">Story points</label>
+						<div className="w-24 pl-5">
+							<ClickToEdit
+								initialTextStyle={
+									"bg-gray-100 hover:bg-gray-200 transition duration-200 flex justify-center px-5"
+								}
+								inputStyle={"bg-gray-100 flex justify-center items-center"}
+								initialValue={customTask.storyPoints || null}
+								onValueChange={handleStoryPointsChange}
+								checkEmptyText={false}
+								type={"number"}
+								minValue={1}
+								maxValue={100}
+								placeholder={"-"}
+							/>
+						</div>
 					</div>
 				</div>
 				<div className="flex flex-row w-full">
@@ -237,7 +241,7 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 						<label>Description</label>
 						<ClickToEdit
 							initialTextStyle={
-								"bg-gray-100 hover:bg-gray-300 h-[50px] hover:bg-gray-300 transition duration-300"
+								"bg-gray-100 hover:bg-gray-300 h-[50px] hover:bg-gray-200 transition duration-300"
 							}
 							inputStyle={"h-[200px] w-full "}
 							initialValue={customTask.description || ""}
@@ -250,25 +254,25 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 					</div>
 				</div>
 			</div>
-			<div className="flex flex-col w-36">
+			<div className="flex flex-col w-1/4">
 				<div>
 					<h2>Actions</h2>
 				</div>
-				<div>
+				<div className="w-full">
 					<DropDownContext
-						dropDownDirection="dropdown-start"
+						dropDownDirection="dropdown-end"
 						openDropDownButtonContent={
-							<button className="flex border border-red-500 hover:bg-red-500 hover:text-white transition duration-300 hover:cursor-pointer px-2 py-1 w-full justify-center items-center font-bold text-red-500">
+							<button className="w-full flex border border-red-500 hover:bg-red-500 hover:text-white transition duration-300 hover:cursor-pointer px-2 py-1 w-full justify-center items-center font-bold text-red-500">
 								Delete
 							</button>
 						}
 						openDropDownButtonStyle="flex items-center transition duration-300"
-						dropDownContentStyle="bg-white">
+						dropDownContentStyle="bg-white shadow-lg drop-shadow-lg rounded-md z-[10000] p-1">
 						<div className="m-3 h-12 w-24 flex flex-col items-center">
 							<h2 className="mb-3">Are you sure?</h2>
 							<button
 								onClick={handleDeleteTask}
-								className="mb-5 flex border bg-red-500 hover:bg-red-600 rounded-full px-2 py-1 w-full justify-center items-center font-bold text-white">
+								className="mb-5 flex border bg-red-500 hover:bg-white hover:border-red-600 hover:text-red-600 transition duration-200 rounded-full px-2 py-1 w-full justify-center items-center font-bold text-white">
 								Delete
 							</button>
 						</div>

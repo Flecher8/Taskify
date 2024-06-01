@@ -18,6 +18,8 @@ namespace Taskify.BLL.Services
         private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
         private readonly IProjectRoleRepository _projectRoleRepository;
+        private readonly ISectionRepository _sectionsRepository;
+        private readonly ICustomTaskRepository _customTaskRepository;
         private readonly IValidator<ProjectMember> _validator;
         private readonly ILogger<ProjectMembersService> _logger;
 
@@ -26,6 +28,8 @@ namespace Taskify.BLL.Services
             IProjectRepository projectRepository,
             IUserRepository userRepository,
             IProjectRoleRepository projectRoleRepository,
+            ISectionRepository sectionsRepository,
+            ICustomTaskRepository customTaskRepository,
             IValidator<ProjectMember> validator,
             ILogger<ProjectMembersService> logger
         )
@@ -34,6 +38,8 @@ namespace Taskify.BLL.Services
             _projectRepository = projectRepository;
             _userRepository = userRepository;
             _projectRoleRepository = projectRoleRepository;
+            _sectionsRepository = sectionsRepository;
+            _customTaskRepository = customTaskRepository;
             _validator = validator;
             _logger = logger;
         }
@@ -114,13 +120,56 @@ namespace Taskify.BLL.Services
         {
             try
             {
+                var projectMember = (await _projectMemberRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeProjectEntity()
+                        .IncludeUserEntity()
+                        .WithFilter(pm => pm.Id == id)
+                )).FirstOrDefault();
+
+                if (projectMember == null)
+                {
+                    return ResultFactory.Failure<bool>("Project member with the specified ID does not exist.");
+                }
+
+                // Remove assignments from tasks
+                await RemoveMemberAssignmentsFromTasks(projectMember);
+
                 await _projectMemberRepository.DeleteAsync(id);
+
                 return ResultFactory.Success(true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return ResultFactory.Failure<bool>("Can not delete the project member.");
+            }
+        }
+
+        private async Task RemoveMemberAssignmentsFromTasks(ProjectMember projectMember)
+        {
+            try
+            {
+                var sections = await _sectionsRepository.GetFilteredItemsAsync(
+                    builder => builder
+                        .IncludeCustomTasksEntity()
+                        .WithFilter(section => section.Project.Id == projectMember.Project.Id)
+                );
+
+                foreach (var section in sections)
+                {
+                    foreach (var customTask in section.CustomTasks
+                        .Where(task => task.ResponsibleUser != null && task.ResponsibleUser.Id == projectMember.User.Id))
+                    {
+                        customTask.ResponsibleUser = null;
+                        await _customTaskRepository.UpdateAsync(customTask);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error removing member assignments from tasks: {ex.Message}");
+                throw;
             }
         }
 
@@ -336,7 +385,7 @@ namespace Taskify.BLL.Services
                     return ResultFactory.Failure<bool>("Project member with the specified user ID and project ID does not exist.");
                 }
 
-                await _projectMemberRepository.DeleteAsync(projectMember.Id);
+                await DeleteProjectMemberAsync(projectMember.Id);
                 return ResultFactory.Success(true);
             }
             catch (Exception ex)

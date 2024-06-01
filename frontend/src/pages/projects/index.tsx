@@ -117,7 +117,7 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 							)}
 						</div>
 					</div>
-					<div className="w-full">
+					<div className="w-full overflow-auto custom-scroll-sm">
 						<ProjectsList projects={projects} isLoading={isLoading} />
 					</div>
 					{projectsMembership.length === 0 ? (
@@ -127,7 +127,7 @@ const ProjectsPage: FC<ProjectsPageProps> = observer(() => {
 							<div className="flex flex-row items-center mb-10">
 								<h1 className="text-2xl font-bold mr-5">Projects Membership</h1>
 							</div>
-							<div className="w-full">
+							<div className="w-full overflow-auto custom-scroll-sm">
 								<ProjectsList projects={projectsMembership} isLoading={isLoading} />
 							</div>
 						</>

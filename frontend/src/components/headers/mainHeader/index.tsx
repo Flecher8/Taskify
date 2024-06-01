@@ -1,10 +1,26 @@
-import React, { FC, MouseEventHandler } from "react";
+import React, { FC, MouseEventHandler, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./mainHeader.scss";
 import DropDownContext from "components/dropDownContext";
 import NotificationsDashboard from "components/notificationsDashboard";
+import UserSettingsMenu from "components/userSettingsMenu";
+import { User } from "entities/user";
+import userStore from "stores/userStore";
+import authStore from "stores/authStore";
 
 const MainHeader: FC = () => {
+	const [user, setUser] = useState<User | undefined>(undefined);
+
+	useEffect(() => {
+		const loadUserData = async () => {
+			const userId = userStore.userId;
+			if (userId) {
+				const userData = await userStore.getUserById(userId);
+				setUser(userData);
+			}
+		};
+		loadUserData();
+	}, []);
 	return (
 		<header className="bg-indigo-500 p-4">
 			<div className="container mx-auto flex justify-between items-center">
@@ -27,9 +43,13 @@ const MainHeader: FC = () => {
 							</DropDownContext>
 						</li>
 						<li>
-							<Link to="/profile" className="hover:text-gray-300 text-white">
-								<i className="fa-light fa-user"></i>
-							</Link>
+							<DropDownContext
+								dropDownDirection="dropdown-end"
+								openDropDownButtonContent={<i className="fa-light fa-user"></i>}
+								openDropDownButtonStyle="text-white"
+								dropDownContentStyle="w-48 bg-white mt-5">
+								<UserSettingsMenu user={user} />
+							</DropDownContext>
 						</li>
 					</ul>
 				</nav>
