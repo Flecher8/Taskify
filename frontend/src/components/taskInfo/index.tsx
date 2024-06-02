@@ -142,20 +142,22 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 	return (
 		<div className="flex flex-row justify-center min-h-full">
 			<div className="flex flex-col w-3/4">
-				<div className="flex flex-row items-center mb-5">
-					<div className="flex mr-3">
+				<div className="grid grid-cols-9 items-center mb-5">
+					<div className="flex col-span-1">
 						<i className="fa-light fa-list-check"></i>
 					</div>
-					<div className="w-full">
+					<div className="col-span-8">
 						<ClickToEdit initialValue={customTask.name} onValueChange={handleTaskNameChange} />
 					</div>
 				</div>
-				<div className="flex flex-row items-center mb-5 w-full">
-					<div className="mr-3">
+				<div className="items-center mb-5 w-full grid grid-cols-9">
+					<div className="col-span-1">
 						<i className="fa-light fa-user"></i>
 					</div>
-					<div className="flex flex-row items-center gap-x-5 justify-between">
+					<div className="col-span-3">
 						<label>Assigned</label>
+					</div>
+					<div className="col-span-5 flex items-center justify-center w-full">
 						<DropDownContext
 							dropDownDirection="dropdown-start"
 							openDropDownButtonContent={
@@ -180,65 +182,76 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 						</DropDownContext>
 					</div>
 				</div>
-				<div className="flex flex-row mb-5">
-					<div className="mr-2">
+				<div className="mb-5 grid grid-cols-9">
+					<div className="col-span-1">
 						<i className="fa-light fa-timer"></i>
 					</div>
-					<div>
-						<div className="flex flex-row justify-between mb-1">
-							<label className="w-full mr-2">Time tracker</label>
-							<TaskTimeTrackerComponent customTaskId={customTask.id} />
-						</div>
+					<div className="col-span-3">
+						<label className="w-full">Time tracker</label>
+					</div>
+					<div className="col-span-5 flex items-center justify-center">
+						<TaskTimeTrackerComponent customTaskId={customTask.id} />
 					</div>
 				</div>
-				<div className="flex flex-row mb-5">
-					<div className="mr-3">
+				<div className="mb-5 grid grid-cols-9">
+					<div className="col-span-1">
 						<i className="fa-light fa-calendar"></i>
 					</div>
-					<div className="">
-						<div className="flex flex-row items-center mb-1">
-							<label className="w-full">Start date</label>
-							<DateTimePicker
-								initValue={dateToIDay(startDate)}
-								onChange={handleStartDateChange}
-								calenderModalClass={"max-w-[300px]"}
-							/>
+					<div className="col-span-8">
+						<div className="items-center grid grid-cols-8 mb-1">
+							<div className="col-span-3">
+								<label className="w-full">Start date</label>
+							</div>
+							<div className="col-span-5">
+								<DateTimePicker
+									initValue={dateToIDay(startDate)}
+									onChange={handleStartDateChange}
+									calenderModalClass={"max-w-[300px]"}
+								/>
+							</div>
 						</div>
-						<div className="flex flex-row items-center">
-							<label className="w-full">Due date</label>
-							<DateTimePicker initValue={dateToIDay(endDate)} onChange={handleEndDateChange} />
+						<div className="items-center grid grid-cols-8">
+							<div className="col-span-3">
+								<label className="w-full">Due date</label>
+							</div>
+							<div className="col-span-5">
+								<DateTimePicker initValue={dateToIDay(endDate)} onChange={handleEndDateChange} />
+							</div>
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-row items-center mb-5 w-full">
-					<div className="mr-3">
+				<div className="mb-5 grid grid-cols-9">
+					<div className="col-span-1">
 						<i className="fa-light fa-hundred-points"></i>
 					</div>
-					<div className="flex flex-row items-center w-full">
-						<label className="flex">Story points</label>
-						<div className="w-24 pl-5">
-							<ClickToEdit
-								initialTextStyle={
-									"bg-gray-100 hover:bg-gray-200 transition duration-200 flex justify-center px-5"
-								}
-								inputStyle={"bg-gray-100 flex justify-center items-center"}
-								initialValue={customTask.storyPoints || null}
-								onValueChange={handleStoryPointsChange}
-								checkEmptyText={false}
-								type={"number"}
-								minValue={1}
-								maxValue={100}
-								placeholder={"-"}
-							/>
-						</div>
+					<div className="col-span-3">
+						<label>Story points</label>
+					</div>
+					<div className="col-span-5 flex justify-center items-center">
+						<ClickToEdit
+							initialTextStyle={"bg-gray-100 hover:bg-gray-200 transition duration-200 flex justify-center px-5"}
+							inputStyle={"bg-gray-100 flex justify-center items-center"}
+							initialValue={customTask.storyPoints || null}
+							onValueChange={handleStoryPointsChange}
+							checkEmptyText={false}
+							type={"number"}
+							minValue={1}
+							maxValue={100}
+							placeholder={"-"}
+						/>
 					</div>
 				</div>
-				<div className="flex flex-row w-full">
-					<div className="mr-3">
+				<div className="grid grid-cols-9 mb-1">
+					<div className="col-span-1">
 						<i className="fa-light fa-align-justify"></i>
 					</div>
-					<div className="w-full">
+					<div className="col-span-8">
 						<label>Description</label>
+					</div>
+				</div>
+				<div className="grid grid-cols-9">
+					<div className="col-span-1"> </div>
+					<div className="col-span-8">
 						<ClickToEdit
 							initialTextStyle={
 								"bg-gray-100 hover:bg-gray-300 h-[50px] hover:bg-gray-200 transition duration-300"
