@@ -12,31 +12,31 @@ interface ProjectStatisticsDashboardProps {
 
 const ProjectStatisticsDashboard: FC<ProjectStatisticsDashboardProps> = ({ projectId }) => {
 	return (
-		<div className="w-full h-full flex flex-nowrap flex-col overflow-auto custom-scroll-sm">
-			<div className="flex flex-row w-full justify-around flex-wrap mb-5 gap-3">
-				<div className="flex min-w-64 h-64">
-					<StatisticsContainer>
+		<div className="w-full h-full flex flex-nowrap flex-col overflow-auto custom-scroll-sm ml-3 mt-3">
+			<div className="flex flex-row w-full justify-around flex-wrap mb-3 gap-3">
+				<div className="flex flex-1">
+					<StatisticsContainer name={"Tasks status"}>
 						<SectionTypeTaskCountForProjectStatisticsComponent projectId={projectId} />
 					</StatisticsContainer>
 				</div>
-				<div className="flex h-64">
-					<StatisticsContainer>
+				<div className="flex flex-1">
+					<StatisticsContainer name={"Tasks by sections"}>
 						<TaskCountForSectionsStatisticsComponent projectId={projectId} />
 					</StatisticsContainer>
 				</div>
-				<div className="flex h-64">
-					<StatisticsContainer>
+				<div className="flex flex-1">
+					<StatisticsContainer name={"Tasks by roles"}>
 						<TaskCountByRolesStatisticsComponent projectId={projectId} />
 					</StatisticsContainer>
 				</div>
 			</div>
-			<div className="flex h-64 mb-5">
-				<StatisticsContainer>
+			<div className="flex mb-5">
+				<StatisticsContainer name={"Tasks by users"}>
 					<UserTaskCountForProjectStatisticsComponent projectId={projectId} />
 				</StatisticsContainer>
 			</div>
-			<div className="flex h-64 mb-5">
-				<StatisticsContainer>
+			<div className="flex mb-5">
+				<StatisticsContainer name={"Story points by users"}>
 					<UserStoryPointsCountForProjectStatisticsComponent projectId={projectId} />
 				</StatisticsContainer>
 			</div>

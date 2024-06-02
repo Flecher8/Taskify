@@ -12,31 +12,31 @@ interface CompanyStatisticsDashboardProps {
 
 const CompanyStatisticsDashboard: FC<CompanyStatisticsDashboardProps> = ({ companyId }) => {
 	return (
-		<div className="w-full h-full flex flex-nowrap flex-col overflow-auto custom-scroll-sm">
-			<div className="flex flex-row w-full justify-around flex-wrap mb-5 gap-3">
-				<div className="flex min-w-64 h-64">
-					<StatisticsContainer>
+		<div className="w-full h-full flex flex-nowrap flex-col overflow-auto custom-scroll-sm ml-3 mt-3">
+			<div className="flex flex-row w-full justify-around flex-wrap mb-3 gap-3">
+				<div className="flex flex-1">
+					<StatisticsContainer name={"Monthly Budget"}>
 						<MonthlyIncomeExpenseComparison companyId={companyId} />
 					</StatisticsContainer>
 				</div>
-				<div className="flex h-64">
-					<StatisticsContainer>
+				<div className="flex flex-1">
+					<StatisticsContainer name={"Yearly Budget"}>
 						<YearlyIncomeExpenseComparison companyId={companyId} />
 					</StatisticsContainer>
 				</div>
-				<div className="flex h-64">
-					<StatisticsContainer>
+				<div className="flex flex-1">
+					<StatisticsContainer name={"Roles salary"}>
 						<RoleSalaryStatisticsComponent companyId={companyId} />
 					</StatisticsContainer>
 				</div>
 			</div>
-			<div className="flex h-64">
-				<StatisticsContainer>
+			<div className="flex mb-5">
+				<StatisticsContainer name={"Monthly Incomes"}>
 					<MonthlyIncomeDistributionByProjects companyId={companyId} />
 				</StatisticsContainer>
 			</div>
-			<div className="flex h-64">
-				<StatisticsContainer>
+			<div className="flex mb-5">
+				<StatisticsContainer name={"Yearly Incomes"}>
 					<YearlyIncomeDistributionByProjects companyId={companyId} />
 				</StatisticsContainer>
 			</div>
