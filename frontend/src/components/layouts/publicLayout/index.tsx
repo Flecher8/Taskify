@@ -15,10 +15,14 @@ const PublicLayout: FC<PublicLayoutProps> = ({ showHeader = true }) => {
 	}, []);
 	return (
 		<React.Fragment>
-			{showHeader && <PublicHeader />}
-			<main>
-				<Outlet />
-			</main>
+			<div className="flex flex-col h-full">
+				{showHeader && <PublicHeader />}
+				<div className="flex h-full w-full overflow-hidden">
+					<main className="flex-grow w-full h-full">
+						<Outlet />
+					</main>
+				</div>
+			</div>
 		</React.Fragment>
 	);
 };

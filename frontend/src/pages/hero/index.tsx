@@ -5,20 +5,28 @@ interface HeroPageProps {}
 
 const HeroPage: FC<HeroPageProps> = () => {
 	return (
-		<div className="hero min-h-screen bg-white text-gray-800">
-			<div className="hero-content text-center">
-				<div className="max-w-md">
-					<h1 className="text-5xl font-bold">Welcome to Taskify</h1>
-					<p className="py-6">
-						Boost your productivity and stay organized with Taskify! Whether you're managing projects, tracking
-						tasks, or collaborating with your team, Taskify has got you covered.
-					</p>
-					<Link to="/signup" className="hover:text-gray-300">
-						<button className="btn btn-primary bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-							Get Started
-						</button>
-					</Link>
+		<div className="hero h-full bg-white text-gray-800 overflow-auto custom-scroll-base">
+			<div className="flex flex-col">
+				<div className="max-w-lg flex flex-col justify-center items-center">
+					<h1 className="text-5xl font-bold">Welcome to Taskify!</h1>
+					<div className="w-3/4 flex flex-col justify-center">
+						<p className="py-4 text-center">Get everything you need in one app!</p>
+						<Link to="/signup" className="">
+							<button className="w-full btn btn-primary bg-gradient-to-r from-indigo-500 from-10% to-purple-500 to-50% text-white text-2xl font-semibold">
+								Get Started
+							</button>
+						</Link>
+					</div>
 				</div>
+				<div>123</div>
+				<div>123</div>
+				<div>123</div>
+				<div>123</div>
+				<div>123</div>
+				<div>123</div>
+				<div>123</div>
+				<div>123</div>
+				<div>123</div>
 			</div>
 		</div>
 	);

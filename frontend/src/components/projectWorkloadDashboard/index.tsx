@@ -98,7 +98,7 @@ const ProjectWorkloadDashboard: FC<ProjectWorkloadDashboardProps> = ({ projectId
 	};
 
 	return (
-		<div className="flex flex-col w-full h-full overflow-auto custom-scroll-sm">
+		<div className="flex flex-col w-full h-full">
 			<div className="flex flex-row gap-5 w-full h-16 items-center text-gray-500 pl-10 border-b border-gray-200 py-5">
 				<div
 					className="flex justify-center items-center rounded-full bg-white px-2 border border-gray-300 cursor-pointer hover:bg-gray-100 transition duration-200"
@@ -114,58 +114,62 @@ const ProjectWorkloadDashboard: FC<ProjectWorkloadDashboardProps> = ({ projectId
 						onClick={() => handleDateChange("next")}>{`>`}</div>
 				</div>
 			</div>
-			<div className="grid grid-cols-9 w-full">
-				<div className="col-span-2 border-b border-r border-gray-200 p-2 truncate overflow-hidden">Members</div>
-				{weekDates.map((date, index) => (
-					<div
-						key={index}
-						className={`col-span-1 border-b border-gray-200 p-2 text-center truncate ${
-							index < weekDates.length - 1 && date.getMonth() !== weekDates[index + 1].getMonth()
-								? "border-r"
-								: ""
-						}`}>
-						<ProjectWorkloadDate
-							date={date}
-							showMonth={index === 0 || date.getDate() === 1 || date.getDay() === 1}
-							selected={date.toDateString() === new Date().toDateString()}
-						/>
-					</div>
-				))}
-			</div>
-			{loading ? (
-				<div className="flex justify-center items-center w-full h-full">
-					<Loading />
-				</div>
-			) : (
-				<>
-					{members.map((member, index) => (
-						<div key={index} className="grid grid-cols-9 w-full">
-							<div className="col-span-2 border-b border-r border-gray-200 p-2 truncate overflow-hidden">{`${member.firstName} ${member.lastName}`}</div>
-							{weekDates.map((date, dateIndex) => (
-								<div
-									key={dateIndex}
-									className="col-span-1 border-b border-r border-gray-200 p-2 text-center h-20">
-									<TimeSpentIndicator
-										secondsSpent={timeStatistics[member.id]?.[date.toISOString()] || 0}
-										normalWorkingHoursPerDay={project?.normalWorkingHoursPerDay || 8}
-										isActive={!isWeekend(date)} // Set isActive based on whether the date is a weekend or not
-									/>
-								</div>
-							))}
+			<div className="relative overflow-auto custom-scroll-sm">
+				<div className="grid grid-cols-9 w-full sticky top-0 bg-white z-10">
+					<div className="col-span-2 border-b border-r border-gray-200 p-2 truncate overflow-hidden">Members</div>
+					{weekDates.map((date, index) => (
+						<div
+							key={index}
+							className={`col-span-1 border-b border-gray-200 p-2 text-center truncate ${
+								index < weekDates.length - 1 && date.getMonth() !== weekDates[index + 1].getMonth()
+									? "border-r"
+									: ""
+							}`}>
+							<ProjectWorkloadDate
+								date={date}
+								showMonth={index === 0 || date.getDate() === 1 || date.getDay() === 1}
+								selected={date.toDateString() === new Date().toDateString()}
+							/>
 						</div>
 					))}
-					<div className="grid grid-cols-9 w-full">
-						<div className="col-span-2 border-b border-r border-gray-200 p-2 font-semibold"></div>
-						{weekDates.map((date, index) => (
-							<div
-								key={index}
-								className="col-span-1 border-b border-r border-gray-200 p-2 text-center text-gray-500">
-								{project?.normalWorkingHoursPerDay} h
+				</div>
+				<div className="overflow-x-auto custom-scroll-sm">
+					{loading ? (
+						<div className="flex justify-center items-center w-full h-full">
+							<Loading />
+						</div>
+					) : (
+						<div className="h-full w-full">
+							{members.map((member, index) => (
+								<div key={index} className="grid grid-cols-9 w-full">
+									<div className="col-span-2 border-b border-r border-gray-200 p-2 truncate overflow-hidden">{`${member.firstName} ${member.lastName}`}</div>
+									{weekDates.map((date, dateIndex) => (
+										<div
+											key={dateIndex}
+											className="col-span-1 border-b border-r border-gray-200 p-2 text-center h-20">
+											<TimeSpentIndicator
+												secondsSpent={timeStatistics[member.id]?.[date.toISOString()] || 0}
+												normalWorkingHoursPerDay={project?.normalWorkingHoursPerDay || 8}
+												isActive={!isWeekend(date)} // Set isActive based on whether the date is a weekend or not
+											/>
+										</div>
+									))}
+								</div>
+							))}
+							<div className="grid grid-cols-9 w-full flex-shrink-0">
+								<div className="col-span-2 border-b border-r border-gray-200 p-2 font-semibold"></div>
+								{weekDates.map((date, index) => (
+									<div
+										key={index}
+										className="col-span-1 border-b border-r border-gray-200 p-2 text-center text-gray-500 flex-shrink-0 min-w-[100px]">
+										{project?.normalWorkingHoursPerDay} h
+									</div>
+								))}
 							</div>
-						))}
-					</div>
-				</>
-			)}
+						</div>
+					)}
+				</div>
+			</div>
 		</div>
 	);
 };
