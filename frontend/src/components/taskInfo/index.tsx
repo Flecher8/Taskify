@@ -140,7 +140,7 @@ const TaskInfo: FC<TaskInfoProps> = ({ customTask, section, close, editTask, del
 	};
 
 	return (
-		<div className="flex flex-row justify-center min-h-full">
+		<div className="flex flex-row justify-center min-h-full overflow-auto custom-scroll-sm">
 			<div className="flex flex-col w-3/4">
 				<div className="grid grid-cols-9 items-center mb-5">
 					<div className="flex col-span-1">

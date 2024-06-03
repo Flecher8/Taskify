@@ -115,7 +115,7 @@ const ProjectWorkloadDashboard: FC<ProjectWorkloadDashboardProps> = ({ projectId
 				</div>
 			</div>
 			<div className="relative overflow-auto custom-scroll-sm">
-				<div className="grid grid-cols-9 w-full sticky top-0 bg-white z-10">
+				<div className="grid grid-cols-9 w-full sticky top-0 bg-white z-[1]">
 					<div className="col-span-2 border-b border-r border-gray-200 p-2 truncate overflow-hidden">Members</div>
 					{weekDates.map((date, index) => (
 						<div
@@ -133,7 +133,7 @@ const ProjectWorkloadDashboard: FC<ProjectWorkloadDashboardProps> = ({ projectId
 						</div>
 					))}
 				</div>
-				<div className="overflow-x-auto custom-scroll-sm">
+				<div className="overflow-hidden">
 					{loading ? (
 						<div className="flex justify-center items-center w-full h-full">
 							<Loading />

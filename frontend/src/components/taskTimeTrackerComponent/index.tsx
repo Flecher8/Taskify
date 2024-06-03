@@ -191,7 +191,7 @@ const TaskTimeTrackerComponent: FC<TaskTimeTrackerComponentProps> = ({ customTas
 				</div>
 				<div>
 					<DropDownContext
-						dropDownDirection="dropdown-start"
+						dropDownDirection="dropdown-end"
 						openDropDownButtonContent={
 							<div>
 								{stopwatchIsRunning ? (

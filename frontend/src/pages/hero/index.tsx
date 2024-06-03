@@ -18,15 +18,6 @@ const HeroPage: FC<HeroPageProps> = () => {
 						</Link>
 					</div>
 				</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
 			</div>
 		</div>
 	);
