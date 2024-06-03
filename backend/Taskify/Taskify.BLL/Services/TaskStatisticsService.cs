@@ -309,7 +309,7 @@ namespace Taskify.BLL.Services
                         roleTaskCounts[role] = 0;
                     }
 
-                    // Count tasks assigned to the member
+                    // Count tasks assigned to the member (Errors)
                     var tasksResult = await _customTasksService.GetCustomTasksAssignedForUserInProjectAsync(projectId, member.User.Id);
                     if (tasksResult.IsSuccess)
                     {

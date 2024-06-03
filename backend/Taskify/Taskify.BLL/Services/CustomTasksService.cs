@@ -581,23 +581,19 @@ namespace Taskify.BLL.Services
                     builder => builder
                         .IncludeProjectEntity()
                         .WithFilter(s => s.Project.Id == projectId)
-                    );
+                );
 
                 var tasks = new List<CustomTask>();
-                // Asynchronously retrieve custom tasks for each section
-                var sectionTasks = sections.Select(section => GetCustomTasksBySectionIdAsync(section.Id));
 
-                // Wait for all tasks to complete
-                await Task.WhenAll(sectionTasks);
-
-                // Add custom tasks from each section to the result list
-                foreach (var sectionTask in sectionTasks)
+                foreach (var section in sections)
                 {
-                    var customTaskResult = await sectionTask;
+                    var customTaskResult = await GetCustomTasksBySectionIdAsync(section.Id);
+
                     if (!customTaskResult.IsSuccess)
                     {
                         return ResultFactory.Failure<List<CustomTask>>(customTaskResult.Errors);
                     }
+
                     tasks.AddRange(customTaskResult.Data);
                 }
 
@@ -609,6 +605,7 @@ namespace Taskify.BLL.Services
                 return ResultFactory.Failure<List<CustomTask>>("Can not get custom tasks by project id.");
             }
         }
+
 
         public async Task<Result<List<CustomTask>>> GetCustomTasksAssignedForUserInProjectAsync(string projectId, string userId)
         {

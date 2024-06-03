@@ -9,7 +9,7 @@ namespace Taskify.Core.Dtos.Statistics
 {
     public class ProjectRoleTaskCountStatisticsDto
     {
-        public ProjectRole? ProjectRole { get; set; }
+        public ProjectRoleDto? ProjectRole { get; set; }
         public int Count { get; set; }
     }
 }

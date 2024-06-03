@@ -9,7 +9,7 @@ namespace Taskify.Core.Dtos.Statistics
 {
     public class UserStoryPointsCountStatisticsDto
     {
-        public User? User { get; set; }
+        public UserDto? User { get; set; }
         public int Count { get; set; }
     }
 }
