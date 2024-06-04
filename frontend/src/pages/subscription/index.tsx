@@ -98,7 +98,7 @@ const SubscriptionPage: FC<SubscriptionProps> = () => {
 
 	return (
 		<div
-			className="flex flex-col items-center justify-center w-full p-4 bg-gray-100 "
+			className="flex flex-col items-center justify-center w-full p-4 bg-gray-100 h-full"
 			style={{
 				backgroundImage: `url(${"https://tailwindcss.com/_next/static/media/docs-dark@tinypng.1bbe175e.png"})`
 			}}>

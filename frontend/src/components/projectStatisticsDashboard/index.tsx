@@ -1,3 +1,4 @@
+import KpiStatisticsComponent from "components/statisticsComponents/kpiComponent";
 import SectionTypeTaskCountForProjectStatisticsComponent from "components/statisticsComponents/sectionTypeTaskCountForProjectStatisticsComponent";
 import TaskCountByRolesStatisticsComponent from "components/statisticsComponents/taskCountByRolesStatisticsComponent";
 import TaskCountForSectionsStatisticsComponent from "components/statisticsComponents/taskCountForSectionsComponent";
@@ -38,6 +39,11 @@ const ProjectStatisticsDashboard: FC<ProjectStatisticsDashboardProps> = ({ proje
 			<div className="flex mb-5">
 				<StatisticsContainer name={"Story points by users"}>
 					<UserStoryPointsCountForProjectStatisticsComponent projectId={projectId} />
+				</StatisticsContainer>
+			</div>
+			<div className="flex mb-5">
+				<StatisticsContainer name={"KPI"}>
+					<KpiStatisticsComponent projectId={projectId} />
 				</StatisticsContainer>
 			</div>
 		</div>

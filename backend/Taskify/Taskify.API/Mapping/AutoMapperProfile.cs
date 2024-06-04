@@ -138,6 +138,9 @@ namespace Taskify.API.Mapping
             // UserTimeSpendOnDateStatistic
             CreateMap<UserTimeSpendOnDateStatistic, UserTimeSpendOnDateStatisticDto>();
             CreateMap<UserTimeSpendOnDateStatisticDto, UserTimeSpendOnDateStatistic>();
+            // KpiStatistics
+            CreateMap<KpiStatistics, KpiStatisticsDto>();
+            CreateMap<KpiStatisticsDto, KpiStatistics>();
         }
     }
 }
