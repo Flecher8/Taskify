@@ -18,6 +18,8 @@ namespace Taskify.BLL.Services
         private readonly IProjectMembersService _projectMembersService;
         private readonly IProjectsService _projectsService;
         private readonly ILogger<KpiStatisticsService> _logger;
+        private readonly int defaultNumberOfStoryPoints = 1;
+        private readonly double secondsInOneHour = 3600.00;
 
         public KpiStatisticsService(
             ICustomTasksService customTasksService,
@@ -56,8 +58,8 @@ namespace Taskify.BLL.Services
 
                 var totalTasks = tasks.Count;
                 var completedTasks = tasks.Count(t => t.Section.SectionType == SectionType.Done);
-                var totalEstimatedTime = tasks.Sum(t => t.StoryPoints ?? 0);
-                var totalTimeSpent = tasks.Sum(t => t.TaskTimeTrackers.Sum(tt => tt.DurationInSeconds)) / 3600.0; // Convert seconds to hours
+                var totalEstimatedTime = tasks.Sum(t => t.StoryPoints ?? defaultNumberOfStoryPoints);
+                var totalTimeSpent = tasks.Sum(t => t.TaskTimeTrackers.Sum(tt => tt.DurationInSeconds)) / secondsInOneHour; // Convert seconds to hours
 
                 if (totalTasks == 0 || totalEstimatedTime == 0)
                 {

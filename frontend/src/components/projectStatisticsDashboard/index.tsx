@@ -42,7 +42,7 @@ const ProjectStatisticsDashboard: FC<ProjectStatisticsDashboardProps> = ({ proje
 				</StatisticsContainer>
 			</div>
 			<div className="flex mb-5">
-				<StatisticsContainer name={"KPI"}>
+				<StatisticsContainer name={"User productivity"}>
 					<KpiStatisticsComponent projectId={projectId} />
 				</StatisticsContainer>
 			</div>

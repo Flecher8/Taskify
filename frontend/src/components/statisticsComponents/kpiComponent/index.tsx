@@ -34,7 +34,7 @@ const KpiStatisticsComponent: FC<KpiStatisticsComponentProps> = ({ projectId }) 
 			}) || [], // Ensure labels is not undefined
 		datasets: [
 			{
-				label: "KPI",
+				label: "User productivity",
 				data: kpis?.map(statistics => statistics.kpi) || [], // Ensure data is not undefined
 				backgroundColor: "rgba(53, 162, 235, 0.5)" // Adjust color as needed
 			}
