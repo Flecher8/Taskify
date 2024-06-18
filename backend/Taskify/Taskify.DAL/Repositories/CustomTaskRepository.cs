@@ -6,55 +6,38 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class CustomTaskRepository : ICustomTaskRepository
+    public class CustomTaskRepository : BaseFilterableRepository<CustomTask, CustomTaskFilterBuilder>, ICustomTaskRepository
     {
-        private readonly DataContext _dbContext;
+        public CustomTaskRepository(DataContext dbContext) : base(dbContext) { }
 
-        public CustomTaskRepository(DataContext dbContext)
+        public override async Task<List<CustomTask>> GetFilteredItemsAsync(Action<CustomTaskFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<CustomTask> AddAsync(CustomTask item)
+        protected override IQueryable<CustomTask> IncludeEntities(IQueryable<CustomTask> query)
         {
-            await _dbContext.CustomTasks.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var customTask = await _dbContext.CustomTasks.FindAsync(id);
-            if (customTask != null)
+            if (_filterBuilder.IncludeSection)
             {
-                _dbContext.CustomTasks.Remove(customTask);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(c => c.Section);
             }
-        }
 
-        public async Task<List<CustomTask>> GetAllAsync()
-        {
-            return await _dbContext.CustomTasks.ToListAsync();
-        }
+            if (_filterBuilder.IncludeResponsibleUser)
+            {
+                query = query.Include(c => c.ResponsibleUser);
+            }
 
-        public async Task<CustomTask?> GetByIdAsync(string id)
-        {
-            return await _dbContext.CustomTasks.FindAsync(id);
-        }
+            if (_filterBuilder.IncludeTaskTimeTrackers)
+            {
+                query = query.Include(c => c.TaskTimeTrackers);
+            }
 
-        public async Task<List<CustomTask>> GetFilteredItemsAsync(Expression<Func<CustomTask, bool>> filter)
-        {
-            return await _dbContext.CustomTasks.Where(filter).ToListAsync();
-        }
-
-        public async Task UpdateAsync(CustomTask item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

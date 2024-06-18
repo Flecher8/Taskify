@@ -1,0 +1,30 @@
+.creteProjectForm {
+	input {
+		width: 100%;
+		border: 1px solid #000000;
+		box-sizing: border-box;
+		border-radius: 9px;
+		padding: 0 20px 0 36px;
+		height: 40px;
+		color: #2a2e34;
+	}
+	.error {
+		color: red;
+		font-size: 10px;
+		display: flex;
+		align-items: center;
+		margin-top: 5px;
+	}
+
+	.error i {
+		margin-right: 4px;
+	}
+	button {
+		font-size: 14px;
+		font-weight: 700;
+		min-height: 2.5rem;
+		padding: 0 20px;
+		box-shadow: 0 10px 25px #7b68ee80;
+		letter-spacing: 0.4px;
+	}
+}

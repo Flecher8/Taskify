@@ -186,6 +186,9 @@ namespace Taskify.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Frequency")
                         .HasColumnType("int");
 
@@ -253,7 +256,7 @@ namespace Taskify.DAL.Migrations
                     b.ToTable("CompanyMembers");
                 });
 
-            modelBuilder.Entity("Taskify.Core.DbModels.CompanyMemberRole", b =>
+            modelBuilder.Entity("Taskify.Core.DbModels.CompanyRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -261,6 +264,9 @@ namespace Taskify.DAL.Migrations
                     b.Property<string>("CompanyId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -270,7 +276,7 @@ namespace Taskify.DAL.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("CompanyMemberRoles");
+                    b.ToTable("CompanyRoles");
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.CustomTask", b =>
@@ -355,6 +361,9 @@ namespace Taskify.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NormalWorkingHoursPerDay")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -373,8 +382,15 @@ namespace Taskify.DAL.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Frequency")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectId")
                         .HasColumnType("nvarchar(450)");
@@ -440,6 +456,9 @@ namespace Taskify.DAL.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -494,6 +513,9 @@ namespace Taskify.DAL.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("CanCreateCompany")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -523,6 +545,46 @@ namespace Taskify.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Subscriptions");
+                });
+
+            modelBuilder.Entity("Taskify.Core.DbModels.TaskTimeTracker", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomTaskId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("DurationInSeconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("EndDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TrackerType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomTaskId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TaskTimeTrackers");
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.User", b =>
@@ -603,6 +665,9 @@ namespace Taskify.DAL.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("EndDateTimeUtc")
                         .HasColumnType("datetime2");
@@ -723,7 +788,7 @@ namespace Taskify.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Taskify.Core.DbModels.CompanyMemberRole", "Role")
+                    b.HasOne("Taskify.Core.DbModels.CompanyRole", "Role")
                         .WithMany("CompanyMembers")
                         .HasForeignKey("RoleId");
 
@@ -738,10 +803,10 @@ namespace Taskify.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Taskify.Core.DbModels.CompanyMemberRole", b =>
+            modelBuilder.Entity("Taskify.Core.DbModels.CompanyRole", b =>
                 {
                     b.HasOne("Taskify.Core.DbModels.Company", "Company")
-                        .WithMany("CompanyMemberRoles")
+                        .WithMany("CompanyRoles")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -785,7 +850,7 @@ namespace Taskify.DAL.Migrations
             modelBuilder.Entity("Taskify.Core.DbModels.ProjectIncome", b =>
                 {
                     b.HasOne("Taskify.Core.DbModels.Project", "Project")
-                        .WithMany()
+                        .WithMany("ProjectIncomes")
                         .HasForeignKey("ProjectId");
 
                     b.Navigation("Project");
@@ -849,6 +914,23 @@ namespace Taskify.DAL.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("Taskify.Core.DbModels.TaskTimeTracker", b =>
+                {
+                    b.HasOne("Taskify.Core.DbModels.CustomTask", "CustomTask")
+                        .WithMany("TaskTimeTrackers")
+                        .HasForeignKey("CustomTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Taskify.Core.DbModels.User", "User")
+                        .WithMany("TaskTimeTrackers")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("CustomTask");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Taskify.Core.DbModels.UserSubscription", b =>
                 {
                     b.HasOne("Taskify.Core.DbModels.Subscription", "Subscription")
@@ -874,18 +956,25 @@ namespace Taskify.DAL.Migrations
 
                     b.Navigation("CompanyInvitations");
 
-                    b.Navigation("CompanyMemberRoles");
+                    b.Navigation("CompanyMembers");
 
+                    b.Navigation("CompanyRoles");
+                });
+
+            modelBuilder.Entity("Taskify.Core.DbModels.CompanyRole", b =>
+                {
                     b.Navigation("CompanyMembers");
                 });
 
-            modelBuilder.Entity("Taskify.Core.DbModels.CompanyMemberRole", b =>
+            modelBuilder.Entity("Taskify.Core.DbModels.CustomTask", b =>
                 {
-                    b.Navigation("CompanyMembers");
+                    b.Navigation("TaskTimeTrackers");
                 });
 
             modelBuilder.Entity("Taskify.Core.DbModels.Project", b =>
                 {
+                    b.Navigation("ProjectIncomes");
+
                     b.Navigation("ProjectInvitations");
 
                     b.Navigation("ProjectMembers");
@@ -912,6 +1001,8 @@ namespace Taskify.DAL.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Projects");
+
+                    b.Navigation("TaskTimeTrackers");
 
                     b.Navigation("UserSubscriptions");
                 });

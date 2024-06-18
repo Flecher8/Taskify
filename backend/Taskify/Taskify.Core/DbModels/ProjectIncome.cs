@@ -11,8 +11,9 @@ namespace Taskify.Core.DbModels
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public Project Project { get; set; }
+        public string Name { get; set; }
         public double Amount { get; set; }
         public ProjectIncomeFrequency Frequency { get; set; }
-        
+        public DateTime CreatedAt { get; set; }
     }
 }

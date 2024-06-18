@@ -12,13 +12,14 @@ namespace Taskify.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUsersService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IUserService userService, IMapper mapper, ILogger<UsersController> logger) 
+        public UsersController(IUsersService userService, IMapper mapper, ILogger<UsersController> logger) 
         {
             _userService = userService;
             _mapper = mapper;
@@ -100,6 +101,24 @@ namespace Taskify.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in DeleteUser method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> GetUserByEmail(string email)
+        {
+            try
+            {
+                var result = await _userService.GetUserByEmailAsync(email);
+
+                return result.IsSuccess
+                    ? Ok(_mapper.Map<UserDto>(result.Data))
+                    : NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in GetUserById method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

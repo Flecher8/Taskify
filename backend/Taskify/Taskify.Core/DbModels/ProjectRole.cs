@@ -14,5 +14,6 @@ namespace Taskify.Core.DbModels
         public string Name { get; set; }
         public ProjectRoleType ProjectRoleType { get; set; }
         public List<ProjectMember> ProjectMembers { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

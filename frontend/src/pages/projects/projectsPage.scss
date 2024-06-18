@@ -1,0 +1,27 @@
+.projectsPage {
+	.projectsPage-header {
+		font-size: 2rem;
+		font-weight: 500;
+	}
+
+	.buttonToOpenCreateProject {
+		font-size: 1rem;
+		font-weight: 300;
+		text-align: center; // Center text horizontally
+		color: oklch(0.6971 0.329 342.55); // Set text color  oklch(0.6971 0.329 342.55)
+		background-color: #ffffff; // Set background color to white
+		border: 1px solid oklch(0.6971 0.329 342.55); // Set border color
+		cursor: pointer; // Change cursor to pointer
+		outline: none; // Remove outline
+		border-radius: 25%; // Remove border-radius
+		display: flex; // Allow vertical alignment
+		justify-content: center; // Center content vertically
+		align-items: center; // Center content horizontally
+		transition: background-color 0.3s ease-in-out; // Apply transition to background-color
+	}
+
+	.buttonToOpenCreateProject:hover {
+		background-color: oklch(0.6971 0.329 342.55); // Set background color to white
+		color: #ffffff;
+	}
+}

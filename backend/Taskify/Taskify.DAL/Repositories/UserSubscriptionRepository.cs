@@ -11,55 +11,17 @@ using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class UserSubscriptionRepository : IUserSubscriptionRepository
+    public class UserSubscriptionRepository : BaseFilterableRepository<UserSubscription, UserSubscriptionFilterBuilder>, IUserSubscriptionRepository
     {
-        private readonly DataContext _dbContext;
-        private readonly UserSubscriptionFilterBuilder _filterBuilder;
+        public UserSubscriptionRepository(DataContext dbContext) : base(dbContext) { }
 
-        public UserSubscriptionRepository(DataContext dbContext)
+        public override async Task<List<UserSubscription>> GetFilteredItemsAsync(Action<UserSubscriptionFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
-            _filterBuilder = new UserSubscriptionFilterBuilder();
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<UserSubscription> AddAsync(UserSubscription item)
+        protected override IQueryable<UserSubscription> IncludeEntities(IQueryable<UserSubscription> query)
         {
-            await _dbContext.UserSubscriptions.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var userSubscription = await _dbContext.UserSubscriptions.FindAsync(id);
-            if (userSubscription != null)
-            {
-                _dbContext.UserSubscriptions.Remove(userSubscription);
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task<List<UserSubscription>> GetAllAsync()
-        {
-            return await _dbContext.UserSubscriptions.ToListAsync();
-        }
-
-        public async Task<UserSubscription?> GetByIdAsync(string id)
-        {
-            return await _dbContext.UserSubscriptions.FindAsync(id);
-        }
-
-        public async Task<List<UserSubscription>> GetFilteredItemsAsync(Expression<Func<UserSubscription, bool>> filter)
-        {
-            return await _dbContext.UserSubscriptions.Where(filter).ToListAsync();
-        }
-
-        public async Task<List<UserSubscription>> GetFilteredItemsAsync(Action<UserSubscriptionFilterBuilder> buildFilter)
-        {
-            buildFilter(_filterBuilder);
-
-            var query = _dbContext.UserSubscriptions.AsQueryable();
-
             if (_filterBuilder.IncludeUser)
             {
                 query = query.Include(us => us.User);
@@ -70,15 +32,7 @@ namespace Taskify.DAL.Repositories
                 query = query.Include(us => us.Subscription);
             }
 
-            return await query
-                .Where(_filterBuilder.Filter)
-                .ToListAsync();
-        }
-
-        public async Task UpdateAsync(UserSubscription item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

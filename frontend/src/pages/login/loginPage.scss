@@ -1,0 +1,74 @@
+.error-container {
+	position: fixed;
+	bottom: 3em;
+	left: 3em;
+	padding: 10px;
+	max-width: 55rem;
+
+	// Add this for initial state
+	transform: translateY(100%);
+	opacity: 0;
+	transition: all 0.5s ease-in-out;
+
+	// Add this for visible state
+	&.show {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.loginPage {
+	display: flex;
+	justify-content: center; /* Horizontal centering */
+	align-items: center; /* Vertical centering */
+	height: 90vh; /* Full height of the viewport */
+
+	.loginForm {
+		width: 25rem;
+		padding: 3rem;
+
+		.authButton {
+			font-size: 14px;
+			font-weight: 700;
+			min-height: 2.5rem;
+			padding: 0 20px;
+			box-shadow: 0 10px 25px #7b68ee80;
+			letter-spacing: 0.4px;
+		}
+
+		.form-row-label {
+			font-size: 11px;
+			font-weight: 500;
+			line-height: 11px;
+			display: block;
+			color: #292d34;
+			padding: 0 0 8px 2px;
+			letter-spacing: 0.4px;
+		}
+
+		input {
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 1;
+			width: 100%;
+			border: 1px solid #d6d9de;
+			box-sizing: border-box;
+			border-radius: 9px;
+			padding: 0 20px 0 36px;
+			height: 40px;
+			color: #2a2e34;
+		}
+	}
+
+	.error {
+		color: red;
+		font-size: 10px;
+		display: flex;
+		align-items: center;
+		margin-top: 5px;
+	}
+
+	.error i {
+		margin-right: 4px;
+	}
+}

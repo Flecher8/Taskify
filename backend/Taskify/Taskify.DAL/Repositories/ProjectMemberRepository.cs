@@ -6,55 +6,38 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class ProjectMemberRepository : IProjectMemberRepository
+    public class ProjectMemberRepository : BaseFilterableRepository<ProjectMember, ProjectMemberFilterBuilder>, IProjectMemberRepository
     {
-        private readonly DataContext _dbContext;
+        public ProjectMemberRepository(DataContext dbContext) : base(dbContext) { }
 
-        public ProjectMemberRepository(DataContext dbContext)
+        public override async Task<List<ProjectMember>> GetFilteredItemsAsync(Action<ProjectMemberFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<ProjectMember> AddAsync(ProjectMember item)
+        protected override IQueryable<ProjectMember> IncludeEntities(IQueryable<ProjectMember> query)
         {
-            await _dbContext.ProjectMembers.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var projectMember = await _dbContext.ProjectMembers.FindAsync(id);
-            if (projectMember != null)
+            if (_filterBuilder.IncludeProject)
             {
-                _dbContext.ProjectMembers.Remove(projectMember);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(pm => pm.Project);
             }
-        }
 
-        public async Task<List<ProjectMember>> GetAllAsync()
-        {
-            return await _dbContext.ProjectMembers.ToListAsync();
-        }
+            if (_filterBuilder.IncludeUser)
+            {
+                query = query.Include(pm => pm.User);
+            }
 
-        public async Task<ProjectMember?> GetByIdAsync(string id)
-        {
-            return await _dbContext.ProjectMembers.FindAsync(id);
-        }
+            if (_filterBuilder.IncludeProjectRole)
+            {
+                query = query.Include(pm => pm.ProjectRole);
+            }
 
-        public async Task<List<ProjectMember>> GetFilteredItemsAsync(Expression<Func<ProjectMember, bool>> filter)
-        {
-            return await _dbContext.ProjectMembers.Where(filter).ToListAsync();
-        }
-
-        public async Task UpdateAsync(ProjectMember item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

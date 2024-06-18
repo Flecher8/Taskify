@@ -6,55 +6,48 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class CompanyRepository : ICompanyRepository
+    public class CompanyRepository : BaseFilterableRepository<Company, CompanyFilterBuilder>, ICompanyRepository
     {
-        private readonly DataContext _dbContext;
+        public CompanyRepository(DataContext dbContext) : base(dbContext) { }
 
-        public CompanyRepository(DataContext dbContext)
+        public override async Task<List<Company>> GetFilteredItemsAsync(Action<CompanyFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<Company> AddAsync(Company item)
+        protected override IQueryable<Company> IncludeEntities(IQueryable<Company> query)
         {
-            await _dbContext.Companies.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var company = await _dbContext.Companies.FindAsync(id);
-            if (company != null)
+            if (_filterBuilder.IncludeUser)
             {
-                _dbContext.Companies.Remove(company);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(c => c.User);
             }
-        }
 
-        public async Task<List<Company>> GetAllAsync()
-        {
-            return await _dbContext.Companies.ToListAsync();
-        }
+            if (_filterBuilder.IncludeExpenses)
+            {
+                query = query.Include(c => c.CompanyExpenses);
+            }
 
-        public async Task<Company?> GetByIdAsync(string id)
-        {
-            return await _dbContext.Companies.FindAsync(id);
-        }
+            if (_filterBuilder.IncludeMembers)
+            {
+                query = query.Include(c => c.CompanyMembers);
+            }
 
-        public async Task<List<Company>> GetFilteredItemsAsync(Expression<Func<Company, bool>> filter)
-        {
-            return await _dbContext.Companies.Where(filter).ToListAsync();
-        }
+            if (_filterBuilder.IncludeMemberRoles)
+            {
+                query = query.Include(c => c.CompanyRoles);
+            }
 
-        public async Task UpdateAsync(Company item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            if (_filterBuilder.IncludeInvitations)
+            {
+                query = query.Include(c => c.CompanyInvitations);
+            }
+
+            return query;
         }
     }
 }

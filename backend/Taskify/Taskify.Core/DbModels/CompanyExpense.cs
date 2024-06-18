@@ -14,5 +14,6 @@ namespace Taskify.Core.DbModels
         public string Name { get; set; }
         public double Amount { get; set; }
         public CompanyExpenseFrequency Frequency { get; set; }
+        public DateTime CreatedAt { get; set; } 
     }
 }

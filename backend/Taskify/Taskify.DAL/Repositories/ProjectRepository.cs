@@ -6,55 +6,53 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class ProjectRepository : BaseFilterableRepository<Project, ProjectFilterBuilder>, IProjectRepository
     {
-        private readonly DataContext _dbContext;
+        public ProjectRepository(DataContext dbContext) : base(dbContext) { }
 
-        public ProjectRepository(DataContext dbContext)
+        public override async Task<List<Project>> GetFilteredItemsAsync(Action<ProjectFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<Project> AddAsync(Project item)
+        protected override IQueryable<Project> IncludeEntities(IQueryable<Project> query)
         {
-            await _dbContext.Projects.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var project = await _dbContext.Projects.FindAsync(id);
-            if (project != null)
+            if (_filterBuilder.IncludeUser)
             {
-                _dbContext.Projects.Remove(project);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(p => p.User);
             }
-        }
 
-        public async Task<List<Project>> GetAllAsync()
-        {
-            return await _dbContext.Projects.ToListAsync();
-        }
+            if (_filterBuilder.IncludeSections)
+            {
+                query = query.Include(p => p.Sections);
+            }
 
-        public async Task<Project?> GetByIdAsync(string id)
-        {
-            return await _dbContext.Projects.FindAsync(id);
-        }
+            if (_filterBuilder.IncludeInvitations)
+            {
+                query = query.Include(p => p.ProjectInvitations);
+            }
 
-        public async Task<List<Project>> GetFilteredItemsAsync(Expression<Func<Project, bool>> filter)
-        {
-            return await _dbContext.Projects.Where(filter).ToListAsync();
-        }
+            if (_filterBuilder.IncludeMembers)
+            {
+                query = query.Include(p => p.ProjectMembers);
+            }
 
-        public async Task UpdateAsync(Project item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            if (_filterBuilder.IncludeRoles)
+            {
+                query = query.Include(p => p.ProjectRoles);
+            }
+
+            if (_filterBuilder.IncludeIncomes)
+            {
+                query = query.Include(p => p.ProjectIncomes);
+            }
+
+            return query;
         }
     }
 }

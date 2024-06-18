@@ -17,5 +17,6 @@ namespace Taskify.Core.DbModels
         public int ProjectMembersLimit { get; set; }
         public int ProjectSectionsLimit { get; set; }
         public int ProjectTasksLimit { get; set; }
+        public bool CanCreateCompany { get; set; }
     }
 }

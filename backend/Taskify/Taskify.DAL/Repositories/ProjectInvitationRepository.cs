@@ -6,55 +6,33 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Taskify.Core.DbModels;
+using Taskify.DAL.Helpers;
 using Taskify.DAL.Interfaces;
 
 namespace Taskify.DAL.Repositories
 {
-    public class ProjectInvitationRepository : IProjectInvitationRepository
+    public class ProjectInvitationRepository : BaseFilterableRepository<ProjectInvitation, ProjectInvitationFilterBuilder>, IProjectInvitationRepository
     {
-        private readonly DataContext _dbContext;
+        public ProjectInvitationRepository(DataContext dbContext) : base(dbContext) { }
 
-        public ProjectInvitationRepository(DataContext dbContext)
+        public override async Task<List<ProjectInvitation>> GetFilteredItemsAsync(Action<ProjectInvitationFilterBuilder> buildFilter)
         {
-            _dbContext = dbContext;
+            return await base.GetFilteredItemsAsync(buildFilter);
         }
 
-        public async Task<ProjectInvitation> AddAsync(ProjectInvitation item)
+        protected override IQueryable<ProjectInvitation> IncludeEntities(IQueryable<ProjectInvitation> query)
         {
-            await _dbContext.ProjectInvitations.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var projectInvitation = await _dbContext.ProjectInvitations.FindAsync(id);
-            if (projectInvitation != null)
+            if (_filterBuilder.IncludeNotification)
             {
-                _dbContext.ProjectInvitations.Remove(projectInvitation);
-                await _dbContext.SaveChangesAsync();
+                query = query.Include(pi => pi.Notification);
             }
-        }
 
-        public async Task<List<ProjectInvitation>> GetAllAsync()
-        {
-            return await _dbContext.ProjectInvitations.ToListAsync();
-        }
+            if (_filterBuilder.IncludeProject)
+            {
+                query = query.Include(pi => pi.Project);
+            }
 
-        public async Task<ProjectInvitation?> GetByIdAsync(string id)
-        {
-            return await _dbContext.ProjectInvitations.FindAsync(id);
-        }
-
-        public async Task<List<ProjectInvitation>> GetFilteredItemsAsync(Expression<Func<ProjectInvitation, bool>> filter)
-        {
-            return await _dbContext.ProjectInvitations.Where(filter).ToListAsync();
-        }
-
-        public async Task UpdateAsync(ProjectInvitation item)
-        {
-            _dbContext.Entry(item).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return query;
         }
     }
 }

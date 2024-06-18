@@ -11,10 +11,12 @@ namespace Taskify.Core.DbModels
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public User User { get; set; }
         public string Name { get; set; }
+        public int NormalWorkingHoursPerDay { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<Section> Sections { get; set; }
-        public List<ProjectInvitation>? ProjectInvitations { get; set; }
-        public List<ProjectMember>? ProjectMembers { get; set; }
-        public List<ProjectRole>? ProjectRoles { get; set; }
+        public List<ProjectInvitation> ProjectInvitations { get; set; }
+        public List<ProjectMember> ProjectMembers { get; set; }
+        public List<ProjectRole> ProjectRoles { get; set; }
+        public List<ProjectIncome> ProjectIncomes { get; set;}
     }
 }

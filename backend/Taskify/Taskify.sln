@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskify.API", "Taskify.API\Taskify.API.csproj", "{CE34AE2B-71CD-49B9-A189-37FAE66E942C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taskify.API", "Taskify.API\Taskify.API.csproj", "{CE34AE2B-71CD-49B9-A189-37FAE66E942C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskify.Core", "Taskify.Core\Taskify.Core.csproj", "{1E3F8CDC-AA54-4BF1-AE86-A8E7256D8EBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taskify.Core", "Taskify.Core\Taskify.Core.csproj", "{1E3F8CDC-AA54-4BF1-AE86-A8E7256D8EBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskify.BLL", "Taskify.BLL\Taskify.BLL.csproj", "{4AB094C4-7858-4BEF-BA51-550CD8EBBAB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taskify.BLL", "Taskify.BLL\Taskify.BLL.csproj", "{4AB094C4-7858-4BEF-BA51-550CD8EBBAB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskify.DAL", "Taskify.DAL\Taskify.DAL.csproj", "{D68D8F18-92BE-4738-9DF6-30D222ECE04F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taskify.DAL", "Taskify.DAL\Taskify.DAL.csproj", "{D68D8F18-92BE-4738-9DF6-30D222ECE04F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskify.Tests", "Taskify.Tests\Taskify.Tests.csproj", "{EC1D7D6B-AC0F-4C62-84DE-0B9CD3A1BD2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D68D8F18-92BE-4738-9DF6-30D222ECE04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D68D8F18-92BE-4738-9DF6-30D222ECE04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D68D8F18-92BE-4738-9DF6-30D222ECE04F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC1D7D6B-AC0F-4C62-84DE-0B9CD3A1BD2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC1D7D6B-AC0F-4C62-84DE-0B9CD3A1BD2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC1D7D6B-AC0F-4C62-84DE-0B9CD3A1BD2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC1D7D6B-AC0F-4C62-84DE-0B9CD3A1BD2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,6 +12,8 @@ namespace Taskify.DAL
 {
     public class DataContext : IdentityDbContext<User>
     {
+        public DataContext() { }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public override DbSet<User> Users { get; set; }
@@ -27,9 +29,9 @@ namespace Taskify.DAL
         public DbSet<ProjectInvitation> ProjectInvitations { get; set;}
         public DbSet<Company> Companies { get; set; }
         public DbSet<CompanyInvitation> CompanyInvitations { get; set; }
-        public DbSet<CompanyMemberRole> CompanyMemberRoles { get; set;}
+        public DbSet<CompanyRole> CompanyRoles { get; set;}
         public DbSet<CompanyMember> CompanyMembers {  get; set; }
         public DbSet<CompanyExpense> CompanyExpenses { get; set; }
-
+        public DbSet<TaskTimeTracker> TaskTimeTrackers { get; set; }
     }
 }

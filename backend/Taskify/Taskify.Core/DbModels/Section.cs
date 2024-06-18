@@ -16,6 +16,6 @@ namespace Taskify.Core.DbModels
         public int SequenceNumber { get; set; }
         public SectionType SectionType { get; set; }
         public bool IsArchived { get; set; }
-        public List<CustomTask>? CustomTasks { get; set; }
+        public List<CustomTask> CustomTasks { get; set; }
     }
 }

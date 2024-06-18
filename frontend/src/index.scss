@@ -1,24 +1,85 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 * {
 	padding: 0;
 	margin: 0;
 	background-color: transparent;
 	outline: none;
-	border: none;
-  font-size: 1em;
-  text-decoration: none;
-  list-style: none;
+	font-size: 1em;
+	text-decoration: none;
+	list-style: none;
+}
+
+body {
+	height: 100%;
+}
+
+#root {
+	height: 100%;
 }
 
 html {
-  font-size: 20px;
+	font-size: 20px;
+	height: 100%;
 }
 
 main {
-  height: 100%;
-  padding: 10px;
-  transition: all 0.3s ease-in-out;
+	height: 100%;
+	transition: all 0.3s ease-in-out;
 }
+.content-wrapper {
+	overflow-x: hidden;
+	width: 100%; /* Ensure the content wrapper takes up full width */
+}
+
+.custom-scroll-xs::-webkit-scrollbar {
+	width: 0.25rem; /* Ширина полосы прокрутки */
+	height: 0.25rem;
+}
+.custom-scroll-sm::-webkit-scrollbar {
+	width: 0.5rem; /* Ширина полосы прокрутки */
+	height: 0.5rem;
+}
+
+.custom-scroll-base::-webkit-scrollbar {
+	width: 0.75rem; /* Ширина полосы прокрутки */
+	height: 0.75rem;
+}
+
+.custom-scroll-lg::-webkit-scrollbar {
+	width: 1rem; /* Ширина полосы прокрутки */
+	height: 1rem;
+}
+
+.custom-scroll-xs::-webkit-scrollbar-thumb {
+	background-color: #888; /* Цвет ползунка */
+	border-radius: 20px; /* Скругление углов ползунка */
+}
+.custom-scroll-sm::-webkit-scrollbar-thumb {
+	background-color: #888; /* Цвет ползунка */
+	border-radius: 20px; /* Скругление углов ползунка */
+}
+.custom-scroll-base::-webkit-scrollbar-thumb {
+	background-color: #888; /* Цвет ползунка */
+	border-radius: 20px; /* Скругление углов ползунка */
+}
+.custom-scroll-lg::-webkit-scrollbar-thumb {
+	background-color: #888; /* Цвет ползунка */
+	border-radius: 20px; /* Скругление углов ползунка */
+}
+
+.custom-scroll-xs::-webkit-scrollbar-track {
+	background-color: #eee; /* Цвет фона полосы прокрутки */
+}
+.custom-scroll-sm::-webkit-scrollbar-track {
+	background-color: #eee; /* Цвет фона полосы прокрутки */
+}
+.custom-scroll-base::-webkit-scrollbar-track {
+	background-color: #eee; /* Цвет фона полосы прокрутки */
+}
+.custom-scroll-lg::-webkit-scrollbar-track {
+	background-color: #eee; /* Цвет фона полосы прокрутки */
+}
+

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Taskify.BLL.Interfaces;
 using Taskify.Core.DbModels;
 using Taskify.Core.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Taskify.API.Controllers
 {

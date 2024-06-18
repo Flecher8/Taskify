@@ -35,22 +35,34 @@ namespace Taskify.BLL.Services
         {
             try
             {
-                var userSubscriptions = await _userSubscriptionRepository.GetFilteredItemsAsync(builder =>
-                    builder.IncludeSubscriptionEntity()
-                           .WithFilter(us => us.User.Id == userId && us.EndDateTimeUtc > DateTime.UtcNow)
-                );
+                var userSubscriptions = (await _userSubscriptionRepository.GetFilteredItemsAsync(
+                    builder => builder
+                                    .IncludeSubscriptionEntity()
+                                    .WithFilter(us => us.User.Id == userId && us.EndDateTimeUtc > DateTime.UtcNow)
+                )).OrderBy(p => p.StartDateTimeUtc);
 
-                var activeSubscription = userSubscriptions.FirstOrDefault(us => us.EndDateTimeUtc > DateTime.UtcNow);
+                var activeSubscription = userSubscriptions.FirstOrDefault();
 
                 return activeSubscription != null
                     ? ResultFactory.Success(activeSubscription.Subscription)
-                    : ResultFactory.Success<Subscription>(null);
+                    : ResultFactory.Success(GetDefaultSubscription());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching user subscription.");
                 return ResultFactory.Failure<Subscription>("An error occurred while fetching user subscription.");
             }
+        }
+
+        private Subscription GetDefaultSubscription()
+        {
+            var subscription = new Subscription();
+            subscription.Name = "Default";
+            subscription.ProjectMembersLimit = 10;
+            subscription.ProjectsLimit = 10;
+            subscription.ProjectTasksLimit = 100;
+            subscription.ProjectSectionsLimit = 100;
+            subscription.CanCreateCompany = false;
+            return subscription;
         }
 
         public async Task<Result<bool>> CreateUserSubscription(string userId, string subscriptionId)
@@ -104,7 +116,8 @@ namespace Taskify.BLL.Services
                 User = lastActiveSubscription.User,
                 Subscription = subscription,
                 StartDateTimeUtc = lastActiveSubscription.EndDateTimeUtc,
-                EndDateTimeUtc = lastActiveSubscription.EndDateTimeUtc.AddDays(subscription.DurationInDays)
+                EndDateTimeUtc = lastActiveSubscription.EndDateTimeUtc.AddDays(subscription.DurationInDays),
+                CreatedAt = DateTime.UtcNow
             };
 
             await _userSubscriptionRepository.AddAsync(newUserSubscription);
@@ -117,7 +130,8 @@ namespace Taskify.BLL.Services
                 User = user,
                 Subscription = subscription,
                 StartDateTimeUtc = DateTime.UtcNow,
-                EndDateTimeUtc = DateTime.UtcNow.AddDays(subscription.DurationInDays)
+                EndDateTimeUtc = DateTime.UtcNow.AddDays(subscription.DurationInDays),
+                CreatedAt = DateTime.UtcNow
             };
 
             await _userSubscriptionRepository.AddAsync(newUserSubscription);
