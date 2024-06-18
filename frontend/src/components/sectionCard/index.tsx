@@ -119,7 +119,7 @@ const SectionCard: FC<SectionCardProps> = ({
 								cursor: "auto"
 							}}>
 							<DropDownContext
-								dropDownDirection={"dropdown-start"}
+								dropDownDirection={"dropdown-end"}
 								openDropDownButtonContent={<i className="fa-light fa-ellipsis"></i>}
 								openDropDownButtonStyle={
 									"p-1 flex items-center hover:bg-gray-200 hover:cursor-pointer transition duration-300"
